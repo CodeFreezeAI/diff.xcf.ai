@@ -498,7 +498,7 @@ class NumberProcessor:
         
         outputStats.innerHTML = `
             <div class="stats-grid">
-                <button class="stat-badge diff-button" id="generate-diff-btn">GEN D1F</button>
+                <span class="stat-badge diff-card">D1F DIFF</span>
                 <span class="stat-badge algorithm-badge">${algorithmEmojis[stats.algorithm] || '🔧'} ${stats.algorithm}</span>
                 <span class="stat-badge timing-badge live-timing">⚡ ${preciseCreateTime}ms</span>
                 <span class="stat-badge format-badge">${formatEmojis[stats.format] || '📄'} ${stats.format}</span>
@@ -523,11 +523,7 @@ class NumberProcessor:
             outputStats.innerHTML = updatedContent;
         }
 
-        // Add click handler to the new DIFF button
-        const diffBtn = document.getElementById('generate-diff-btn');
-        if (diffBtn) {
-            diffBtn.addEventListener('click', generateDiff);
-        }
+        // D1F DIFF is now a card, no click handler needed
     }
 
     function showPlaceholder() {
@@ -563,7 +559,7 @@ class NumberProcessor:
             
             outputStats.innerHTML = `
                 <div class="stats-grid">
-                    <button class="stat-badge diff-button" id="generate-diff-btn">GEN D1F</button>
+                    <span class="stat-badge diff-card">D1F DIFF</span>
                     <span class="stat-badge algorithm-badge">${algorithmEmojis[currentAlgorithm] || '🔧'} ${currentAlgorithm}</span>
                     <span class="stat-badge timing-badge">⚡ 0.001ms</span>
                     <span class="stat-badge success-badge">✅ 100%</span>
@@ -572,11 +568,7 @@ class NumberProcessor:
                 </div>
             `;
             
-            // Add click handler to the initial DIFF button
-            const diffBtn = document.getElementById('generate-diff-btn');
-            if (diffBtn) {
-                diffBtn.addEventListener('click', generateDiff);
-            }
+            // D1F DIFF is now a card, no click handler needed
         }
     }
 

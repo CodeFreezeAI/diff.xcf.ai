@@ -1056,6 +1056,25 @@
     background: var(--gradient-secondary);
 }
 
+/* D1F DIFF Card Styling */
+.diff-card {
+    background: var(--gradient-primary) !important;
+    color: white !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px !important;
+    border: none !important;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3) !important;
+}
+
+.diff-card::before {
+    background: rgba(255, 255, 255, 0.2) !important;
+}
+
+.diff-card:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4) !important;
+}
+
 /* Performance Section Components */
 .performance {
     background: var(--bg-primary);
@@ -1396,7 +1415,7 @@
     }
     
     .algo-comparison-container {
-        max-width: 1800px;
+        max-width: 1200px;
         margin: 0 auto;
         width: auto;
     }
@@ -1673,13 +1692,12 @@
 }
 
 .algo-comparison-container {
-    max-width: none;
-    margin: 0 var(--space-lg);
+    max-width: 1200px;
+    margin: 0 auto;
     background: rgba(255, 255, 255, 0.95);
     border-radius: 20px;
     padding: 30px;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-    width: calc(100% - 2 * var(--space-lg));
 }
 
 .algo-comparison-title {
