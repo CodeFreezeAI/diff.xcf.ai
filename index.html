@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>D1F - MultiLineDiff - The World’s Most Advanced Diffing System</title>
+    <title>D1F - MultiLineDiff - The World's Most Advanced Diffing System</title>
     <meta name="description" content="D1F Dee One Eff Revolutionary Swift diffing library with AI integration, ASCII diffs, and lightning-fast performance. Created by Todd Bruss © xcf.ai">
     <meta name="keywords" content="diff, swift, AI, ASCII, code, algorithm, performance, xcf.ai, todd bruss">
     <meta name="author" content="Todd Bruss, xcf.ai">
@@ -12,14 +12,14 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://d1f.ai/">
     <meta property="og:title" content="D1F - MultiLineDiff - Revolutionary Diffing System">
-    <meta property="og:description" content="The world’s most advanced diffing system with AI integration and lightning-fast performance">
+    <meta property="og:description" content="The world's most advanced diffing system with AI integration and lightning-fast performance">
     <meta property="og:image" content="https://d1f.ai/images/og-image.png">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://d1f.ai/">
     <meta property="twitter:title" content="D1F - MultiLineDiff - Revolutionary Diffing System">
-    <meta property="twitter:description" content="The world’s most advanced diffing system with AI integration and lightning-fast performance">
+    <meta property="twitter:description" content="The world's most advanced diffing system with AI integration and lightning-fast performance">
     <meta property="twitter:image" content="https://d1f.ai/images/twitter-image.png">
 
     <!-- Favicon -->
@@ -87,7 +87,7 @@
                     <span>Revolutionary Breakthrough</span>
                 </div>
                 <h1 class="hero-title">
-                    The World’s Most
+                    The World's Most
                     <span class="gradient-text">Advanced Diffing System</span>
                 </h1>
                 <p class="hero-subtitle">
@@ -326,11 +326,11 @@
                             <div class="algorithm-stats">
                                 <div class="stat-item">
                                     <span class="stat-label">Create Time</span>
-                                    <span class="stat-value">14.5ms</span>
+                                    <span class="stat-value static-time">14.5ms</span>
                                 </div>
                                 <div class="stat-item">
                                     <span class="stat-label">Apply Time</span>
-                                    <span class="stat-value">6.6ms</span>
+                                    <span class="stat-value static-time">6.6ms</span>
                                 </div>
                                 <div class="stat-item">
                                     <span class="stat-label">Operations</span>
@@ -366,11 +366,11 @@ let diff = MultiLineDiff.createDiff(
                             <div class="algorithm-stats">
                                 <div class="stat-item">
                                     <span class="stat-label">Create Time</span>
-                                    <span class="stat-value">43.7ms</span>
+                                    <span class="stat-value static-time">43.7ms</span>
                                 </div>
                                 <div class="stat-item">
                                     <span class="stat-label">Apply Time</span>
-                                    <span class="stat-value">6.6ms</span>
+                                    <span class="stat-value static-time">6.6ms</span>
                                 </div>
                                 <div class="stat-item">
                                     <span class="stat-label">Operations</span>
@@ -406,11 +406,11 @@ let diff = MultiLineDiff.createDiff(
                             <div class="algorithm-stats">
                                 <div class="stat-item">
                                     <span class="stat-label">Create Time</span>
-                                    <span class="stat-value">47.8ms</span>
+                                    <span class="stat-value static-time">47.8ms</span>
                                 </div>
                                 <div class="stat-item">
                                     <span class="stat-label">Apply Time</span>
-                                    <span class="stat-value">7.0ms</span>
+                                    <span class="stat-value static-time">7.0ms</span>
                                 </div>
                                 <div class="stat-item">
                                     <span class="stat-label">Operations</span>
@@ -446,11 +446,11 @@ let diff = MultiLineDiff.createDiff(
                             <div class="algorithm-stats">
                                 <div class="stat-item">
                                     <span class="stat-label">Create Time</span>
-                                    <span class="stat-value">45.1ms</span>
+                                    <span class="stat-value static-time">45.1ms</span>
                                 </div>
                                 <div class="stat-item">
                                     <span class="stat-label">Apply Time</span>
-                                    <span class="stat-value">6.9ms</span>
+                                    <span class="stat-value static-time">6.9ms</span>
                                 </div>
                                 <div class="stat-item">
                                     <span class="stat-label">Operations</span>
@@ -486,11 +486,11 @@ let diff = MultiLineDiff.createDiff(
                             <div class="algorithm-stats">
                                 <div class="stat-item">
                                     <span class="stat-label">Create Time</span>
-                                    <span class="stat-value">23.9ms</span>
+                                    <span class="stat-value static-time">23.9ms</span>
                                 </div>
                                 <div class="stat-item">
                                     <span class="stat-label">Apply Time</span>
-                                    <span class="stat-value">9.1ms</span>
+                                    <span class="stat-value static-time">9.1ms</span>
                                 </div>
                                 <div class="stat-item">
                                     <span class="stat-label">Operations</span>
@@ -521,8 +521,10 @@ let diff = MultiLineDiff.createDiff(
     <section id="demo" class="demo">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">Interactive Demo</h2>
-                <p class="section-subtitle">Experience the power of D1F - MultiLineDiff in real-time</p>
+                <div>
+                    <h2 class="section-title">Interactive Demo</h2>
+                    <p class="section-subtitle">Experience the power of D1F - MultiLineDiff in real-time</p>
+                </div>
             </div>
             <div class="demo-container">
                 <div class="demo-controls">
@@ -545,7 +547,11 @@ let diff = MultiLineDiff.createDiff(
                             <option value="base64">🔐 Base64</option>
                         </select>
                     </div>
-                    <button id="generate-diff" class="btn btn-primary">Generate Diff</button>
+                    <div style="display: flex; align-items: center; gap: 16px;">
+                        <div style="color: var(--text-muted); font-size: 0.75rem; font-style: italic;">
+                            <em>⚠️ Note: Algorithms and interpretation are currently simulated for web demo</em>
+                        </div>
+                    </div>
                 </div>
                 <div class="demo-panels">
                     <div class="demo-panel">
@@ -564,7 +570,7 @@ let diff = MultiLineDiff.createDiff(
                     </div>
                     <div class="demo-panel demo-output">
                         <div class="panel-header">
-                            <h4>D1F<br>MultiLine<br>DIFF</h4>
+                            <button id="generate-diff" class="btn btn-primary" style="width: auto; padding: 8px 16px; margin: 0;">Gen D1F Diff</button>
                             <div class="output-stats" id="output-stats"></div>
                         </div>
                         <div id="diff-output" class="demo-output-content">
@@ -1233,7 +1239,7 @@ let base64Diff = try MultiLineDiff.createBase64Diff(
                         </svg>
                         <span>D1F - MultiLineDiff</span>
                     </a>
-                    <p>The world’s most advanced diffing system</p>
+                    <p>The world's most advanced diffing system</p>
                 </div>
                 <div class="footer-links">
                     <div class="footer-section">
