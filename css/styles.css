@@ -433,7 +433,6 @@ a:hover {
     animation: shimmer 4s ease-in-out infinite;
     font-weight: 900;
     letter-spacing: 0.1em;
-    filter: blur(0.5px);
 }
 
 .hero-subtitle {

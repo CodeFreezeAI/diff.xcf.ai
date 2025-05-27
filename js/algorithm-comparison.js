@@ -138,7 +138,7 @@ function setupLegendClickHandlers() {
     const legendItems = document.querySelectorAll('.algo-comparison-legend-item');
     
     legendItems.forEach((item, index) => {
-        item.style.cursor = 'pointer';
+        item.classList.add('algo-legend-clickable');
         item.addEventListener('click', function() {
             toggleDatasetVisibility(index);
         });
@@ -157,11 +157,11 @@ function toggleDatasetVisibility(datasetIndex) {
     // Update legend item appearance
     const legendItem = document.querySelectorAll('.algo-comparison-legend-item')[datasetIndex];
     if (meta.hidden) {
-        legendItem.style.opacity = '0.5';
-        legendItem.style.filter = 'grayscale(100%)';
+        legendItem.classList.add('algo-legend-hidden');
+        legendItem.classList.remove('algo-legend-visible');
     } else {
-        legendItem.style.opacity = '1';
-        legendItem.style.filter = 'none';
+        legendItem.classList.add('algo-legend-visible');
+        legendItem.classList.remove('algo-legend-hidden');
     }
     
     algoComparisonChart.update();

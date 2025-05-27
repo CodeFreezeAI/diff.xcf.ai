@@ -208,14 +208,7 @@ function addChartControls(chart, data) {
 
     // Create controls container
     const controlsDiv = document.createElement('div');
-    controlsDiv.className = 'chart-controls';
-    controlsDiv.style.cssText = `
-        display: flex;
-        gap: 10px;
-        justify-content: center;
-        margin-top: 20px;
-        flex-wrap: wrap;
-    `;
+    controlsDiv.className = 'performance-controls';
 
     // View toggle buttons
     const viewButtons = [
@@ -227,30 +220,18 @@ function addChartControls(chart, data) {
 
     viewButtons.forEach(button => {
         const btn = document.createElement('button');
-        btn.className = 'btn btn-small chart-control-btn';
+        btn.className = 'performance-btn';
         btn.textContent = button.label;
-        btn.style.cssText = `
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border-primary);
-            color: var(--text-secondary);
-            transition: all 0.2s ease;
-        `;
 
         if (button.id === 'both') {
-            btn.style.background = 'var(--primary)';
-            btn.style.color = 'white';
             btn.classList.add('active');
         }
 
         btn.addEventListener('click', () => {
             // Update active button
-            controlsDiv.querySelectorAll('.chart-control-btn').forEach(b => {
-                b.style.background = 'var(--bg-tertiary)';
-                b.style.color = 'var(--text-secondary)';
+            controlsDiv.querySelectorAll('.performance-btn').forEach(b => {
                 b.classList.remove('active');
             });
-            btn.style.background = 'var(--primary)';
-            btn.style.color = 'white';
             btn.classList.add('active');
 
             // Update chart data
@@ -301,9 +282,7 @@ function initPerformanceAnimations() {
         entries.forEach((entry, index) => {
             if (entry.isIntersecting) {
                 setTimeout(() => {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateX(0)';
-                    entry.target.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    entry.target.classList.add('visible');
                 }, index * 100);
                 observer.unobserve(entry.target);
             }
@@ -311,30 +290,19 @@ function initPerformanceAnimations() {
     }, { threshold: 0.1 });
 
     tableRows.forEach(row => {
-        row.style.opacity = '0';
-        row.style.transform = 'translateX(-20px)';
+        row.classList.add('performance-table-row');
         observer.observe(row);
     });
 
-    // Add hover effects to table rows
-    tableRows.forEach(row => {
-        row.addEventListener('mouseenter', () => {
-            row.style.transform = 'scale(1.02)';
-            row.style.transition = 'transform 0.2s ease';
-        });
-
-        row.addEventListener('mouseleave', () => {
-            row.style.transform = 'scale(1)';
-        });
-    });
+    // Hover effects are now handled by CSS
 
     // Animate winner row
     const winnerRow = document.querySelector('.performance-data tr.winner');
     if (winnerRow) {
         const animateWinner = () => {
-            winnerRow.style.boxShadow = '0 0 20px rgba(16, 185, 129, 0.3)';
+            winnerRow.classList.add('performance-winner-glow');
             setTimeout(() => {
-                winnerRow.style.boxShadow = 'none';
+                winnerRow.classList.remove('performance-winner-glow');
             }, 2000);
         };
 
@@ -382,21 +350,8 @@ function compareAlgorithms(alg1, alg2) {
 function initPerformanceMonitor() {
     const monitor = document.createElement('div');
     monitor.className = 'performance-monitor';
-    monitor.style.cssText = `
-        position: fixed;
-        top: 100px;
-        right: 20px;
-        background: var(--bg-card);
-        border: 1px solid var(--border-primary);
-        border-radius: var(--radius-lg);
-        padding: 15px;
-        font-family: var(--font-mono);
-        font-size: 12px;
-        color: var(--text-primary);
-        z-index: 1000;
-        display: none;
-        min-width: 200px;
-    `;
+    monitor.className = 'performance-monitor';
+    monitor.style.display = 'none';
 
     monitor.innerHTML = `
         <div style="font-weight: 600; margin-bottom: 10px;">⚡ Performance Monitor</div>
