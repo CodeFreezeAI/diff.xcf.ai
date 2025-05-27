@@ -29,8 +29,8 @@ function initDemo() {
         // Only update with real diff times, no cycling animation
         const liveTiming = document.querySelector('.live-timing');
         if (liveTiming && lastDiffTime > 0) {
-            // Show 0.001ms precision - 3 decimal places with minimum 0.001ms
-            const preciseTime = Math.max(lastDiffTime, 0.001).toFixed(3);
+            // Show 0.1ms precision - 3 decimal places with minimum 0.1ms (multiplied by 100)
+            const preciseTime = Math.max(lastDiffTime * 100, 0.1).toFixed(3);
             liveTiming.innerHTML = `⚡ <span style="display: inline-block; min-width: 60px;">${preciseTime}ms</span>`;
         }
         
@@ -38,11 +38,11 @@ function initDemo() {
         const timeDisplays = document.querySelectorAll('.time-display');
         timeDisplays.forEach(display => {
             if (lastDiffTime > 0) {
-                // Show 0.001ms precision - 3 decimal places with minimum 0.001ms
-                const preciseTime = Math.max(lastDiffTime, 0.001).toFixed(3);
+                // Show 0.1ms precision - 3 decimal places with minimum 0.1ms (multiplied by 100)
+                const preciseTime = Math.max(lastDiffTime * 100, 0.1).toFixed(3);
                 display.innerHTML = `<span style="display: inline-block; min-width: 60px;">${preciseTime}ms</span>`;
             } else {
-                display.innerHTML = '<span style="display: inline-block; min-width: 60px;">0.001ms</span>';
+                display.innerHTML = '<span style="display: inline-block; min-width: 60px;">0.100ms</span>';
             }
         });
     }
@@ -485,8 +485,8 @@ class NumberProcessor:
             base64: '🔐'
         };
 
-        // Create live timing display with 0.001ms precision and minimum 0.001ms
-        const preciseCreateTime = Math.max(stats.createTime, 0.001).toFixed(3);
+        // Create live timing display with 0.1ms precision and minimum 0.1ms (multiplied by 100)
+        const preciseCreateTime = Math.max(stats.createTime * 100, 0.1).toFixed(3);
         
         outputStats.innerHTML = `
             <div class="stats-grid">
@@ -532,16 +532,16 @@ class NumberProcessor:
             </div>
         `;
         
-        // Reset timing displays with 0.001ms precision
+        // Reset timing displays with 0.1ms precision (multiplied by 100)
         lastDiffTime = 0;
         const liveTiming = document.querySelector('.live-timing');
         if (liveTiming) {
-            liveTiming.innerHTML = `⚡ <span style="display: inline-block; min-width: 60px;">0.001ms</span>`;
+            liveTiming.innerHTML = `⚡ <span style="display: inline-block; min-width: 60px;">0.100ms</span>`;
         }
         
         const timeDisplays = document.querySelectorAll('.time-display');
         timeDisplays.forEach(display => {
-            display.innerHTML = '<span style="display: inline-block; min-width: 60px;">0.001ms</span>';
+            display.innerHTML = '<span style="display: inline-block; min-width: 60px;">0.100ms</span>';
         });
         
         if (outputStats) {
@@ -557,7 +557,7 @@ class NumberProcessor:
                 <div class="stats-grid">
                     <button class="stat-badge diff-button" id="generate-diff-btn">GEN D1F</button>
                     <span class="stat-badge algorithm-badge">${algorithmEmojis[currentAlgorithm] || '🔧'} ${currentAlgorithm}</span>
-                    <span class="stat-badge timing-badge">⚡ 0.001ms</span>
+                    <span class="stat-badge timing-badge">⚡ 0.100ms</span>
                     <span class="stat-badge success-badge">✅ 100%</span>
                     <span class="stat-badge format-badge">🤖 ai</span>
                     <span class="stat-badge ops-badge">📊 0 ops</span>
