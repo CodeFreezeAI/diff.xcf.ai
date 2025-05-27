@@ -15,7 +15,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- CSS -->
-    <link rel="stylesheet" href="css/styles.css?v=1748365999">
+    <link rel="stylesheet" href="css/styles.css?v=1748366999">
     <style>
         .chat-container {
             max-width: 1200px;
@@ -369,7 +369,7 @@
         <div class="chat-header">
             <h1 class="chat-title">
                 D1F Chat 
-                <span style="background: linear-gradient(135deg, #ef4444, #f59e0b); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.6em; margin-left: 12px; animation: pulse 2s infinite;">NEW!</span>
+                <span style="background: linear-gradient(135deg, #ef4444, #000000); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.6em; margin-left: 12px; animation: pulse 2s infinite;">NEW!</span>
             </h1>
             <p class="chat-subtitle">✨ Updated Multi-User P2P Chat with Real WebRTC Mesh Network ✨</p>
         </div>
@@ -545,37 +545,47 @@
 
             async connectToSignalingServer() {
                 return new Promise((resolve, reject) => {
-                    // Use a free WebSocket signaling service
-                    // For production, you'd want to use your own signaling server
+                    // Use a more reliable WebSocket signaling approach
+                    // Try a simple echo server first to test connectivity
                     const signalingUrls = [
-                        'wss://socketsbay.com/wss/v2/1/demo/',
-                        'wss://ws.postman-echo.com/raw',
-                        'wss://echo.websocket.org'
+                        'wss://echo.websocket.org',
+                        'wss://ws.postman-echo.com/raw'
                     ];
                     
                     let urlIndex = 0;
                     
                     const tryConnect = () => {
                         if (urlIndex >= signalingUrls.length) {
-                            // Fallback to a simple peer-to-peer discovery using a public API
-                            this.useFallbackSignaling();
+                            // If all WebSocket servers fail, use a simple localStorage fallback for same-device testing
+                            console.log('🔄 All WebSocket servers failed, using localStorage fallback for testing');
+                            this.useLocalStorageFallback();
                             resolve();
                             return;
                         }
                         
                         const wsUrl = signalingUrls[urlIndex];
+                        console.log('🔗 Trying to connect to:', wsUrl);
                         this.signalingSocket = new WebSocket(wsUrl);
                         
                         this.signalingSocket.onopen = () => {
-                            console.log('Connected to signaling server:', wsUrl);
+                            console.log('✅ Connected to signaling server:', wsUrl);
                             this.reconnectAttempts = 0;
                             this.setupSignalingHandlers();
-                            this.joinRoom();
-                            resolve();
+                            
+                            // Test the connection by sending a test message
+                            this.testSignalingConnection().then(() => {
+                                this.joinRoom();
+                                resolve();
+                            }).catch(() => {
+                                console.warn('❌ Signaling test failed, trying next server');
+                                this.signalingSocket.close();
+                                urlIndex++;
+                                setTimeout(tryConnect, 1000);
+                            });
                         };
                         
                         this.signalingSocket.onerror = (error) => {
-                            console.warn(`Failed to connect to ${wsUrl}:`, error);
+                            console.warn(`❌ Failed to connect to ${wsUrl}:`, error);
                             urlIndex++;
                             setTimeout(tryConnect, 1000);
                         };
@@ -583,7 +593,7 @@
                         this.signalingSocket.onclose = () => {
                             if (this.roomName && this.reconnectAttempts < this.maxReconnectAttempts) {
                                 this.reconnectAttempts++;
-                                console.log(`Reconnecting... attempt ${this.reconnectAttempts}`);
+                                console.log(`🔄 Reconnecting... attempt ${this.reconnectAttempts}`);
                                 setTimeout(() => this.connectToSignalingServer(), 2000);
                             }
                         };
@@ -593,34 +603,84 @@
                 });
             }
 
-            useFallbackSignaling() {
-                // Fallback: Use a simple HTTP-based signaling with a free service
-                console.log('Using fallback HTTP-based signaling');
-                this.updateStatus('connecting', 'Using fallback signaling...');
-                
-                // Use a simple polling mechanism with a free API service
-                this.startHttpSignaling();
+            async testSignalingConnection() {
+                return new Promise((resolve, reject) => {
+                    const testMessage = {
+                        type: 'test',
+                        room: this.roomName,
+                        from: this.peerId,
+                        timestamp: Date.now()
+                    };
+                    
+                    const timeout = setTimeout(() => {
+                        reject(new Error('Signaling test timeout'));
+                    }, 5000);
+                    
+                    // For echo servers, we should receive our own message back
+                    const testHandler = (event) => {
+                        try {
+                            const message = JSON.parse(event.data);
+                            if (message.type === 'test' && message.from === this.peerId) {
+                                console.log('✅ Signaling test successful');
+                                clearTimeout(timeout);
+                                this.signalingSocket.removeEventListener('message', testHandler);
+                                resolve();
+                            }
+                        } catch (e) {
+                            // Ignore parse errors during test
+                        }
+                    };
+                    
+                    this.signalingSocket.addEventListener('message', testHandler);
+                    this.signalingSocket.send(JSON.stringify(testMessage));
+                });
             }
 
-            async startHttpSignaling() {
-                // Use JSONBin.io as a simple signaling backend
-                const apiKey = '$2a$10$8K8Z8Z8Z8Z8Z8Z8Z8Z8Z8O'; // Demo key
-                const binId = `d1f-chat-${this.roomName}`;
+            useLocalStorageFallback() {
+                console.log('📱 Using localStorage fallback for same-device testing');
+                this.updateStatus('connecting', 'Using localStorage fallback...');
                 
-                this.httpSignalingInterval = setInterval(async () => {
-                    try {
-                        // Announce presence
-                        await this.announcePresenceHttp();
-                        
-                        // Check for peers and signaling messages
-                        await this.checkForPeersHttp();
-                        await this.checkForSignalingMessagesHttp();
-                    } catch (error) {
-                        console.warn('HTTP signaling error:', error);
-                    }
-                }, 3000);
+                // Simple localStorage-based signaling for same-device testing
+                this.localStorageInterval = setInterval(() => {
+                    this.checkLocalStorageSignaling();
+                }, 2000);
                 
                 this.joinRoom();
+            }
+
+            checkLocalStorageSignaling() {
+                const roomKey = `d1f-chat-${this.roomName}`;
+                
+                // Announce our presence
+                const peersData = JSON.parse(localStorage.getItem(`${roomKey}-peers`) || '{}');
+                peersData[this.peerId] = {
+                    username: this.username,
+                    timestamp: Date.now()
+                };
+                localStorage.setItem(`${roomKey}-peers`, JSON.stringify(peersData));
+                
+                // Check for other peers
+                Object.keys(peersData).forEach(peerId => {
+                    if (peerId !== this.peerId && !this.peerConnections.has(peerId)) {
+                        // Simulate receiving a peer-joined message
+                        this.handleSignalingMessage({
+                            type: 'peer-joined',
+                            from: peerId,
+                            username: peersData[peerId].username,
+                            room: this.roomName
+                        });
+                    }
+                });
+                
+                // Check for signaling messages
+                const messagesData = JSON.parse(localStorage.getItem(`${roomKey}-messages`) || '[]');
+                messagesData.forEach(message => {
+                    if (message.to === this.peerId && !message.processed) {
+                        this.handleSignalingMessage(message);
+                        message.processed = true;
+                    }
+                });
+                localStorage.setItem(`${roomKey}-messages`, JSON.stringify(messagesData));
             }
 
             setupSignalingHandlers() {
@@ -635,43 +695,81 @@
             }
 
             async handleSignalingMessage(message) {
+                console.log('📨 Received signaling message:', message.type, 'from:', message.from);
+                
                 if (message.room !== this.roomName || message.from === this.peerId) {
+                    console.log('🚫 Ignoring message - wrong room or from self');
                     return; // Ignore messages from other rooms or ourselves
                 }
 
                 switch (message.type) {
                     case 'peer-joined':
+                        console.log('👋 Peer joined:', message.username);
                         await this.handlePeerJoined(message);
                         break;
                     case 'offer':
+                        console.log('📞 Received offer from:', message.username);
                         await this.handleOffer(message);
                         break;
                     case 'answer':
+                        console.log('✅ Received answer from:', message.username);
                         await this.handleAnswer(message);
                         break;
                     case 'ice-candidate':
+                        console.log('🧊 Received ICE candidate from:', message.username);
                         await this.handleIceCandidate(message);
                         break;
                     case 'peer-left':
+                        console.log('👋 Peer left:', message.username);
                         this.handlePeerLeft(message);
+                        break;
+                    case 'heartbeat':
+                        console.log('💓 Heartbeat from:', message.username);
+                        // Just acknowledge the heartbeat
                         break;
                 }
             }
 
             sendSignalingMessage(message) {
                 if (this.signalingSocket && this.signalingSocket.readyState === WebSocket.OPEN) {
-                    this.signalingSocket.send(JSON.stringify({
+                    const fullMessage = {
                         ...message,
                         room: this.roomName,
                         from: this.peerId,
                         username: this.username,
                         timestamp: Date.now()
-                    }));
+                    };
+                    console.log('📤 Sending signaling message:', fullMessage.type, 'to:', fullMessage.to || 'all');
+                    this.signalingSocket.send(JSON.stringify(fullMessage));
+                } else if (this.localStorageInterval) {
+                    // Use localStorage fallback
+                    const fullMessage = {
+                        ...message,
+                        room: this.roomName,
+                        from: this.peerId,
+                        username: this.username,
+                        timestamp: Date.now()
+                    };
+                    
+                    if (message.to) {
+                        // Direct message to specific peer
+                        const roomKey = `d1f-chat-${this.roomName}`;
+                        const messagesData = JSON.parse(localStorage.getItem(`${roomKey}-messages`) || '[]');
+                        messagesData.push(fullMessage);
+                        localStorage.setItem(`${roomKey}-messages`, JSON.stringify(messagesData));
+                        console.log('📤 Stored signaling message in localStorage:', fullMessage.type, 'to:', fullMessage.to);
+                    } else {
+                        // Broadcast message (like peer-joined)
+                        console.log('📤 Broadcasting via localStorage:', fullMessage.type);
+                    }
+                } else {
+                    console.warn('⚠️ Cannot send signaling message - no signaling method available');
                 }
             }
 
             joinRoom() {
                 // Announce our presence in the room
+                console.log('🚪 Joining room:', this.roomName, 'as:', this.username);
                 this.sendSignalingMessage({
                     type: 'peer-joined',
                     username: this.username
@@ -683,27 +781,60 @@
                 
                 // Start heartbeat
                 this.startHeartbeat();
+                
+                // Also send a periodic announcement to catch peers who joined before us
+                this.announcementInterval = setInterval(() => {
+                    if (this.connectedPeers.size === 0) {
+                        console.log('🔄 Re-announcing presence (no peers connected)');
+                        this.sendSignalingMessage({
+                            type: 'peer-joined',
+                            username: this.username
+                        });
+                    }
+                }, 5000);
             }
 
             async handlePeerJoined(message) {
+                console.log('🤝 Handling peer joined:', message.from, message.username);
+                
                 if (!this.peerConnections.has(message.from)) {
+                    console.log('🆕 New peer detected, checking if we should initiate connection');
+                    console.log('Our ID:', this.peerId, 'Their ID:', message.from);
+                    
                     // Only initiate connection if our peerId is "smaller" to avoid duplicate connections
                     if (this.peerId < message.from) {
+                        console.log('✅ We should initiate connection (smaller ID)');
                         await this.initiateConnection(message.from, message.username);
+                    } else {
+                        console.log('⏳ Waiting for them to initiate connection (larger ID)');
+                        // Send back our presence so they know we're here
+                        this.sendSignalingMessage({
+                            type: 'peer-joined',
+                            username: this.username
+                        });
                     }
+                } else {
+                    console.log('🔄 Peer already known:', message.from);
                 }
             }
 
             async initiateConnection(remotePeerId, remoteUsername) {
-                const peerConnection = await this.createPeerConnection(remotePeerId, remoteUsername);
-                const offer = await peerConnection.createOffer();
-                await peerConnection.setLocalDescription(offer);
+                console.log('🚀 Initiating connection to:', remotePeerId, remoteUsername);
                 
-                this.sendSignalingMessage({
-                    type: 'offer',
-                    offer: offer,
-                    to: remotePeerId
-                });
+                try {
+                    const peerConnection = await this.createPeerConnection(remotePeerId, remoteUsername);
+                    const offer = await peerConnection.createOffer();
+                    await peerConnection.setLocalDescription(offer);
+                    
+                    console.log('📞 Sending offer to:', remotePeerId);
+                    this.sendSignalingMessage({
+                        type: 'offer',
+                        offer: offer,
+                        to: remotePeerId
+                    });
+                } catch (error) {
+                    console.error('❌ Failed to initiate connection:', error);
+                }
             }
 
             async createPeerConnection(remotePeerId, remoteUsername) {
@@ -879,6 +1010,8 @@
             }
 
             disconnect() {
+                console.log('🔌 Disconnecting from chat...');
+                
                 // Announce departure
                 if (this.signalingSocket && this.signalingSocket.readyState === WebSocket.OPEN) {
                     this.sendSignalingMessage({
@@ -900,10 +1033,16 @@
                     this.heartbeatInterval = null;
                 }
 
-                // Stop HTTP signaling if using fallback
-                if (this.httpSignalingInterval) {
-                    clearInterval(this.httpSignalingInterval);
-                    this.httpSignalingInterval = null;
+                // Stop announcement interval
+                if (this.announcementInterval) {
+                    clearInterval(this.announcementInterval);
+                    this.announcementInterval = null;
+                }
+
+                // Stop localStorage fallback
+                if (this.localStorageInterval) {
+                    clearInterval(this.localStorageInterval);
+                    this.localStorageInterval = null;
                 }
 
                 // Close signaling socket
@@ -919,6 +1058,8 @@
                 this.roomName = '';
                 this.updateConnectionStatus();
                 this.connectBtn.disabled = false;
+                
+                console.log('✅ Disconnected successfully');
             }
 
             sendMessage() {
@@ -975,23 +1116,6 @@
 
             addSystemMessage(text) {
                 this.addMessage(text, 'system');
-            }
-
-            // HTTP signaling fallback methods
-            async announcePresenceHttp() {
-                // Implementation for HTTP-based presence announcement
-                // This would use a service like Firebase, Supabase, or a simple REST API
-                console.log('Announcing presence via HTTP');
-            }
-
-            async checkForPeersHttp() {
-                // Implementation for checking peers via HTTP
-                console.log('Checking for peers via HTTP');
-            }
-
-            async checkForSignalingMessagesHttp() {
-                // Implementation for checking signaling messages via HTTP
-                console.log('Checking signaling messages via HTTP');
             }
         }
 
