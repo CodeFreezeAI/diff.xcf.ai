@@ -203,13 +203,18 @@ class NumberProcessor:
         });
     }
 
-    // Clear destination button
+    // Clear both inputs button
     if (clearDestBtn) {
         clearDestBtn.addEventListener('click', () => {
+            if (sourceInput) {
+                sourceInput.value = '';
+            }
             if (destInput) {
                 destInput.value = '';
                 destInput.focus();
             }
+            // Clear the diff output as well
+            showPlaceholder();
         });
     }
 
