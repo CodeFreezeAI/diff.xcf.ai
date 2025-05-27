@@ -1,6 +1,6 @@
 /* Diff Showcase Section Components */
 .diff-showcase {
-    background: var(--bg-secondary);
+    background: transparent;
     padding: var(--space-3xl) 0 var(--space-xl) 0;
 }
 
@@ -957,10 +957,10 @@
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr;
-    gap: var(--space-sm);
+    gap: var(--space-md);
     align-items: center;
     justify-items: center;
-    width: 360px;
+    width: 480px;
     grid-template-areas: 
         "button algorithm timing"
         "accuracy format ops";
@@ -985,8 +985,8 @@
     position: relative;
     overflow: hidden;
     box-shadow: var(--shadow-sm);
-    min-width: 110px;
-    width: 110px;
+    min-width: 140px;
+    width: 140px;
     min-height: 40px;
     display: flex;
     align-items: center;
@@ -1056,24 +1056,7 @@
     background: var(--gradient-secondary);
 }
 
-/* D1F DIFF Card Styling */
-.diff-card {
-    background: var(--gradient-primary) !important;
-    color: white !important;
-    font-weight: 700 !important;
-    letter-spacing: 0.5px !important;
-    border: none !important;
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3) !important;
-}
-
-.diff-card::before {
-    background: rgba(255, 255, 255, 0.2) !important;
-}
-
-.diff-card:hover {
-    transform: translateY(-3px) !important;
-    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4) !important;
-}
+/* D1F DIFF Card Styling - Now styled same as other cards */
 
 /* Performance Section Components */
 .performance {
@@ -1410,8 +1393,9 @@
 /* Desktop full-width with reasonable maximum for ultrawide screens */
 @media (min-width: 1920px) {
     .demo-container {
-        max-width: 1800px;
+        max-width: none;
         margin: 0 auto;
+        padding: 0 60px;
     }
     
     .algo-comparison-container {
@@ -1487,7 +1471,7 @@
     
     .stats-grid {
         width: 100%;
-        max-width: 320px;
+        max-width: 420px;
         grid-template-columns: 1fr 1fr;
         grid-template-rows: 1fr 1fr 1fr;
         grid-template-areas: 
@@ -1498,7 +1482,7 @@
     }
     
     .output-stats .stat-badge {
-        min-width: 90px;
+        min-width: 120px;
         width: auto;
         font-size: 0.7rem;
         padding: var(--space-xs) var(--space-sm);
@@ -1542,7 +1526,7 @@
     }
     
     .stats-grid {
-        max-width: 280px;
+        max-width: 380px;
         gap: var(--space-xs);
         grid-template-areas: 
             "button button"
@@ -1552,7 +1536,7 @@
     }
     
     .output-stats .stat-badge {
-        min-width: 80px;
+        min-width: 100px;
         font-size: 0.65rem;
         padding: var(--space-xs);
         min-height: 32px;
@@ -1586,7 +1570,7 @@
     }
     
     .stats-grid {
-        max-width: 260px;
+        max-width: 320px;
         grid-template-columns: 1fr;
         grid-template-rows: repeat(6, 1fr);
         grid-template-areas: 

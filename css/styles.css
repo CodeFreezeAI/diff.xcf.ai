@@ -97,6 +97,33 @@ body {
     }
 }
 
+/* Constrained sections - all sections except demo use 1200px max-width */
+.hero .container,
+.diff-showcase .container,
+.features .container,
+.algorithms .container,
+.performance .container,
+.docs .container,
+.algo-comparison-section .algo-comparison-container,
+.footer .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--space-lg);
+}
+
+@media (max-width: 768px) {
+    .hero .container,
+    .diff-showcase .container,
+    .features .container,
+    .algorithms .container,
+    .performance .container,
+    .docs .container,
+    .algo-comparison-section .algo-comparison-container,
+    .footer .container {
+        padding: 0 var(--space-md);
+    }
+}
+
 /* Typography */
 h1, h2, h3, h4, h5, h6 {
     font-weight: 700;
@@ -219,8 +246,8 @@ a:hover {
     align-items: center;
     justify-content: space-between;
     padding: var(--space-md) var(--space-lg);
-    max-width: none;
-    margin: 0;
+    max-width: 1200px;
+    margin: 0 auto;
     width: 100%;
 }
 
@@ -337,47 +364,27 @@ a:hover {
 /* Hero Section */
 .hero {
     position: relative;
-    min-height: auto;
+    height: auto;
     display: flex;
     align-items: center;
-    padding: 80px 0 var(--space-3xl) 0;
+    padding: 125px 0 30px 0;
     overflow: hidden;
 }
 
 .hero-background {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: -1;
+    display: none;
 }
 
 .hero-grid {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: 
-        linear-gradient(rgba(99, 102, 241, 0.1) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(99, 102, 241, 0.1) 1px, transparent 1px);
-    background-size: 50px 50px;
-    animation: grid-move 20s linear infinite;
+    display: none;
 }
 
 .hero-gradient {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: var(--gradient-bg);
-    opacity: 0.8;
+    display: none;
 }
 
 .hero-content {
-    flex: 1;
+    flex: 0 0 auto;
     max-width: 600px;
     z-index: 1;
 }
@@ -385,26 +392,28 @@ a:hover {
 .hero-badge {
     display: inline-flex;
     align-items: center;
-    gap: var(--space-sm);
-    padding: var(--space-sm) var(--space-md);
-    background: rgba(99, 102, 241, 0.1);
-    border: 1px solid rgba(99, 102, 241, 0.3);
+    gap: var(--space-xs);
+    padding: var(--space-xs) var(--space-sm);
+    background: rgba(139, 92, 246, 0.15);
+    border: 1px solid rgba(139, 92, 246, 0.4);
     border-radius: var(--radius-xl);
-    color: var(--primary-light);
-    font-size: 0.875rem;
-    font-weight: 600;
-    margin-bottom: var(--space-xl);
+    color: #a78bfa;
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-bottom: var(--space-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
 .badge-icon {
-    font-size: 1rem;
+    font-size: 0.875rem;
 }
 
 .hero-title {
     font-size: 4rem;
     font-weight: 900;
     line-height: 1.1;
-    margin-bottom: var(--space-lg);
+    margin-bottom: var(--space-sm);
 }
 
 .gradient-text {
@@ -439,14 +448,14 @@ a:hover {
 .hero-subtitle {
     font-size: 1.25rem;
     color: var(--text-secondary);
-    margin-bottom: var(--space-2xl);
+    margin-bottom: var(--space-sm);
     line-height: 1.6;
 }
 
 .hero-stats {
     display: flex;
     gap: var(--space-xl);
-    margin-bottom: var(--space-2xl);
+    margin-bottom: var(--space-sm);
 }
 
 .stat {
@@ -473,7 +482,7 @@ a:hover {
 }
 
 .hero-visual {
-    flex: 1;
+    flex: 0 0 auto;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -540,6 +549,11 @@ a:hover {
 /* Section Styles */
 section {
     padding: var(--space-3xl) 0;
+}
+
+/* Add minimal top padding to first section after hero */
+.hero + section {
+    padding-top: 30px;
 }
 
 .features {
@@ -659,7 +673,9 @@ section {
     .hero {
         flex-direction: column;
         text-align: center;
-        gap: var(--space-2xl);
+        gap: var(--space-sm);
+        height: auto;
+        padding: 105px 0 30px 0;
     }
     
     .hero-visual {
@@ -713,6 +729,10 @@ section {
         border-bottom: none;
     }
     
+    .hero {
+        padding: 85px 0 30px 0;
+    }
+    
     .hero-title {
         font-size: 2.5rem;
     }
@@ -751,14 +771,6 @@ section {
 }
 
 /* Animations */
-@keyframes grid-move {
-    0% {
-        transform: translate(0, 0);
-    }
-    100% {
-        transform: translate(50px, 50px);
-    }
-}
 
 @keyframes shimmer {
     0% {
@@ -857,12 +869,12 @@ a:focus {
 /* Desktop full-width with reasonable maximum for ultrawide screens */
 @media (min-width: 1920px) {
     .container {
-        max-width: 1800px;
+        max-width: 1200px;
         margin: 0 auto;
     }
     
     .nav-container {
-        max-width: 1800px;
+        max-width: 1200px;
         margin: 0 auto;
     }
 }
