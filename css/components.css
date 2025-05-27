@@ -9,8 +9,6 @@
     grid-template-columns: 1fr 1fr;
     gap: var(--space-3xl);
     align-items: end;
-    max-width: 1200px;
-    margin: 0 auto;
 }
 
 .showcase-text {
@@ -530,9 +528,10 @@
 }
 
 .demo-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0;
+    max-width: none;
+    margin: 0;
+    padding: 0 var(--space-lg);
+    width: 100%;
 }
 
 .demo-controls {
@@ -1389,6 +1388,20 @@
     transform: translateY(-2px);
 }
 
+/* Desktop full-width with reasonable maximum for ultrawide screens */
+@media (min-width: 1920px) {
+    .demo-container {
+        max-width: 1800px;
+        margin: 0 auto;
+    }
+    
+    .algo-comparison-container {
+        max-width: 1800px;
+        margin: 0 auto;
+        width: auto;
+    }
+}
+
 /* Responsive Design for Components */
 @media (max-width: 1024px) {
     .algorithm-panel {
@@ -1660,12 +1673,13 @@
 }
 
 .algo-comparison-container {
-    max-width: 1200px;
-    margin: 0 auto;
+    max-width: none;
+    margin: 0 var(--space-lg);
     background: rgba(255, 255, 255, 0.95);
     border-radius: 20px;
     padding: 30px;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    width: calc(100% - 2 * var(--space-lg));
 }
 
 .algo-comparison-title {

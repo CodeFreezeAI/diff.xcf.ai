@@ -219,8 +219,9 @@ a:hover {
     align-items: center;
     justify-content: space-between;
     padding: var(--space-md) var(--space-lg);
-    max-width: 1200px;
-    margin: 0 auto;
+    max-width: none;
+    margin: 0;
+    width: 100%;
 }
 
 .nav-brand {
@@ -851,4 +852,17 @@ button:focus,
 a:focus {
     outline: 2px solid var(--primary);
     outline-offset: 2px;
-} 
+}
+
+/* Desktop full-width with reasonable maximum for ultrawide screens */
+@media (min-width: 1920px) {
+    .container {
+        max-width: 1800px;
+        margin: 0 auto;
+    }
+    
+    .nav-container {
+        max-width: 1800px;
+        margin: 0 auto;
+    }
+}
