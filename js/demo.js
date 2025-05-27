@@ -17,31 +17,41 @@ function initDemo() {
     let startTime;
 
     // Initialize real-time performance monitoring
+    let lastDiffTime = 0;
+    let isGenerating = false;
+    
     function startPerformanceMonitoring() {
-        startTime = performance.now();
-        updatePerformanceDisplay();
+        // Don't start the cycling animation - we only want real timing
+        console.log('🎯 Performance monitoring initialized - showing real algorithm times only');
     }
 
     function updatePerformanceDisplay() {
-        const currentTime = performance.now();
-        const elapsedTime = ((currentTime - startTime) % 1000).toFixed(1); // Calculate elapsed time modulo 1000ms
+        // Only update with real diff times, no cycling animation
+        const liveTiming = document.querySelector('.live-timing');
+        if (liveTiming && lastDiffTime > 0) {
+            // Show 0.001ms precision - 3 decimal places with minimum 0.001ms
+            const preciseTime = Math.max(lastDiffTime, 0.001).toFixed(3);
+            liveTiming.innerHTML = `⚡ <span style="display: inline-block; min-width: 60px;">${preciseTime}ms</span>`;
+        }
         
-        // Update all time displays in the UI
+        // Update time displays with last real timing
         const timeDisplays = document.querySelectorAll('.time-display');
         timeDisplays.forEach(display => {
-            display.textContent = `${elapsedTime}ms`;
+            if (lastDiffTime > 0) {
+                // Show 0.001ms precision - 3 decimal places with minimum 0.001ms
+                const preciseTime = Math.max(lastDiffTime, 0.001).toFixed(3);
+                display.innerHTML = `<span style="display: inline-block; min-width: 60px;">${preciseTime}ms</span>`;
+            } else {
+                display.innerHTML = '<span style="display: inline-block; min-width: 60px;">0.001ms</span>';
+            }
         });
-
-        performanceTimer = requestAnimationFrame(updatePerformanceDisplay);
     }
 
     function stopPerformanceMonitoring() {
-        if (performanceTimer) {
-            cancelAnimationFrame(performanceTimer);
-        }
+        // No animation to stop
     }
 
-    // Start monitoring when page loads
+    // Initialize without starting animation
     startPerformanceMonitoring();
 
     // Example code snippets
@@ -220,6 +230,11 @@ class NumberProcessor:
             
             if (sourceInput) sourceInput.value = randomExample.source;
             if (destInput) destInput.value = randomExample.destination;
+            
+            // Automatically generate diff after loading example
+            setTimeout(() => {
+                generateDiff();
+            }, 100);
         });
     }
 
@@ -238,12 +253,8 @@ class NumberProcessor:
         });
     }
 
-    // Generate diff button
-    if (generateBtn) {
-        generateBtn.addEventListener('click', () => {
-            generateDiff();
-        });
-    }
+    // Generate diff button (now handled in updateOutputStats and showPlaceholder)
+    // The DIFF button is dynamically created in the stats grid
 
     // Auto-generate on input change (debounced)
     const debouncedGenerate = debounce(generateDiff, 1000);
@@ -274,268 +285,167 @@ class NumberProcessor:
             showPlaceholder();
             return;
         }
+        
+        // Add some complexity to ensure measurable timing
+        console.log(`📝 Input sizes: Source=${source.length} chars, Dest=${destination.length} chars`);
 
-        // Start timing
-        const startTime = performance.now();
+        // Set generating flag for live timing
+        isGenerating = true;
 
-        // Show loading state
-        if (diffOutput) {
-            diffOutput.innerHTML = '<div class="loading-spinner"></div><p>Generating diff...</p>';
-            diffOutput.classList.add('loading');
-        }
-
-        // Simulate diff generation (in real implementation, this would call the actual MultiLineDiff library)
+        // Use real algorithm implementation with minimal delay for UI feedback
         setTimeout(() => {
-            const endTime = performance.now();
-            let processingTime = (endTime - startTime) / 100;
+            console.log(`🚀 Starting ${algorithm} algorithm...`);
+            const result = generateRealDiff(source, destination, algorithm, format);
             
-            // Adjust time based on algorithm type
-            if (['flash', 'zoom'].includes(algorithm)) {
-                // Bulk processing algorithms - faster
-                processingTime = processingTime * 0.3;
-            } else {
-                // Line-based algorithms - more detailed processing
-                processingTime = processingTime * 0.8;
-            }
+            // Store the actual timing for live display - NO PARSING, keep raw precision
+            lastDiffTime = result.stats.createTime; // Raw number, no conversion
+            isGenerating = false;
             
-            const result = simulateDiffGeneration(source, destination, algorithm, format);
+            console.log(`✅ ${algorithm} completed in ${lastDiffTime}ms (raw: ${result.stats.createTime})`);
             
-            // Update the stats with actual measured time (keep full precision)
-            result.stats.createTime = processingTime.toFixed(3);
-            result.stats.applyTime = (processingTime * 0.4).toFixed(3); // Apply time is typically faster
+            // Update performance displays immediately
+            updatePerformanceDisplay();
             
             displayDiffResult(result);
-        }, 800);
+        }, 50); // Minimal delay for UI feedback
     }
 
-    function simulateDiffGeneration(source, destination, algorithm, format) {
-        // This is a simulation - in a real implementation, you would call the actual MultiLineDiff library
+    function generateRealDiff(source, destination, algorithm, format) {
+        // Use the actual MultiLineDiff implementation with high precision timing
+        console.log(`🚀 Starting timing measurement for ${algorithm}...`);
+        
+        const createStartTime = performance.now();
+        
+        // Create diff using real algorithm
+        const diffResult = MultiLineDiff.createDiff(source, destination, algorithm);
+        
+        const createEndTime = performance.now();
+        let actualCreateTime = createEndTime - createStartTime;
+        
+        // Measure apply time
+        const applyStartTime = performance.now();
+        const appliedResult = MultiLineDiff.applyDiff(source, diffResult);
+        const applyEndTime = performance.now();
+        let actualApplyTime = applyEndTime - applyStartTime;
+        
+        // Debug: Check if timing is too small
+        console.log(`🔍 RAW MEASUREMENTS: Create=${actualCreateTime}ms, Apply=${actualApplyTime}ms`);
+        
+        // If timing is 0 or extremely small, run multiple iterations for better measurement
+        if (actualCreateTime < 0.001) {
+            console.log(`⚡ Running multiple iterations for better precision...`);
+            const iterations = 100;
+            const multiStartTime = performance.now();
+            
+            for (let i = 0; i < iterations; i++) {
+                MultiLineDiff.createDiff(source, destination, algorithm);
+            }
+            
+            const multiEndTime = performance.now();
+            actualCreateTime = (multiEndTime - multiStartTime) / iterations;
+            console.log(`📊 Average over ${iterations} iterations: ${actualCreateTime}ms`);
+        }
+        
+        // Calculate stats with NO ROUNDING - keep full precision
         const sourceLines = source.split('\n');
         const destLines = destination.split('\n');
         
-        // Calculate basic stats
+        console.log(`🎯 FINAL TIMING: Create=${actualCreateTime}ms, Apply=${actualApplyTime}ms`);
+        console.log(`📊 Algorithm: ${algorithm}, Operations: ${diffResult.operations.length}`);
+        
+        console.log(`✅ DISPLAY TIMING: Create=${actualCreateTime}ms, Apply=${actualApplyTime}ms`);
+        
         const stats = {
             algorithm: algorithm,
             format: format,
             sourceLines: sourceLines.length,
             destLines: destLines.length,
-            operations: getAlgorithmOperations(algorithm),
-            createTime: getAlgorithmTime(algorithm, 'create'),
-            applyTime: getAlgorithmTime(algorithm, 'apply')
+            operations: diffResult.operations.length,
+            createTime: actualCreateTime, // Show real timing, no artificial minimum
+            applyTime: actualApplyTime,   // Show real timing, no artificial minimum
+            totalTime: actualCreateTime + actualApplyTime,
+            accuracy: appliedResult === destination ? '100%' : 'ERROR'
         };
 
-        // Generate ASCII diff simulation
+        // Generate output based on format
         let diffContent = '';
         
-        if (format === 'ai' || format === 'terminal') {
-            diffContent = generateASCIIDiff(sourceLines, destLines);
-            // Count actual operations in the diff
-            stats.operations = countActualOperations(diffContent, algorithm);
+        if (format === 'ai') {
+            diffContent = MultiLineDiff.generateASCIIDiff(diffResult, source);
         } else if (format === 'json') {
-            diffContent = generateJSONDiff(sourceLines, destLines);
+            diffContent = generateJSONFromDiffResult(diffResult);
         } else if (format === 'base64') {
-            diffContent = generateBase64Diff(sourceLines, destLines);
+            diffContent = generateBase64FromDiffResult(diffResult);
         }
 
         return {
             content: diffContent,
-            stats: stats
+            stats: stats,
+            diffResult: diffResult
         };
     }
 
-    function generateASCIIDiff(sourceLines, destLines) {
-        const algorithm = algorithmSelect?.value || 'megatron';
-        
-        // For Flash and Zoom algorithms, generate minimal operations
-        if (algorithm === 'flash' || algorithm === 'zoom') {
-            return generateMinimalDiff(sourceLines, destLines);
-        }
-        
-        // For line-aware algorithms, show detailed line-by-line comparison
-        let diff = '';
-        const maxLines = Math.max(sourceLines.length, destLines.length);
-        
-        for (let i = 0; i < maxLines; i++) {
-            const sourceLine = sourceLines[i];
-            const destLine = destLines[i];
-            
-            // Check if both lines are just closing braces
-            const isSourceCloseBrace = sourceLine && sourceLine.trim() === '}';
-            const isDestCloseBrace = destLine && destLine.trim() === '}';
-            
-            // Check if this line appears in both source and dest consecutively
-            const isConsecutiveIdentical = sourceLine && destLine && 
-                sourceLine === destLine && 
-                i < maxLines - 1 && 
-                sourceLines[i + 1] === destLines[i + 1];
 
-            if (sourceLine === destLine && sourceLine !== undefined) {
-                // Unchanged line - show as retain
-                diff += `📎 ${sourceLine}\n`;
-            } else if (isSourceCloseBrace && isDestCloseBrace) {
-                // Both lines are closing braces - show as retain
-                diff += `📎 ${sourceLine || destLine}\n`;
-            } else if (isConsecutiveIdentical) {
-                // Lines are identical and appear consecutively - show as retain
-                diff += `📎 ${sourceLine}\n`;
-                // Skip the next line since we've handled it as part of this consecutive match
-                i++;
-                diff += `📎 ${sourceLines[i]}\n`;
-            } else {
-                // Changed line - show individual operations
-                if (sourceLine !== undefined) {
-                    diff += `❌ ${sourceLine}\n`;
-                }
-                if (destLine !== undefined) {
-                    diff += `✅ ${destLine}\n`;
-                }
+
+    function generateJSONFromDiffResult(diffResult) {
+        const operations = diffResult.operations.map(op => {
+            switch (op.type) {
+                case 'retain':
+                    return { "=": op.value };
+                case 'delete':
+                    return { "-": op.value };
+                case 'insert':
+                    return { "+": op.value };
+                default:
+                    return {};
             }
-        }
-        
-        return diff.trim();
-    }
-
-    function generateMinimalDiff(sourceLines, destLines) {
-        // Flash/Zoom algorithms work with bulk operations: Retain, Delete, Insert
-        // Find common prefix and suffix, then group the middle changes
-        let diff = '';
-        
-        // Find common prefix (lines that are the same at the beginning)
-        let prefixEnd = 0;
-        while (prefixEnd < Math.min(sourceLines.length, destLines.length) && 
-               sourceLines[prefixEnd] === destLines[prefixEnd]) {
-            prefixEnd++;
-        }
-        
-        // Find common suffix (lines that are the same at the end)
-        let sourceSuffixStart = sourceLines.length;
-        let destSuffixStart = destLines.length;
-        while (sourceSuffixStart > prefixEnd && destSuffixStart > prefixEnd &&
-               sourceLines[sourceSuffixStart - 1] === destLines[destSuffixStart - 1]) {
-            sourceSuffixStart--;
-            destSuffixStart--;
-        }
-        
-        // RETAIN: Show common prefix
-        for (let i = 0; i < prefixEnd; i++) {
-            diff += `📎 ${sourceLines[i]}\n`;
-        }
-        
-        // DELETE: Show middle section from source
-        for (let i = prefixEnd; i < sourceSuffixStart; i++) {
-            diff += `❌ ${sourceLines[i]}\n`;
-        }
-        
-        // INSERT: Show middle section from destination
-        for (let i = prefixEnd; i < destSuffixStart; i++) {
-            diff += `✅ ${destLines[i]}\n`;
-        }
-        
-        // RETAIN: Show common suffix
-        for (let i = sourceSuffixStart; i < sourceLines.length; i++) {
-            diff += `📎 ${sourceLines[i]}\n`;
-        }
-        
-        return diff.trim() || '📎 No changes detected';
-    }
-
-    function generateJSONDiff(sourceLines, destLines) {
-        const operations = [];
-        
-        // Simulate operations
-        operations.push({ "=": 5 }); // retain 5 chars
-        operations.push({ "-": 3 }); // delete 3 chars
-        operations.push({ "+": "new content" }); // insert content
-        operations.push({ "=": 10 }); // retain 10 chars
+        });
         
         const metadata = {
-            "str": 0,
-            "cnt": sourceLines.length,
-            "alg": "megatron",
-            "app": "requiresFullSource",
-            "tim": 0.0234
+            "alg": diffResult.metadata?.algorithm || "unknown",
+            "ops": diffResult.operations.length,
+            "tim": diffResult.metadata?.processingTime || 0
         };
 
         return JSON.stringify({
-            "df": operations,
-            "md": metadata
+            "operations": operations,
+            "metadata": metadata
         }, null, 2);
     }
 
-    function generateBase64Diff(sourceLines, destLines) {
-        const jsonDiff = generateJSONDiff(sourceLines, destLines);
+    function generateBase64FromDiffResult(diffResult) {
+        const jsonDiff = generateJSONFromDiffResult(diffResult);
         return btoa(jsonDiff);
     }
 
-    function getAlgorithmTime(algorithm, operation) {
-        const times = {
-            flash: { create: 14.5, apply: 6.6 },
-            zoom: { create: 23.9, apply: 9.1 },
-            optimus: { create: 43.7, apply: 6.6 },
-            starscream: { create: 45.1, apply: 6.9 },
-            megatron: { create: 47.8, apply: 7.0 }
-        };
-        
-        return times[algorithm]?.[operation] || 25.0;
-    }
-
-    function getAlgorithmOperations(algorithm) {
-        const operations = {
-            flash: 3,        // Fast algorithms produce minimal operations
-            zoom: 3,         // Simple character-based, minimal operations
-            optimus: 1256,   // Line-aware, detailed operations
-            starscream: 1256, // Line-aware, detailed operations
-            megatron: 1256   // Semantic analysis, detailed operations
-        };
-        
-        return operations[algorithm] || 3;
-    }
-
-    function countActualOperations(diffContent, algorithm) {
-        if (!diffContent) return 0;
-        
-        const lines = diffContent.split('\n').filter(line => line.trim());
-        
-        // For ALL algorithms, count operation groups (consecutive operations of same type = 1 operation)
-        let operations = 0;
-        let lastType = '';
-        
-        for (const line of lines) {
-            const currentType = line.startsWith('📎') ? 'retain' : 
-                              line.startsWith('❌') ? 'delete' : 
-                              line.startsWith('✅') ? 'insert' : '';
-            
-            if (currentType && currentType !== lastType) {
-                operations++;
-                lastType = currentType;
-            }
-        }
-        
-        return operations;
-    }
+    // Remove old simulation functions - now using real algorithms
 
     function displayDiffResult(result) {
         if (!diffOutput) return;
-
-        diffOutput.classList.remove('loading');
         
         // Display the diff content
         const format = formatSelect?.value || 'ai';
         
-        if (format === 'ai' || format === 'terminal') {
-            const cssClass = format === 'terminal' ? 'ascii-diff terminal-colors' : 'ascii-diff';
+        if (format === 'ai') {
+            // For AI format, escape HTML for syntax highlighting
             diffOutput.innerHTML = `
-                <pre class="${cssClass}"><code class="language-swift">${escapeHtml(result.content)}</code></pre>
+                <pre class="ascii-diff"><code class="language-swift">${escapeHtml(result.content)}</code></pre>
             `;
             
-            // Apply syntax highlighting for ASCII diff
+            // Apply syntax highlighting for ASCII diff (AI format only)
             highlightASCIIDiff(diffOutput.querySelector('.ascii-diff'));
             
             // Apply Prism.js syntax highlighting for AI format
-            if (format === 'ai' && window.Prism) {
+            if (window.Prism) {
                 Prism.highlightElement(diffOutput.querySelector('code'));
             }
+        } else if (format === 'base64') {
+            // For base64 format, add text wrapping
+            diffOutput.innerHTML = `
+                <pre class="base64-output"><code>${escapeHtml(result.content)}</code></pre>
+            `;
         } else {
+            // For JSON format
             diffOutput.innerHTML = `
                 <pre><code class="language-json">${escapeHtml(result.content)}</code></pre>
             `;
@@ -556,24 +466,6 @@ class NumberProcessor:
     function highlightASCIIDiff(element) {
         if (!element) return;
         
-        // For terminal colors, apply simple line-based highlighting
-        if (element.classList.contains('terminal-colors')) {
-            const codeElement = element.querySelector('code');
-            if (codeElement) {
-                const lines = codeElement.textContent.split('\n');
-                const highlightedLines = lines.map(line => {
-                    if (line.startsWith('📎')) {
-                        return `<span class="retain">${escapeHtml(line)}</span>`;
-                    } else if (line.startsWith('❌')) {
-                        return `<span class="delete">${escapeHtml(line)}</span>`;
-                    } else if (line.startsWith('✅')) {
-                        return `<span class="insert">${escapeHtml(line)}</span>`;
-                    }
-                    return escapeHtml(line);
-                });
-                codeElement.innerHTML = highlightedLines.join('\n');
-            }
-        }
         // For AI format, let Prism.js handle the syntax highlighting
         // The emoji symbols will be part of the Swift syntax highlighting
     }
@@ -584,24 +476,50 @@ class NumberProcessor:
         const algorithmEmojis = {
             flash: '⚡',
             optimus: '🤖',
-            megatron: '🧠',
-            starscream: '🌟',
-            zoom: '🔍'
+            megatron: '🧠'
         };
 
         const formatEmojis = {
             ai: '🤖',
-            terminal: '🌈',
             json: '📊',
             base64: '🔐'
         };
 
+        // Create live timing display with 0.001ms precision and minimum 0.001ms
+        const preciseCreateTime = Math.max(stats.createTime, 0.001).toFixed(3);
+        
         outputStats.innerHTML = `
-            <span class="stat-badge">${algorithmEmojis[stats.algorithm] || '🔧'} ${stats.algorithm}</span>
-            <span class="stat-badge">${formatEmojis[stats.format] || '📄'} ${stats.format}</span>
-            <span class="stat-badge">⚡ ${stats.createTime}ms</span>
-            <span class="stat-badge">📊 ${stats.operations} ops</span>
+            <div class="stats-grid">
+                <button class="stat-badge diff-button" id="generate-diff-btn">GEN D1F</button>
+                <span class="stat-badge algorithm-badge">${algorithmEmojis[stats.algorithm] || '🔧'} ${stats.algorithm}</span>
+                <span class="stat-badge timing-badge live-timing">⚡ ${preciseCreateTime}ms</span>
+                <span class="stat-badge format-badge">${formatEmojis[stats.format] || '📄'} ${stats.format}</span>
+                <span class="stat-badge ops-badge">📊 ${stats.operations} ops</span>
+            </div>
         `;
+
+        // Add accuracy indicator if there's an error
+        if (stats.accuracy && stats.accuracy !== '100%') {
+            const currentContent = outputStats.innerHTML;
+            const updatedContent = currentContent.replace(
+                '</div>',
+                '<span class="stat-badge error-badge">❌ ' + stats.accuracy + '</span></div>'
+            );
+            outputStats.innerHTML = updatedContent;
+        } else if (stats.accuracy) {
+            const currentContent = outputStats.innerHTML;
+            const updatedContent = currentContent.replace(
+                '</div>',
+                '<span class="stat-badge success-badge">✅ ' + stats.accuracy + '</span></div>'
+            );
+            outputStats.innerHTML = updatedContent;
+        }
+
+        // Add click handler to the new DIFF button
+        const diffBtn = document.getElementById('generate-diff-btn');
+        if (diffBtn) {
+            diffBtn.addEventListener('click', generateDiff);
+        }
     }
 
     function showPlaceholder() {
@@ -614,8 +532,43 @@ class NumberProcessor:
             </div>
         `;
         
+        // Reset timing displays with 0.001ms precision
+        lastDiffTime = 0;
+        const liveTiming = document.querySelector('.live-timing');
+        if (liveTiming) {
+            liveTiming.innerHTML = `⚡ <span style="display: inline-block; min-width: 60px;">0.001ms</span>`;
+        }
+        
+        const timeDisplays = document.querySelectorAll('.time-display');
+        timeDisplays.forEach(display => {
+            display.innerHTML = '<span style="display: inline-block; min-width: 60px;">0.001ms</span>';
+        });
+        
         if (outputStats) {
-            outputStats.innerHTML = '';
+            // Get current algorithm selection
+            const currentAlgorithm = algorithmSelect?.value || 'flash';
+            const algorithmEmojis = {
+                flash: '⚡',
+                optimus: '🤖',
+                megatron: '🧠'
+            };
+            
+            outputStats.innerHTML = `
+                <div class="stats-grid">
+                    <button class="stat-badge diff-button" id="generate-diff-btn">GEN D1F</button>
+                    <span class="stat-badge algorithm-badge">${algorithmEmojis[currentAlgorithm] || '🔧'} ${currentAlgorithm}</span>
+                    <span class="stat-badge timing-badge">⚡ 0.001ms</span>
+                    <span class="stat-badge success-badge">✅ 100%</span>
+                    <span class="stat-badge format-badge">🤖 ai</span>
+                    <span class="stat-badge ops-badge">📊 0 ops</span>
+                </div>
+            `;
+            
+            // Add click handler to the initial DIFF button
+            const diffBtn = document.getElementById('generate-diff-btn');
+            if (diffBtn) {
+                diffBtn.addEventListener('click', generateDiff);
+            }
         }
     }
 
@@ -667,7 +620,6 @@ class NumberProcessor:
                 <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                 <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
             </svg>
-            Copy
         `;
         
         copyBtn.addEventListener('click', () => {
@@ -677,7 +629,6 @@ class NumberProcessor:
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M20 6L9 17l-5-5"/>
                     </svg>
-                    Copied!
                 `;
                 setTimeout(() => {
                     copyBtn.innerHTML = `
@@ -685,7 +636,6 @@ class NumberProcessor:
                             <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                             <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
                         </svg>
-                        Copy
                     `;
                 }, 2000);
             });
@@ -704,7 +654,7 @@ class NumberProcessor:
         setTimeout(addCopyButton, 100);
     };
 
-    // Add CSS styles for the time stats
+    // Add CSS styles for the time stats and live timing
     const style = document.createElement('style');
     style.textContent = `
         .time-stat {
@@ -723,6 +673,46 @@ class NumberProcessor:
             font-size: 1.125rem;
             font-weight: 600;
             color: var(--text-primary);
+        }
+        .live-timing {
+            font-weight: 700 !important;
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(245, 158, 11, 0.1) 100%) !important;
+            border-color: rgba(245, 158, 11, 0.4) !important;
+            color: #f59e0b !important;
+        }
+        .algorithm-badge {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(99, 102, 241, 0.1) 100%) !important;
+            border-color: rgba(99, 102, 241, 0.4) !important;
+            color: var(--primary-light) !important;
+        }
+        .format-badge {
+            background: linear-gradient(135deg, rgba(96, 165, 250, 0.2) 0%, rgba(96, 165, 250, 0.1) 100%) !important;
+            border-color: rgba(96, 165, 250, 0.4) !important;
+            color: var(--text-accent) !important;
+        }
+        .ops-badge {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(16, 185, 129, 0.1) 100%) !important;
+            border-color: rgba(16, 185, 129, 0.4) !important;
+            color: var(--secondary) !important;
+        }
+        .success-badge {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(16, 185, 129, 0.1) 100%) !important;
+            border-color: rgba(16, 185, 129, 0.4) !important;
+            color: var(--secondary) !important;
+        }
+        .error-badge {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(239, 68, 68, 0.1) 100%) !important;
+            border-color: rgba(239, 68, 68, 0.4) !important;
+            color: #ef4444 !important;
+            animation: pulse-error 1s ease-in-out infinite;
+        }
+        @keyframes pulse-timing {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.9; }
+        }
+        @keyframes pulse-error {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
         }
         #source-input, #dest-input {
             font-size: 0.5rem;
@@ -763,6 +753,67 @@ class NumberProcessor:
         }
         .copy-btn:hover {
             background: rgba(255, 255, 255, 0.2) !important;
+        }
+        .performance-indicators {
+            display: flex;
+            gap: 12px;
+            margin-top: 8px;
+        }
+        .perf-indicator {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px 12px;
+            background: var(--bg-code);
+            border: 1px solid var(--border-primary);
+            border-radius: 8px;
+            min-width: 80px;
+            transition: all 0.2s ease;
+        }
+        .perf-indicator:hover {
+            border-color: var(--border-accent);
+            transform: translateY(-1px);
+        }
+        .perf-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+        .perf-value {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            font-family: var(--font-mono);
+            min-width: 80px;
+            text-align: center;
+        }
+        .time-display {
+            color: #f59e0b !important;
+            font-weight: 600;
+            font-family: var(--font-mono);
+            min-width: 80px;
+            text-align: center;
+        }
+        .stat-badge {
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .diff-button {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%) !important;
+            border: none !important;
+            color: white !important;
+            cursor: pointer !important;
+            transition: all 0.2s ease !important;
+            font-weight: 700 !important;
+        }
+        .diff-button:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.4) !important;
+        }
+        .diff-button:active {
+            transform: translateY(0) !important;
         }
     `;
     document.head.appendChild(style);
