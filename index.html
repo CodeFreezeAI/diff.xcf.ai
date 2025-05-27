@@ -89,6 +89,7 @@
                 <h1 class="hero-title">
                     The World's Most
                     <span class="gradient-text">Advanced Diffing System</span>
+                    <span class="d1f-shimmer">D1F</span>
                 </h1>
                 <p class="hero-subtitle">
                     D1F - MultiLineDiff makes Git diff, Myers algorithm, and traditional tools obsolete.
@@ -523,37 +524,67 @@ let diff = MultiLineDiff.createDiff(
             </div>
             <div class="demo-container">
                 <div class="demo-controls">
-                    <div class="control-group">
-                        <label for="algorithm-select">Algorithm:</label>
-                        <select id="algorithm-select" class="control-select">
-                            <option value="flash" selected>⚡ Flash (Fastest - Bulk)</option>
-                            <option value="optimus">🤖 Optimus (Line-aware - Detailed)</option>
-                            <option value="megatron">🧠 Megatron (Semantic)</option>
-                        </select>
-                    </div>
-                    <div class="control-group">
-                        <label for="format-select">Output Format:</label>
-                        <select id="format-select" class="control-select">
-                            <option value="ai" selected>🤖 AI Format</option>
-                            <option value="json">📊 JSON</option>
-                            <option value="base64">🔐 Base64</option>
-                        </select>
-                    </div>
-                    <div class="control-group">
-                        <label>Live Performance:</label>
-                        <div class="performance-indicators">
-                            <div class="perf-indicator">
-                                <span class="perf-label">⚡ Speed</span>
-                                <span class="perf-value time-display">0.0ms</span>
-                            </div>
-                            <div class="perf-indicator">
-                                <span class="perf-label">🎯 Accuracy</span>
-                                <span class="perf-value">100%</span>
-                            </div>
+                    <div class="controls-header">
+                        <div class="implementation-badge">
+                            <span class="badge-icon">✅</span>
+                            <span>Real JavaScript Implementation</span>
                         </div>
                     </div>
-                    <div style="text-align: center; color: var(--text-success); font-size: 0.75rem; font-weight: 600; margin-top: 8px; margin-bottom: 16px;">
-                        <em>✅ Real JavaScript Implementation</em>
+                    
+                    <div class="controls-main">
+                        <div class="controls-section">
+                            <h4>Configuration</h4>
+                            <div class="controls-row">
+                                <div class="control-group">
+                                    <label for="algorithm-select">Algorithm</label>
+                                    <select id="algorithm-select" class="control-select">
+                                        <option value="flash" selected>⚡ Flash</option>
+                                        <option value="optimus">🤖 Optimus</option>
+                                        <option value="megatron">🧠 Megatron</option>
+                                    </select>
+                                </div>
+                                <div class="control-group">
+                                    <label for="format-select">Output Format</label>
+                                    <select id="format-select" class="control-select">
+                                        <option value="ai" selected>🤖 AI Format</option>
+                                        <option value="json">📊 JSON</option>
+                                        <option value="base64">🔐 Base64</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="controls-section">
+                            <h4>Live Performance</h4>
+                            <div class="performance-indicators">
+                                <div class="perf-indicator">
+                                    <span class="perf-label">⚡ Speed</span>
+                                    <span class="perf-value time-display">0.001ms</span>
+                                </div>
+                                <div class="perf-indicator">
+                                    <span class="perf-label">🎯 Accuracy</span>
+                                    <span class="perf-value">100%</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="controls-section">
+                            <h4>Diff Legend</h4>
+                            <div class="diff-legend">
+                                <div class="legend-item">
+                                    <span class="legend-symbol retain">📎</span>
+                                    <span class="legend-label">Retain</span>
+                                </div>
+                                <div class="legend-item">
+                                    <span class="legend-symbol insert">✅</span>
+                                    <span class="legend-label">Insert</span>
+                                </div>
+                                <div class="legend-item">
+                                    <span class="legend-symbol delete">❌</span>
+                                    <span class="legend-label">Delete</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="demo-panels">
