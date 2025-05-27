@@ -15,7 +15,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- CSS -->
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/styles.css?v=1748365999">
     <style>
         .chat-container {
             max-width: 1200px;
@@ -367,18 +367,21 @@
 
     <div class="chat-container">
         <div class="chat-header">
-            <h1 class="chat-title">D1F Chat</h1>
-            <p class="chat-subtitle">Multi-user serverless peer-to-peer chat powered by WebRTC</p>
+            <h1 class="chat-title">
+                D1F Chat 
+                <span style="background: linear-gradient(135deg, #ef4444, #f59e0b); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.6em; margin-left: 12px; animation: pulse 2s infinite;">NEW!</span>
+            </h1>
+            <p class="chat-subtitle">✨ Updated Multi-User P2P Chat with Real WebRTC Mesh Network ✨</p>
         </div>
 
         <div class="instructions">
-            <h3>🚀 How to Use</h3>
+            <h3>🚀 How to Use - Now with Real Mesh Network!</h3>
             <ol>
                 <li><strong>Enter your username:</strong> Choose a display name for the chat</li>
                 <li><strong>Create or join a room:</strong> Enter a room name (all participants must use the same name)</li>
                 <li><strong>Share the room name:</strong> Give the room name to everyone you want to chat with</li>
-                <li><strong>Connect:</strong> All participants click "Connect" - connections happen automatically</li>
-                <li><strong>Multi-user chat:</strong> Support for multiple people in the same room! No servers, completely peer-to-peer</li>
+                <li><strong>Connect:</strong> All participants click "Connect" - connections happen automatically via WebSocket signaling</li>
+                <li><strong>🌐 NEW: True Multi-Device Chat:</strong> Works across different computers, phones, and networks! No more localStorage limitations!</li>
             </ol>
         </div>
 
@@ -416,7 +419,7 @@
         <div class="chat-area">
             <div class="messages-container" id="messagesContainer">
                 <div class="message system">
-                    Enter your username and room name, then click Connect to join a multi-user chat room
+                    🌐 NEW: Real WebRTC Mesh Network! Enter your username and room name, then connect from any device or network to join the multi-user chat room.
                 </div>
             </div>
             
