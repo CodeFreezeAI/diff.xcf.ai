@@ -555,7 +555,7 @@
 .control-group label {
     font-weight: 600;
     color: var(--text-primary);
-    font-size: 0.875rem;
+    font-size: 0.9625rem;
 }
 
 .control-select {
@@ -565,7 +565,7 @@
     border-radius: var(--radius-md);
     color: var(--text-primary);
     font-family: var(--font-sans);
-    font-size: 0.875rem;
+    font-size: 0.9625rem;
     cursor: pointer;
     transition: all var(--transition-normal);
 }
@@ -582,8 +582,8 @@
 
 .demo-panels {
     display: grid;
-    grid-template-columns: 1fr 1fr 2fr;
-    gap: var(--space-xl);
+    grid-template-columns: 1fr 1fr 1.25fr;
+    gap: calc(var(--space-xl) / 3);
 }
 
 .demo-panel {
@@ -599,7 +599,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: var(--space-md) var(--space-lg);
+    padding: var(--space-sm) var(--space-lg);
     background: var(--bg-tertiary);
     border-bottom: 1px solid var(--border-primary);
 }
@@ -607,7 +607,7 @@
 .demo-output .panel-header {
     background: var(--bg-tertiary);
     border-bottom: 1px solid var(--border-primary);
-    padding: var(--space-md) var(--space-lg);
+    padding: var(--space-sm) var(--space-lg);
 }
 
 .panel-header h4 {
@@ -619,13 +619,13 @@
 .demo-textarea {
     flex: 1;
     min-height: 300px;
-    padding: var(--space-md);
+    padding: 0 var(--space-md) var(--space-md) var(--space-md);
     background: var(--bg-code);
     border: none;
     color: var(--text-primary);
     font-family: var(--font-mono);
-    font-size: 0.7rem;
-    line-height: 1.4;
+    font-size: 0.9rem;
+    line-height: 1.6;
     resize: none;
     outline: none;
 }
@@ -640,12 +640,12 @@
 
 .demo-output-content {
     flex: 1;
-    padding: var(--space-md);
+    padding: 0 var(--space-md) var(--space-md) var(--space-md);
     margin-top: 0;
     background: var(--bg-code);
     font-family: var(--font-mono);
-    font-size: 0.7rem;
-    line-height: 1.4;
+    font-size: 0.9rem;
+    line-height: 1.6;
     overflow-x: auto;
     white-space: pre-wrap;
     word-wrap: break-word;
@@ -1162,7 +1162,7 @@
     
     .demo-panels {
         grid-template-columns: 1fr;
-        gap: var(--space-lg);
+        gap: calc(var(--space-lg) / 3);
     }
     
     .performance-content {
@@ -1197,6 +1197,40 @@
         grid-template-columns: 1fr;
     }
     
+    .demo-panels {
+        grid-template-columns: 1fr;
+        gap: calc(var(--space-lg) / 3);
+    }
+    
+    .demo-textarea {
+        min-height: 200px;
+        font-size: 0.9rem;
+    }
+    
+    .demo-output-content {
+        font-size: 0.9rem;
+        line-height: 1.6;
+    }
+    
+    .stats-grid {
+        width: 100%;
+        max-width: 320px;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr 1fr;
+        grid-template-areas: 
+            "button button"
+            "algorithm timing"
+            "accuracy format"
+            "ops ops";
+    }
+    
+    .output-stats .stat-badge {
+        min-width: 90px;
+        width: auto;
+        font-size: 0.7rem;
+        padding: var(--space-xs) var(--space-sm);
+    }
+    
     .footer-links {
         grid-template-columns: 1fr;
         gap: var(--space-lg);
@@ -1219,6 +1253,92 @@
     
     .algorithm-panel {
         padding: var(--space-lg);
+    }
+    
+    .demo-textarea {
+        min-height: 180px;
+        font-size: 0.9rem;
+        line-height: 1.6;
+        padding: var(--space-sm);
+    }
+    
+    .demo-output-content {
+        font-size: 0.9rem;
+        line-height: 1.6;
+        padding: var(--space-sm);
+    }
+    
+    .stats-grid {
+        max-width: 280px;
+        gap: var(--space-xs);
+        grid-template-areas: 
+            "button button"
+            "algorithm timing"
+            "accuracy format"
+            "ops ops";
+    }
+    
+    .output-stats .stat-badge {
+        min-width: 80px;
+        font-size: 0.65rem;
+        padding: var(--space-xs);
+        min-height: 32px;
+    }
+    
+    .panel-header {
+        padding: var(--space-sm) var(--space-md);
+    }
+    
+    .panel-header h4 {
+        font-size: 1rem;
+    }
+    
+    .placeholder {
+        min-height: 180px;
+    }
+    
+    .placeholder-icon {
+        font-size: 2rem;
+    }
+}
+
+/* iPhone 14 Pro Max specific adjustments */
+@media (max-width: 430px) {
+    .demo-container {
+        padding: 0 var(--space-md);
+    }
+    
+    .demo-panels {
+        gap: var(--space-md);
+    }
+    
+    .stats-grid {
+        max-width: 260px;
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(6, 1fr);
+        grid-template-areas: 
+            "button"
+            "algorithm"
+            "timing"
+            "accuracy"
+            "format"
+            "ops";
+    }
+    
+    .output-stats .stat-badge {
+        width: 100%;
+        min-width: auto;
+        max-width: 260px;
+    }
+    
+    .demo-textarea {
+        font-size: 0.9rem;
+        line-height: 1.6;
+    }
+    
+    .demo-output-content {
+        font-size: 0.9rem;
+        line-height: 1.6;
     }
 }
 
@@ -1251,6 +1371,48 @@
 .ascii-diff {
     font-family: var(--font-mono);
     line-height: 1.6;
+}
+
+/* Unified font sizing for all three demo columns */
+.demo-textarea,
+.demo-output-content,
+.demo-output-content .ascii-diff,
+.demo-output-content pre,
+.demo-output-content code {
+    font-size: 0.9625rem !important;
+}
+
+/* Syntax highlighting for source and destination textareas */
+.demo-textarea.language-swift,
+.demo-textarea.language-javascript,
+.demo-textarea.language-python {
+    color: var(--text-primary);
+    background: var(--bg-code);
+}
+
+/* Apply Prism.js token colors to textareas */
+.demo-textarea .token.keyword {
+    color: var(--primary-light);
+}
+
+.demo-textarea .token.string {
+    color: var(--secondary);
+}
+
+.demo-textarea .token.function {
+    color: var(--text-accent);
+}
+
+.demo-textarea .token.comment {
+    color: var(--text-muted);
+}
+
+.demo-textarea .token.number {
+    color: var(--accent);
+}
+
+.demo-textarea .token.operator {
+    color: var(--text-secondary);
 }
 
 /* AI Format - Uses Prism.js Swift syntax highlighting */

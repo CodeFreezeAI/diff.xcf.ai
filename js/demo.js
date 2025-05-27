@@ -234,6 +234,7 @@ class NumberProcessor:
             // Automatically generate diff after loading example
             setTimeout(() => {
                 generateDiff();
+                applySyntaxHighlighting();
             }, 100);
         });
     }
@@ -258,13 +259,20 @@ class NumberProcessor:
 
     // Auto-generate on input change (debounced)
     const debouncedGenerate = debounce(generateDiff, 1000);
+    const debouncedHighlight = debounce(applySyntaxHighlighting, 300);
     
     if (sourceInput) {
-        sourceInput.addEventListener('input', debouncedGenerate);
+        sourceInput.addEventListener('input', () => {
+            debouncedGenerate();
+            debouncedHighlight();
+        });
     }
     
     if (destInput) {
-        destInput.addEventListener('input', debouncedGenerate);
+        destInput.addEventListener('input', () => {
+            debouncedGenerate();
+            debouncedHighlight();
+        });
     }
 
     if (algorithmSelect) {
@@ -578,6 +586,51 @@ class NumberProcessor:
         return div.innerHTML;
     }
 
+    // Auto-detect language and apply syntax highlighting
+    function detectLanguage(code) {
+        if (!code.trim()) return 'text';
+        
+        // Swift detection
+        if (code.includes('func ') && (code.includes('-> ') || code.includes(': String') || code.includes(': Double'))) {
+            return 'swift';
+        }
+        
+        // Python detection
+        if (code.includes('def ') && code.includes(':') && (code.includes('self') || code.includes('import ') || code.includes('class '))) {
+            return 'python';
+        }
+        
+        // JavaScript detection
+        if (code.includes('function ') || code.includes('const ') || code.includes('let ') || code.includes('var ') || code.includes('=>')) {
+            return 'javascript';
+        }
+        
+        // Default to text
+        return 'text';
+    }
+
+    function applySyntaxHighlighting() {
+        if (!window.Prism) return;
+        
+        const sourceCode = sourceInput?.value || '';
+        const destCode = destInput?.value || '';
+        
+        // Detect languages
+        const sourceLang = detectLanguage(sourceCode);
+        const destLang = detectLanguage(destCode);
+        
+        // Apply syntax highlighting classes
+        if (sourceInput) {
+            sourceInput.className = `demo-textarea language-${sourceLang}`;
+            sourceInput.setAttribute('data-language', sourceLang);
+        }
+        
+        if (destInput) {
+            destInput.className = `demo-textarea language-${destLang}`;
+            destInput.setAttribute('data-language', destLang);
+        }
+    }
+
     // Utility function (reuse from main.js if available)
     function debounce(func, wait, immediate) {
         let timeout;
@@ -595,6 +648,9 @@ class NumberProcessor:
 
     // Initialize with placeholder
     showPlaceholder();
+    
+    // Initialize syntax highlighting
+    applySyntaxHighlighting();
 
     // Add keyboard shortcuts
     document.addEventListener('keydown', (e) => {
@@ -676,6 +732,9 @@ class NumberProcessor:
         }
         .live-timing {
             font-weight: 700 !important;
+            font-family: var(--font-mono) !important;
+            font-size: 1rem !important;
+            line-height: 1.6 !important;
             background: linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(245, 158, 11, 0.1) 100%) !important;
             border-color: rgba(245, 158, 11, 0.4) !important;
             color: #f59e0b !important;
@@ -715,16 +774,39 @@ class NumberProcessor:
             50% { transform: scale(1.1); }
         }
         #source-input, #dest-input {
-            font-size: 0.5rem;
-            line-height: 1.4;
+            font-size: 1rem !important;
+            line-height: 1.6 !important;
             white-space: pre !important;
             overflow-x: auto !important;
             word-wrap: normal !important;
-            padding: 2px !important;
+            padding: var(--space-md) !important;
+        }
+        
+        @media (max-width: 768px) {
+            #source-input, #dest-input {
+                font-size: 1rem !important;
+                line-height: 1.6 !important;
+                padding: var(--space-sm) !important;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            #source-input, #dest-input {
+                font-size: 1rem !important;
+                line-height: 1.6 !important;
+            }
+        }
+        
+        @media (max-width: 430px) {
+            #source-input, #dest-input {
+                font-size: 1rem !important;
+                line-height: 1.6 !important;
+            }
         }
         .btn-gradient {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%) !important;
             border: none !important;
+            color: white !important;
             transition: all 0.2s ease !important;
         }
         .btn-gradient:hover {
@@ -791,6 +873,8 @@ class NumberProcessor:
             color: #f59e0b !important;
             font-weight: 600;
             font-family: var(--font-mono);
+            font-size: 1rem;
+            line-height: 1.6;
             min-width: 80px;
             text-align: center;
         }
@@ -799,6 +883,9 @@ class NumberProcessor:
             display: flex;
             align-items: center;
             justify-content: center;
+            font-family: var(--font-mono);
+            font-size: 1rem;
+            line-height: 1.6;
         }
         .diff-button {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%) !important;
