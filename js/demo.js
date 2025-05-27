@@ -190,16 +190,6 @@ class NumberProcessor:
             
             if (sourceInput) sourceInput.value = randomExample.source;
             if (destInput) destInput.value = randomExample.destination;
-            
-            // Add loading animation
-            loadExampleBtn.classList.add('loading');
-            setTimeout(() => {
-                loadExampleBtn.classList.remove('loading');
-                loadExampleBtn.textContent = 'Example Loaded!';
-                setTimeout(() => {
-                    loadExampleBtn.textContent = 'Load Example';
-                }, 1500);
-            }, 500);
         });
     }
 
@@ -279,7 +269,7 @@ class NumberProcessor:
             format: format,
             sourceLines: sourceLines.length,
             destLines: destLines.length,
-            operations: Math.floor(Math.random() * 50) + 5,
+            operations: getAlgorithmOperations(algorithm),
             createTime: getAlgorithmTime(algorithm, 'create'),
             applyTime: getAlgorithmTime(algorithm, 'apply')
         };
@@ -302,6 +292,14 @@ class NumberProcessor:
     }
 
     function generateASCIIDiff(sourceLines, destLines) {
+        const algorithm = algorithmSelect?.value || 'megatron';
+        
+        // For Flash and Zoom algorithms, generate minimal operations
+        if (algorithm === 'flash' || algorithm === 'zoom') {
+            return generateMinimalDiff(sourceLines, destLines);
+        }
+        
+        // For other algorithms, use detailed line-by-line comparison
         let diff = '';
         const maxLines = Math.max(sourceLines.length, destLines.length);
         
@@ -326,6 +324,76 @@ class NumberProcessor:
         }
         
         return diff.trim();
+    }
+
+    function generateMinimalDiff(sourceLines, destLines) {
+        // Flash/Zoom algorithms work with prefix/suffix detection
+        // Show only the key changes in a minimal format
+        const source = sourceLines.join('\n');
+        const dest = destLines.join('\n');
+        
+        // Simulate minimal operations (3 operations typical for Flash/Zoom)
+        let diff = '';
+        
+        // Find common prefix
+        let prefixEnd = 0;
+        const minLength = Math.min(source.length, dest.length);
+        while (prefixEnd < minLength && source[prefixEnd] === dest[prefixEnd]) {
+            prefixEnd++;
+        }
+        
+        // Find common suffix
+        let suffixStart = source.length;
+        let destSuffixStart = dest.length;
+        while (suffixStart > prefixEnd && destSuffixStart > prefixEnd && 
+               source[suffixStart - 1] === dest[destSuffixStart - 1]) {
+            suffixStart--;
+            destSuffixStart--;
+        }
+        
+        // Generate minimal diff representation
+        if (prefixEnd > 0) {
+            const prefixLines = source.substring(0, prefixEnd).split('\n');
+            diff += `📎 ${prefixLines[0]}\n`;
+            if (prefixLines.length > 1) {
+                diff += `📎 ... (${prefixLines.length - 1} more lines)\n`;
+            }
+        }
+        
+        // Show the changed middle section
+        const sourceMiddle = source.substring(prefixEnd, suffixStart);
+        const destMiddle = dest.substring(prefixEnd, destSuffixStart);
+        
+        if (sourceMiddle) {
+            const sourceMiddleLines = sourceMiddle.split('\n').filter(line => line.trim());
+            if (sourceMiddleLines.length > 0) {
+                diff += `❌ ${sourceMiddleLines[0]}\n`;
+                if (sourceMiddleLines.length > 1) {
+                    diff += `❌ ... (${sourceMiddleLines.length - 1} more changes)\n`;
+                }
+            }
+        }
+        
+        if (destMiddle) {
+            const destMiddleLines = destMiddle.split('\n').filter(line => line.trim());
+            if (destMiddleLines.length > 0) {
+                diff += `✅ ${destMiddleLines[0]}\n`;
+                if (destMiddleLines.length > 1) {
+                    diff += `✅ ... (${destMiddleLines.length - 1} more additions)\n`;
+                }
+            }
+        }
+        
+        // Show suffix if exists
+        if (suffixStart < source.length) {
+            const suffixLines = source.substring(suffixStart).split('\n');
+            if (suffixLines.length > 1) {
+                diff += `📎 ... (${suffixLines.length - 1} more lines)\n`;
+            }
+            diff += `📎 ${suffixLines[suffixLines.length - 1]}\n`;
+        }
+        
+        return diff.trim() || '📎 No changes detected';
     }
 
     function generateJSONDiff(sourceLines, destLines) {
@@ -366,6 +434,18 @@ class NumberProcessor:
         };
         
         return times[algorithm]?.[operation] || 25.0;
+    }
+
+    function getAlgorithmOperations(algorithm) {
+        const operations = {
+            flash: 3,        // Fast algorithms produce minimal operations
+            zoom: 3,         // Simple character-based, minimal operations
+            optimus: 1256,   // Line-aware, detailed operations
+            starscream: 1256, // Line-aware, detailed operations
+            megatron: 1256   // Semantic analysis, detailed operations
+        };
+        
+        return operations[algorithm] || 3;
     }
 
     function displayDiffResult(result) {
