@@ -624,7 +624,7 @@
     border: none;
     color: var(--text-primary);
     font-family: var(--font-mono);
-    font-size: 0.9rem;
+    font-size: 0.9625rem;
     line-height: 1.6;
     resize: none;
     outline: none;
@@ -644,7 +644,7 @@
     margin-top: 0;
     background: var(--bg-code);
     font-family: var(--font-mono);
-    font-size: 0.9rem;
+    font-size: 0.9625rem;
     line-height: 1.6;
     overflow-x: auto;
     white-space: pre-wrap;
@@ -1204,11 +1204,11 @@
     
     .demo-textarea {
         min-height: 200px;
-        font-size: 0.9rem;
+        font-size: 0.9625rem;
     }
     
     .demo-output-content {
-        font-size: 0.9rem;
+        font-size: 0.9625rem;
         line-height: 1.6;
     }
     
@@ -1257,13 +1257,13 @@
     
     .demo-textarea {
         min-height: 180px;
-        font-size: 0.9rem;
+        font-size: 0.9625rem;
         line-height: 1.6;
         padding: var(--space-sm);
     }
     
     .demo-output-content {
-        font-size: 0.9rem;
+        font-size: 0.9625rem;
         line-height: 1.6;
         padding: var(--space-sm);
     }
@@ -1332,12 +1332,12 @@
     }
     
     .demo-textarea {
-        font-size: 0.9rem;
+        font-size: 0.9625rem;
         line-height: 1.6;
     }
     
     .demo-output-content {
-        font-size: 0.9rem;
+        font-size: 0.9625rem;
         line-height: 1.6;
     }
 }
@@ -1371,15 +1371,6 @@
 .ascii-diff {
     font-family: var(--font-mono);
     line-height: 1.6;
-}
-
-/* Unified font sizing for all three demo columns */
-.demo-textarea,
-.demo-output-content,
-.demo-output-content .ascii-diff,
-.demo-output-content pre,
-.demo-output-content code {
-    font-size: 0.9625rem !important;
 }
 
 /* Syntax highlighting for source and destination textareas */
