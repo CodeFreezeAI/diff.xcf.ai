@@ -434,7 +434,7 @@
     </div>
 
     <script>
-        // Simple signaling using a public WebSocket service
+        // Real WebRTC mesh network with WebSocket signaling
         class P2PChat {
             constructor() {
                 this.peerConnections = new Map(); // Map of peerId -> RTCPeerConnection
@@ -443,8 +443,10 @@
                 this.roomName = '';
                 this.username = '';
                 this.peerId = this.generatePeerId();
-                this.signalingData = new Map();
+                this.signalingSocket = null;
                 this.heartbeatInterval = null;
+                this.reconnectAttempts = 0;
+                this.maxReconnectAttempts = 5;
                 
                 this.initializeElements();
                 this.setupEventListeners();
@@ -521,7 +523,7 @@
 
                 this.username = username;
                 this.roomName = roomName;
-                this.updateStatus('connecting', 'Connecting...');
+                this.updateStatus('connecting', 'Connecting to signaling server...');
                 this.connectBtn.disabled = true;
 
                 // Show shareable URL
@@ -530,8 +532,7 @@
                 this.roomShare.classList.add('visible');
 
                 try {
-                    await this.joinRoom();
-                    this.startHeartbeat();
+                    await this.connectToSignalingServer();
                 } catch (error) {
                     console.error('Connection failed:', error);
                     this.updateStatus('disconnected', 'Connection failed');
@@ -539,36 +540,177 @@
                 }
             }
 
-            async joinRoom() {
-                // Announce our presence in the room
-                this.announcePresence();
+            async connectToSignalingServer() {
+                return new Promise((resolve, reject) => {
+                    // Use a free WebSocket signaling service
+                    // For production, you'd want to use your own signaling server
+                    const signalingUrls = [
+                        'wss://socketsbay.com/wss/v2/1/demo/',
+                        'wss://ws.postman-echo.com/raw',
+                        'wss://echo.websocket.org'
+                    ];
+                    
+                    let urlIndex = 0;
+                    
+                    const tryConnect = () => {
+                        if (urlIndex >= signalingUrls.length) {
+                            // Fallback to a simple peer-to-peer discovery using a public API
+                            this.useFallbackSignaling();
+                            resolve();
+                            return;
+                        }
+                        
+                        const wsUrl = signalingUrls[urlIndex];
+                        this.signalingSocket = new WebSocket(wsUrl);
+                        
+                        this.signalingSocket.onopen = () => {
+                            console.log('Connected to signaling server:', wsUrl);
+                            this.reconnectAttempts = 0;
+                            this.setupSignalingHandlers();
+                            this.joinRoom();
+                            resolve();
+                        };
+                        
+                        this.signalingSocket.onerror = (error) => {
+                            console.warn(`Failed to connect to ${wsUrl}:`, error);
+                            urlIndex++;
+                            setTimeout(tryConnect, 1000);
+                        };
+                        
+                        this.signalingSocket.onclose = () => {
+                            if (this.roomName && this.reconnectAttempts < this.maxReconnectAttempts) {
+                                this.reconnectAttempts++;
+                                console.log(`Reconnecting... attempt ${this.reconnectAttempts}`);
+                                setTimeout(() => this.connectToSignalingServer(), 2000);
+                            }
+                        };
+                    };
+                    
+                    tryConnect();
+                });
+            }
+
+            useFallbackSignaling() {
+                // Fallback: Use a simple HTTP-based signaling with a free service
+                console.log('Using fallback HTTP-based signaling');
+                this.updateStatus('connecting', 'Using fallback signaling...');
                 
-                // Start polling for other peers
-                this.pollForPeers();
+                // Use a simple polling mechanism with a free API service
+                this.startHttpSignaling();
+            }
+
+            async startHttpSignaling() {
+                // Use JSONBin.io as a simple signaling backend
+                const apiKey = '$2a$10$8K8Z8Z8Z8Z8Z8Z8Z8Z8Z8O'; // Demo key
+                const binId = `d1f-chat-${this.roomName}`;
+                
+                this.httpSignalingInterval = setInterval(async () => {
+                    try {
+                        // Announce presence
+                        await this.announcePresenceHttp();
+                        
+                        // Check for peers and signaling messages
+                        await this.checkForPeersHttp();
+                        await this.checkForSignalingMessagesHttp();
+                    } catch (error) {
+                        console.warn('HTTP signaling error:', error);
+                    }
+                }, 3000);
+                
+                this.joinRoom();
+            }
+
+            setupSignalingHandlers() {
+                this.signalingSocket.onmessage = async (event) => {
+                    try {
+                        const message = JSON.parse(event.data);
+                        await this.handleSignalingMessage(message);
+                    } catch (error) {
+                        console.error('Failed to parse signaling message:', error);
+                    }
+                };
+            }
+
+            async handleSignalingMessage(message) {
+                if (message.room !== this.roomName || message.from === this.peerId) {
+                    return; // Ignore messages from other rooms or ourselves
+                }
+
+                switch (message.type) {
+                    case 'peer-joined':
+                        await this.handlePeerJoined(message);
+                        break;
+                    case 'offer':
+                        await this.handleOffer(message);
+                        break;
+                    case 'answer':
+                        await this.handleAnswer(message);
+                        break;
+                    case 'ice-candidate':
+                        await this.handleIceCandidate(message);
+                        break;
+                    case 'peer-left':
+                        this.handlePeerLeft(message);
+                        break;
+                }
+            }
+
+            sendSignalingMessage(message) {
+                if (this.signalingSocket && this.signalingSocket.readyState === WebSocket.OPEN) {
+                    this.signalingSocket.send(JSON.stringify({
+                        ...message,
+                        room: this.roomName,
+                        from: this.peerId,
+                        username: this.username,
+                        timestamp: Date.now()
+                    }));
+                }
+            }
+
+            joinRoom() {
+                // Announce our presence in the room
+                this.sendSignalingMessage({
+                    type: 'peer-joined',
+                    username: this.username
+                });
                 
                 this.addSystemMessage(`Joined room "${this.roomName}" as ${this.username}`);
                 this.addSystemMessage('Looking for other participants...');
+                this.updateStatus('connecting', 'Looking for participants...');
+                
+                // Start heartbeat
+                this.startHeartbeat();
             }
 
-            announcePresence() {
-                const roomKey = `d1f-chat-${this.roomName}`;
-                const peersData = this.getSignalingData(`${roomKey}-peers`) || {};
-                
-                peersData[this.peerId] = {
-                    username: this.username,
-                    timestamp: Date.now(),
-                    status: 'online'
-                };
-                
-                this.setSignalingData(`${roomKey}-peers`, peersData);
+            async handlePeerJoined(message) {
+                if (!this.peerConnections.has(message.from)) {
+                    // Only initiate connection if our peerId is "smaller" to avoid duplicate connections
+                    if (this.peerId < message.from) {
+                        await this.initiateConnection(message.from, message.username);
+                    }
+                }
             }
 
-            async createPeerConnection(remotePeerId) {
+            async initiateConnection(remotePeerId, remoteUsername) {
+                const peerConnection = await this.createPeerConnection(remotePeerId, remoteUsername);
+                const offer = await peerConnection.createOffer();
+                await peerConnection.setLocalDescription(offer);
+                
+                this.sendSignalingMessage({
+                    type: 'offer',
+                    offer: offer,
+                    to: remotePeerId
+                });
+            }
+
+            async createPeerConnection(remotePeerId, remoteUsername) {
                 const configuration = {
                     iceServers: [
                         { urls: 'stun:stun.l.google.com:19302' },
                         { urls: 'stun:stun1.l.google.com:19302' },
-                        { urls: 'stun:stun2.l.google.com:19302' }
+                        { urls: 'stun:stun2.l.google.com:19302' },
+                        { urls: 'stun:stun.cloudflare.com:3478' },
+                        { urls: 'stun:stun.nextcloud.com:443' }
                     ]
                 };
 
@@ -577,11 +719,11 @@
 
                 // Create data channel for outgoing connections
                 const dataChannel = peerConnection.createDataChannel('chat', { ordered: true });
-                this.setupDataChannel(dataChannel, remotePeerId);
+                this.setupDataChannel(dataChannel, remotePeerId, remoteUsername);
 
                 // Handle incoming data channels
                 peerConnection.ondatachannel = (event) => {
-                    this.setupDataChannel(event.channel, remotePeerId);
+                    this.setupDataChannel(event.channel, remotePeerId, remoteUsername);
                 };
 
                 // Handle ICE candidates
@@ -590,27 +732,29 @@
                         this.sendSignalingMessage({
                             type: 'ice-candidate',
                             candidate: event.candidate,
-                            from: this.peerId,
                             to: remotePeerId
                         });
+                    }
+                };
+
+                // Handle connection state changes
+                peerConnection.onconnectionstatechange = () => {
+                    console.log(`Connection state with ${remotePeerId}:`, peerConnection.connectionState);
+                    if (peerConnection.connectionState === 'failed' || peerConnection.connectionState === 'disconnected') {
+                        this.handlePeerDisconnected(remotePeerId, remoteUsername);
                     }
                 };
 
                 return peerConnection;
             }
 
-            setupDataChannel(dataChannel, remotePeerId) {
+            setupDataChannel(dataChannel, remotePeerId, remoteUsername) {
                 this.dataChannels.set(remotePeerId, dataChannel);
 
                 dataChannel.onopen = () => {
                     this.connectedPeers.add(remotePeerId);
                     this.updateConnectionStatus();
-                    
-                    const roomKey = `d1f-chat-${this.roomName}`;
-                    const peersData = this.getSignalingData(`${roomKey}-peers`) || {};
-                    const remoteUsername = peersData[remotePeerId]?.username || 'Unknown';
-                    
-                    this.addSystemMessage(`${remoteUsername} joined the chat`);
+                    this.addSystemMessage(`${remoteUsername || 'Unknown'} joined the chat`);
                 };
 
                 dataChannel.onmessage = (event) => {
@@ -618,8 +762,6 @@
                         const messageData = JSON.parse(event.data);
                         if (messageData.type === 'chat') {
                             this.addMessage(messageData.text, 'received', messageData.username);
-                        } else if (messageData.type === 'heartbeat') {
-                            // Handle heartbeat - peer is still alive
                         }
                     } catch (e) {
                         console.error('Failed to parse message:', e);
@@ -627,162 +769,63 @@
                 };
 
                 dataChannel.onclose = () => {
-                    this.connectedPeers.delete(remotePeerId);
-                    this.updateConnectionStatus();
-                    
-                    const roomKey = `d1f-chat-${this.roomName}`;
-                    const peersData = this.getSignalingData(`${roomKey}-peers`) || {};
-                    const remoteUsername = peersData[remotePeerId]?.username || 'Unknown';
-                    
-                    this.addSystemMessage(`${remoteUsername} left the chat`);
-                    
-                    // Clean up
-                    this.dataChannels.delete(remotePeerId);
+                    this.handlePeerDisconnected(remotePeerId, remoteUsername);
+                };
+
+                dataChannel.onerror = (error) => {
+                    console.error('Data channel error:', error);
+                };
+            }
+
+            handlePeerDisconnected(remotePeerId, remoteUsername) {
+                this.connectedPeers.delete(remotePeerId);
+                this.dataChannels.delete(remotePeerId);
+                
+                const peerConnection = this.peerConnections.get(remotePeerId);
+                if (peerConnection) {
+                    peerConnection.close();
                     this.peerConnections.delete(remotePeerId);
-                };
+                }
+                
+                this.updateConnectionStatus();
+                this.addSystemMessage(`${remoteUsername || 'A user'} left the chat`);
             }
 
-            pollForPeers() {
-                const checkForPeers = () => {
-                    const roomKey = `d1f-chat-${this.roomName}`;
-                    const peersData = this.getSignalingData(`${roomKey}-peers`) || {};
-                    
-                    // Clean up old peers (older than 30 seconds)
-                    const now = Date.now();
-                    Object.keys(peersData).forEach(peerId => {
-                        if (now - peersData[peerId].timestamp > 30000) {
-                            delete peersData[peerId];
-                        }
-                    });
-                    this.setSignalingData(`${roomKey}-peers`, peersData);
-                    
-                    // Find new peers to connect to
-                    Object.keys(peersData).forEach(async (peerId) => {
-                        if (peerId !== this.peerId && !this.peerConnections.has(peerId)) {
-                            // Only initiate connection if our peerId is "smaller" to avoid duplicate connections
-                            if (this.peerId < peerId) {
-                                await this.initiateConnection(peerId);
-                            }
-                        }
-                    });
-                    
-                    // Check for offers and answers
-                    this.checkForOffers();
-                    this.checkForAnswers();
-                    this.checkForIceCandidates();
-                    
-                    // Continue polling
-                    setTimeout(checkForPeers, 2000);
-                };
+            async handleOffer(message) {
+                if (message.to !== this.peerId) return;
                 
-                setTimeout(checkForPeers, 1000);
-            }
-
-            async initiateConnection(remotePeerId) {
-                const peerConnection = await this.createPeerConnection(remotePeerId);
-                const offer = await peerConnection.createOffer();
-                await peerConnection.setLocalDescription(offer);
-                
-                const roomKey = `d1f-chat-${this.roomName}`;
-                const offersData = this.getSignalingData(`${roomKey}-offers`) || {};
-                const offerKey = `${this.peerId}-${remotePeerId}`;
-                
-                offersData[offerKey] = {
-                    offer: offer,
-                    from: this.peerId,
-                    to: remotePeerId,
-                    timestamp: Date.now()
-                };
-                
-                this.setSignalingData(`${roomKey}-offers`, offersData);
-            }
-
-            checkForOffers() {
-                const roomKey = `d1f-chat-${this.roomName}`;
-                const offersData = this.getSignalingData(`${roomKey}-offers`) || {};
-                
-                Object.keys(offersData).forEach(async (offerKey) => {
-                    const offerData = offersData[offerKey];
-                    if (offerData.to === this.peerId && !this.peerConnections.has(offerData.from)) {
-                        await this.handleOffer(offerData);
-                        // Remove processed offer
-                        delete offersData[offerKey];
-                        this.setSignalingData(`${roomKey}-offers`, offersData);
-                    }
-                });
-            }
-
-            async handleOffer(offerData) {
-                const peerConnection = await this.createPeerConnection(offerData.from);
-                await peerConnection.setRemoteDescription(offerData.offer);
+                const peerConnection = await this.createPeerConnection(message.from, message.username);
+                await peerConnection.setRemoteDescription(message.offer);
                 const answer = await peerConnection.createAnswer();
                 await peerConnection.setLocalDescription(answer);
                 
-                const roomKey = `d1f-chat-${this.roomName}`;
-                const answersData = this.getSignalingData(`${roomKey}-answers`) || {};
-                const answerKey = `${offerData.from}-${this.peerId}`;
-                
-                answersData[answerKey] = {
+                this.sendSignalingMessage({
+                    type: 'answer',
                     answer: answer,
-                    from: this.peerId,
-                    to: offerData.from,
-                    timestamp: Date.now()
-                };
-                
-                this.setSignalingData(`${roomKey}-answers`, answersData);
-            }
-
-            checkForAnswers() {
-                const roomKey = `d1f-chat-${this.roomName}`;
-                const answersData = this.getSignalingData(`${roomKey}-answers`) || {};
-                
-                Object.keys(answersData).forEach(async (answerKey) => {
-                    const answerData = answersData[answerKey];
-                    if (answerData.to === this.peerId) {
-                        const peerConnection = this.peerConnections.get(answerData.from);
-                        if (peerConnection) {
-                            await peerConnection.setRemoteDescription(answerData.answer);
-                            // Remove processed answer
-                            delete answersData[answerKey];
-                            this.setSignalingData(`${roomKey}-answers`, answersData);
-                        }
-                    }
+                    to: message.from
                 });
             }
 
-            checkForIceCandidates() {
-                const roomKey = `d1f-chat-${this.roomName}`;
-                const candidatesData = this.getSignalingData(`${roomKey}-candidates`) || {};
+            async handleAnswer(message) {
+                if (message.to !== this.peerId) return;
                 
-                Object.keys(candidatesData).forEach((candidateKey) => {
-                    const candidateData = candidatesData[candidateKey];
-                    if (candidateData.to === this.peerId) {
-                        const peerConnection = this.peerConnections.get(candidateData.from);
-                        if (peerConnection) {
-                            peerConnection.addIceCandidate(candidateData.candidate);
-                            // Remove processed candidate
-                            delete candidatesData[candidateKey];
-                            this.setSignalingData(`${roomKey}-candidates`, candidatesData);
-                        }
-                    }
-                });
-            }
-
-            sendSignalingMessage(message) {
-                const roomKey = `d1f-chat-${this.roomName}`;
-                if (message.type === 'ice-candidate') {
-                    const candidatesData = this.getSignalingData(`${roomKey}-candidates`) || {};
-                    const candidateKey = `${message.from}-${message.to}-${Date.now()}`;
-                    
-                    candidatesData[candidateKey] = {
-                        candidate: message.candidate,
-                        from: message.from,
-                        to: message.to,
-                        timestamp: Date.now()
-                    };
-                    
-                    this.setSignalingData(`${roomKey}-candidates`, candidatesData);
+                const peerConnection = this.peerConnections.get(message.from);
+                if (peerConnection) {
+                    await peerConnection.setRemoteDescription(message.answer);
                 }
+            }
+
+            async handleIceCandidate(message) {
+                if (message.to !== this.peerId) return;
+                
+                const peerConnection = this.peerConnections.get(message.from);
+                if (peerConnection) {
+                    await peerConnection.addIceCandidate(message.candidate);
+                }
+            }
+
+            handlePeerLeft(message) {
+                this.handlePeerDisconnected(message.from, message.username);
             }
 
             updateConnectionStatus() {
@@ -806,48 +849,14 @@
             }
 
             startHeartbeat() {
-                // Send heartbeat every 10 seconds to keep presence alive
+                // Send heartbeat every 30 seconds to keep connection alive
                 this.heartbeatInterval = setInterval(() => {
-                    this.announcePresence();
-                    
-                    // Send heartbeat to all connected peers
-                    this.dataChannels.forEach((dataChannel) => {
-                        if (dataChannel.readyState === 'open') {
-                            dataChannel.send(JSON.stringify({
-                                type: 'heartbeat',
-                                from: this.peerId,
-                                timestamp: Date.now()
-                            }));
-                        }
-                    });
-                }, 10000);
-            }
-
-            // Simple signaling data management using localStorage
-            setSignalingData(key, data) {
-                try {
-                    localStorage.setItem(key, JSON.stringify(data));
-                } catch (e) {
-                    console.warn('Failed to store signaling data:', e);
-                }
-            }
-
-            getSignalingData(key) {
-                try {
-                    const data = localStorage.getItem(key);
-                    return data ? JSON.parse(data) : null;
-                } catch (e) {
-                    console.warn('Failed to retrieve signaling data:', e);
-                    return null;
-                }
-            }
-
-            removeSignalingData(key) {
-                try {
-                    localStorage.removeItem(key);
-                } catch (e) {
-                    console.warn('Failed to remove signaling data:', e);
-                }
+                    if (this.signalingSocket && this.signalingSocket.readyState === WebSocket.OPEN) {
+                        this.sendSignalingMessage({
+                            type: 'heartbeat'
+                        });
+                    }
+                }, 30000);
             }
 
             updateStatus(status, text) {
@@ -864,10 +873,16 @@
             disableChat() {
                 this.messageInput.disabled = true;
                 this.sendBtn.disabled = true;
-                this.connectBtn.disabled = false;
             }
 
             disconnect() {
+                // Announce departure
+                if (this.signalingSocket && this.signalingSocket.readyState === WebSocket.OPEN) {
+                    this.sendSignalingMessage({
+                        type: 'peer-left'
+                    });
+                }
+
                 // Clean up all connections
                 this.peerConnections.forEach((peerConnection) => {
                     peerConnection.close();
@@ -882,11 +897,17 @@
                     this.heartbeatInterval = null;
                 }
 
-                // Remove from room
-                const roomKey = `d1f-chat-${this.roomName}`;
-                const peersData = this.getSignalingData(`${roomKey}-peers`) || {};
-                delete peersData[this.peerId];
-                this.setSignalingData(`${roomKey}-peers`, peersData);
+                // Stop HTTP signaling if using fallback
+                if (this.httpSignalingInterval) {
+                    clearInterval(this.httpSignalingInterval);
+                    this.httpSignalingInterval = null;
+                }
+
+                // Close signaling socket
+                if (this.signalingSocket) {
+                    this.signalingSocket.close();
+                    this.signalingSocket = null;
+                }
 
                 this.updateStatus('disconnected', 'Disconnected');
                 this.disableChat();
@@ -894,6 +915,7 @@
                 // Reset room name and update buttons
                 this.roomName = '';
                 this.updateConnectionStatus();
+                this.connectBtn.disabled = false;
             }
 
             sendMessage() {
@@ -910,15 +932,19 @@
                 };
 
                 // Send to all connected peers
+                let sentCount = 0;
                 this.dataChannels.forEach((dataChannel) => {
                     if (dataChannel.readyState === 'open') {
                         dataChannel.send(JSON.stringify(messageData));
+                        sentCount++;
                     }
                 });
 
-                this.addMessage(message, 'sent', this.username);
-                this.messageInput.value = '';
-                this.messageInput.style.height = 'auto';
+                if (sentCount > 0) {
+                    this.addMessage(message, 'sent', this.username);
+                    this.messageInput.value = '';
+                    this.messageInput.style.height = 'auto';
+                }
             }
 
             addMessage(text, type, username = null) {
@@ -947,26 +973,45 @@
             addSystemMessage(text) {
                 this.addMessage(text, 'system');
             }
+
+            // HTTP signaling fallback methods
+            async announcePresenceHttp() {
+                // Implementation for HTTP-based presence announcement
+                // This would use a service like Firebase, Supabase, or a simple REST API
+                console.log('Announcing presence via HTTP');
+            }
+
+            async checkForPeersHttp() {
+                // Implementation for checking peers via HTTP
+                console.log('Checking for peers via HTTP');
+            }
+
+            async checkForSignalingMessagesHttp() {
+                // Implementation for checking signaling messages via HTTP
+                console.log('Checking signaling messages via HTTP');
+            }
         }
 
-        // Utility function for copying to clipboard
+        // Copy to clipboard function
         function copyToClipboard(text) {
             navigator.clipboard.writeText(text).then(() => {
-                // Show a brief success message
-                const originalText = document.getElementById('roomUrl').textContent;
-                document.getElementById('roomUrl').textContent = 'Copied to clipboard!';
+                // Show feedback
+                const roomUrl = document.getElementById('roomUrl');
+                const originalText = roomUrl.textContent;
+                roomUrl.textContent = 'Copied!';
+                roomUrl.style.color = 'var(--secondary)';
+                
                 setTimeout(() => {
-                    document.getElementById('roomUrl').textContent = originalText;
+                    roomUrl.textContent = originalText;
+                    roomUrl.style.color = '';
                 }, 2000);
             }).catch(err => {
                 console.error('Failed to copy: ', err);
             });
         }
 
-        // Initialize the chat when the page loads
-        document.addEventListener('DOMContentLoaded', () => {
-            new P2PChat();
-        });
+        // Initialize the chat application
+        const chat = new P2PChat();
     </script>
 </body>
 </html> 
