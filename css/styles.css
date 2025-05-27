@@ -426,13 +426,14 @@ a:hover {
         #6d28d9 87.5%,
         #ffffff 100%
     );
-    background-size: 150% 100%;
+    background-size: 200% 100%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     animation: shimmer 4s ease-in-out infinite;
     font-weight: 900;
     letter-spacing: 0.1em;
+    filter: blur(0.5px);
 }
 
 .hero-subtitle {
@@ -761,13 +762,13 @@ section {
 
 @keyframes shimmer {
     0% {
-        background-position: -150% 0%;
+        background-position: -200% 0%;
     }
     50% {
-        background-position: 150% 0%;
+        background-position: 200% 0%;
     }
     100% {
-        background-position: -150% 0%;
+        background-position: -200% 0%;
     }
 }
 
