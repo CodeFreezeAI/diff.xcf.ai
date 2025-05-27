@@ -363,12 +363,24 @@ class NumberProcessor:
             const isSourceCloseBrace = sourceLine && sourceLine.trim() === '}';
             const isDestCloseBrace = destLine && destLine.trim() === '}';
             
+            // Check if this line appears in both source and dest consecutively
+            const isConsecutiveIdentical = sourceLine && destLine && 
+                sourceLine === destLine && 
+                i < maxLines - 1 && 
+                sourceLines[i + 1] === destLines[i + 1];
+
             if (sourceLine === destLine && sourceLine !== undefined) {
                 // Unchanged line - show as retain
                 diff += `📎 ${sourceLine}\n`;
             } else if (isSourceCloseBrace && isDestCloseBrace) {
                 // Both lines are closing braces - show as retain
                 diff += `📎 ${sourceLine || destLine}\n`;
+            } else if (isConsecutiveIdentical) {
+                // Lines are identical and appear consecutively - show as retain
+                diff += `📎 ${sourceLine}\n`;
+                // Skip the next line since we've handled it as part of this consecutive match
+                i++;
+                diff += `📎 ${sourceLines[i]}\n`;
             } else {
                 // Changed line - show individual operations
                 if (sourceLine !== undefined) {
@@ -649,18 +661,32 @@ class NumberProcessor:
     // Add copy to clipboard functionality
     function addCopyButton() {
         const copyBtn = document.createElement('button');
-        copyBtn.className = 'btn btn-small copy-btn';
-        copyBtn.innerHTML = '📋 Copy';
-        copyBtn.style.position = 'absolute';
-        copyBtn.style.top = '10px';
-        copyBtn.style.right = '10px';
+        copyBtn.className = 'copy-btn';
+        copyBtn.innerHTML = `
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            Copy
+        `;
         
         copyBtn.addEventListener('click', () => {
-            const content = diffOutput.textContent;
+            const content = diffOutput.querySelector('pre')?.textContent || '';
             navigator.clipboard.writeText(content).then(() => {
-                copyBtn.innerHTML = '✅ Copied!';
+                copyBtn.innerHTML = `
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 6L9 17l-5-5"/>
+                    </svg>
+                    Copied!
+                `;
                 setTimeout(() => {
-                    copyBtn.innerHTML = '📋 Copy';
+                    copyBtn.innerHTML = `
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                        Copy
+                    `;
                 }, 2000);
             });
         });
@@ -705,6 +731,38 @@ class NumberProcessor:
             overflow-x: auto !important;
             word-wrap: normal !important;
             padding: 2px !important;
+        }
+        .btn-gradient {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%) !important;
+            border: none !important;
+            transition: all 0.2s ease !important;
+        }
+        .btn-gradient:hover {
+            transform: translateY(-1px) !important;
+            box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.4) !important;
+        }
+        .copy-btn {
+            position: absolute !important;
+            top: 8px !important;
+            right: 8px !important;
+            background: rgba(255, 255, 255, 0.1) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            border-radius: 4px !important;
+            color: white !important;
+            padding: 4px 8px !important;
+            font-size: 12px !important;
+            cursor: pointer !important;
+            opacity: 0 !important;
+            transition: opacity 0.2s ease !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 4px !important;
+        }
+        .demo-panel:hover .copy-btn {
+            opacity: 1 !important;
+        }
+        .copy-btn:hover {
+            background: rgba(255, 255, 255, 0.2) !important;
         }
     `;
     document.head.appendChild(style);

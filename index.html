@@ -547,30 +547,28 @@ let diff = MultiLineDiff.createDiff(
                             <option value="base64">🔐 Base64</option>
                         </select>
                     </div>
-                    <div style="display: flex; align-items: center; gap: 16px;">
-                        <div style="color: var(--text-muted); font-size: 0.75rem; font-style: italic;">
-                            <em>⚠️ Note: Algorithms and interpretation are currently simulated for web demo</em>
-                        </div>
+                    <div style="text-align: center; color: var(--text-muted); font-size: 0.75rem; font-style: italic; margin-top: 8px; margin-bottom: 16px;">
+                        <em>⚠️ Note: Simulated for web</em>
                     </div>
                 </div>
                 <div class="demo-panels">
                     <div class="demo-panel">
                         <div class="panel-header">
                             <h4>Source</h4>
-                            <button class="btn-small" id="load-example">Load Example</button>
+                            <button class="btn-small btn-gradient" id="load-example">Load Example</button>
                         </div>
                         <textarea id="source-input" class="demo-textarea" placeholder="Enter your source code here..."></textarea>
                     </div>
                     <div class="demo-panel">
                         <div class="panel-header">
                             <h4>Destination</h4>
-                            <button class="btn-small" id="clear-dest">Clear</button>
+                            <button class="btn-small btn-gradient" id="clear-dest">Clear</button>
                         </div>
                         <textarea id="dest-input" class="demo-textarea" placeholder="Enter your modified code here..."></textarea>
                     </div>
                     <div class="demo-panel demo-output">
                         <div class="panel-header">
-                            <button id="generate-diff" class="btn btn-primary" style="width: auto; padding: 8px 16px; margin: 0;">Gen D1F Diff</button>
+                            <button id="generate-diff" class="btn btn-primary btn-gradient" style="width: auto; padding: 8px 16px; margin: 0;">Gen D1F Diff</button>
                             <div class="output-stats" id="output-stats"></div>
                         </div>
                         <div id="diff-output" class="demo-output-content">
