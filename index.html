@@ -137,10 +137,10 @@
         <div class="container">
             <div class="showcase-content">
                 <div class="showcase-text">
-                    <div class="showcase-badge">
+                    <a href="#demo" class="showcase-badge">
                         <span class="badge-icon">✨</span>
                         <span>Live Example</span>
-                    </div>
+                    </a>
                     <h2 class="showcase-title">See the Magic in Action</h2>
                     <p class="showcase-subtitle">
                         Watch D1F - MultiLineDiff transform complex code changes into beautiful,
@@ -722,7 +722,7 @@ let diff = MultiLineDiff.createDiff(
                         <h4>Installation</h4>
                         <pre><code class="language-swift">// Add to Package.swift
 dependencies: [
-    .package(url: "https://github.com/codefreezeai/swift-multi-line-diff", from: "1.0.0")
+    .package(url: "https://github.com/codefreezeai/swift-multi-line-diff", from: "2.0.1")
 ]</code></pre>
 
                         <h4>Basic Usage</h4>
@@ -977,10 +977,10 @@ Line 2: 📎     private var result... (retain)
 Line 3: ❌     func add(_ value...   (delete) ← MODIFICATIONS START HERE
 Line 4: ❌         result += value   (delete)
 Line 5: ❌     }                     (delete)
-       ✅     func add(_ value...   (insert)
-       ✅         result += value   (insert)
-       ✅         return result     (insert)
-       ✅     }                     (insert)
+Line 6: ✅     func add(_ value...   (insert)
+Line 7: ✅         result += value   (insert)
+Line 8: ✅         return result     (insert)
+Line 9: ✅     }                     (insert)
 
 // Result: sourceStartLine = 2 (0-indexed, displayed as Line 3)</code></pre>
 
