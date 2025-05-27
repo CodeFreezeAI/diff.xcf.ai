@@ -538,8 +538,8 @@ let diff = MultiLineDiff.createDiff(
                                 <div class="control-group">
                                     <label for="algorithm-select">Algorithm</label>
                                     <select id="algorithm-select" class="control-select">
-                                        <option value="flash" selected>⚡ Flash</option>
-                                        <option value="optimus">🤖 Optimus</option>
+                                        <option value="flash">⚡ Flash</option>
+                                        <option value="optimus" selected>🤖 Optimus</option>
                                         <option value="megatron">🧠 Megatron</option>
                                     </select>
                                 </div>
@@ -558,12 +558,16 @@ let diff = MultiLineDiff.createDiff(
                             <h4>Live Performance</h4>
                             <div class="performance-indicators">
                                 <div class="perf-indicator">
-                                    <span class="perf-label">⚡ Speed</span>
-                                    <span class="perf-value time-display">0.001ms</span>
+                                    <span class="perf-symbol speed">⚡</span>
+                                    <span class="perf-label">Speed</span>
                                 </div>
                                 <div class="perf-indicator">
-                                    <span class="perf-label">🎯 Accuracy</span>
-                                    <span class="perf-value">100%</span>
+                                    <span class="perf-symbol accuracy">🎯</span>
+                                    <span class="perf-label">Accuracy</span>
+                                </div>
+                                <div class="perf-indicator">
+                                    <span class="perf-symbol operations">🔧</span>
+                                    <span class="perf-label">Operations</span>
                                 </div>
                             </div>
                         </div>
