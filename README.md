@@ -224,13 +224,13 @@ chmod +x deploy.sh
 
 ## 📝 License
 
-This project is part of the MultiLineDiff library created by Todd Bruss © xcf.ai.
+This project is part of the MultiLineDiff library created by Todd Bruss © d1f.ai.
 
 ## 🔗 Links
 
 - **Library Repository**: [swift-multi-line-diff](https://github.com/codefreezeai/swift-multi-line-diff)
 - **Documentation**: [ASCII Diff Guide](https://github.com/codefreezeai/swift-multi-line-diff/blob/main/NEW_ASCII_DIFF.md)
-- **XCF.ai**: [https://xcf.ai](https://xcf.ai)
+- **D1F.ai**: [https://d1f.ai](https://d1f.ai)
 
 ---
 

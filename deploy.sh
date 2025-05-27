@@ -7,7 +7,7 @@
 set -e
 
 ENVIRONMENT=${1:-dev}
-SITE_URL="https://diff.xcf.ai"
+SITE_URL="https://d1f.ai"
 
 echo "🚀 Deploying MultiLineDiff Website to $ENVIRONMENT..."
 

@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>D1F Chat - Serverless P2P Chat</title>
-    <meta name="description" content="Serverless peer-to-peer chat powered by WebRTC">
+    <title>D1F Chat - Multi-User P2P Chat</title>
+    <meta name="description" content="Multi-user serverless peer-to-peer chat powered by WebRTC">
     
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="images/favicon.ico">
@@ -87,7 +87,7 @@
 
         .connection-controls {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
             gap: var(--space-lg);
             margin-bottom: var(--space-lg);
         }
@@ -155,6 +155,17 @@
             border-radius: var(--radius-lg);
             max-width: 70%;
             word-wrap: break-word;
+        }
+
+        .message-header {
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: var(--space-xs);
+            opacity: 0.8;
+        }
+
+        .message-content {
+            line-height: 1.4;
         }
 
         .message.sent {
@@ -329,6 +340,7 @@
 
             .connection-controls {
                 grid-template-columns: 1fr;
+                gap: var(--space-md);
             }
 
             .message {
@@ -356,16 +368,17 @@
     <div class="chat-container">
         <div class="chat-header">
             <h1 class="chat-title">D1F Chat</h1>
-            <p class="chat-subtitle">Serverless peer-to-peer chat powered by WebRTC</p>
+            <p class="chat-subtitle">Multi-user serverless peer-to-peer chat powered by WebRTC</p>
         </div>
 
         <div class="instructions">
             <h3>🚀 How to Use</h3>
             <ol>
-                <li><strong>Create or join a room:</strong> Enter a room name (both users must use the same name)</li>
-                <li><strong>Share the room name:</strong> Give the room name to the person you want to chat with</li>
-                <li><strong>Connect:</strong> Both users click "Connect" - connection happens automatically</li>
-                <li><strong>Chat:</strong> Once connected, start chatting! No servers, completely peer-to-peer</li>
+                <li><strong>Enter your username:</strong> Choose a display name for the chat</li>
+                <li><strong>Create or join a room:</strong> Enter a room name (all participants must use the same name)</li>
+                <li><strong>Share the room name:</strong> Give the room name to everyone you want to chat with</li>
+                <li><strong>Connect:</strong> All participants click "Connect" - connections happen automatically</li>
+                <li><strong>Multi-user chat:</strong> Support for multiple people in the same room! No servers, completely peer-to-peer</li>
             </ol>
         </div>
 
@@ -378,12 +391,20 @@
             <div class="connection-controls">
                 <input 
                     type="text" 
+                    id="usernameInput" 
+                    class="room-input" 
+                    placeholder="Enter your username"
+                    maxlength="20"
+                >
+                <input 
+                    type="text" 
                     id="roomInput" 
                     class="room-input" 
                     placeholder="Enter room name (e.g., d1f-chat-123)"
                     maxlength="50"
                 >
                 <button id="connectBtn" class="connect-btn">Connect</button>
+                <button id="disconnectBtn" class="connect-btn" style="background: #ef4444; display: none;">Disconnect</button>
             </div>
 
             <div class="room-share" id="roomShare">
@@ -395,7 +416,7 @@
         <div class="chat-area">
             <div class="messages-container" id="messagesContainer">
                 <div class="message system">
-                    Enter a room name and click Connect to start chatting
+                    Enter your username and room name, then click Connect to join a multi-user chat room
                 </div>
             </div>
             
@@ -416,20 +437,32 @@
         // Simple signaling using a public WebSocket service
         class P2PChat {
             constructor() {
-                this.peerConnection = null;
-                this.dataChannel = null;
-                this.isInitiator = false;
+                this.peerConnections = new Map(); // Map of peerId -> RTCPeerConnection
+                this.dataChannels = new Map(); // Map of peerId -> DataChannel
+                this.connectedPeers = new Set(); // Set of connected peer IDs
                 this.roomName = '';
+                this.username = '';
                 this.peerId = this.generatePeerId();
                 this.signalingData = new Map();
+                this.heartbeatInterval = null;
                 
                 this.initializeElements();
                 this.setupEventListeners();
                 this.checkUrlParams();
+                this.generateDefaultUsername();
             }
 
             generatePeerId() {
                 return Math.random().toString(36).substr(2, 9);
+            }
+
+            generateDefaultUsername() {
+                const adjectives = ['Cool', 'Smart', 'Fast', 'Bright', 'Swift', 'Quick', 'Sharp', 'Bold'];
+                const nouns = ['Coder', 'Dev', 'User', 'Hacker', 'Ninja', 'Pro', 'Guru', 'Wizard'];
+                const adjective = adjectives[Math.floor(Math.random() * adjectives.length)];
+                const noun = nouns[Math.floor(Math.random() * nouns.length)];
+                const number = Math.floor(Math.random() * 100);
+                this.usernameInput.value = `${adjective}${noun}${number}`;
             }
 
             checkUrlParams() {
@@ -443,8 +476,10 @@
             initializeElements() {
                 this.statusIndicator = document.getElementById('statusIndicator');
                 this.statusText = document.getElementById('statusText');
+                this.usernameInput = document.getElementById('usernameInput');
                 this.roomInput = document.getElementById('roomInput');
                 this.connectBtn = document.getElementById('connectBtn');
+                this.disconnectBtn = document.getElementById('disconnectBtn');
                 this.messagesContainer = document.getElementById('messagesContainer');
                 this.messageInput = document.getElementById('messageInput');
                 this.sendBtn = document.getElementById('sendBtn');
@@ -454,6 +489,7 @@
 
             setupEventListeners() {
                 this.connectBtn.addEventListener('click', () => this.connect());
+                this.disconnectBtn.addEventListener('click', () => this.disconnect());
                 this.sendBtn.addEventListener('click', () => this.sendMessage());
                 this.messageInput.addEventListener('keypress', (e) => {
                     if (e.key === 'Enter' && !e.shiftKey) {
@@ -470,12 +506,20 @@
             }
 
             async connect() {
+                const username = this.usernameInput.value.trim();
                 const roomName = this.roomInput.value.trim();
+                
+                if (!username) {
+                    alert('Please enter a username');
+                    return;
+                }
+                
                 if (!roomName) {
                     alert('Please enter a room name');
                     return;
                 }
 
+                this.username = username;
                 this.roomName = roomName;
                 this.updateStatus('connecting', 'Connecting...');
                 this.connectBtn.disabled = true;
@@ -486,8 +530,8 @@
                 this.roomShare.classList.add('visible');
 
                 try {
-                    await this.initializePeerConnection();
-                    await this.setupSignaling();
+                    await this.joinRoom();
+                    this.startHeartbeat();
                 } catch (error) {
                     console.error('Connection failed:', error);
                     this.updateStatus('disconnected', 'Connection failed');
@@ -495,8 +539,31 @@
                 }
             }
 
-            async initializePeerConnection() {
-                // Use free STUN servers for NAT traversal
+            async joinRoom() {
+                // Announce our presence in the room
+                this.announcePresence();
+                
+                // Start polling for other peers
+                this.pollForPeers();
+                
+                this.addSystemMessage(`Joined room "${this.roomName}" as ${this.username}`);
+                this.addSystemMessage('Looking for other participants...');
+            }
+
+            announcePresence() {
+                const roomKey = `d1f-chat-${this.roomName}`;
+                const peersData = this.getSignalingData(`${roomKey}-peers`) || {};
+                
+                peersData[this.peerId] = {
+                    username: this.username,
+                    timestamp: Date.now(),
+                    status: 'online'
+                };
+                
+                this.setSignalingData(`${roomKey}-peers`, peersData);
+            }
+
+            async createPeerConnection(remotePeerId) {
                 const configuration = {
                     iceServers: [
                         { urls: 'stun:stun.l.google.com:19302' },
@@ -505,159 +572,255 @@
                     ]
                 };
 
-                this.peerConnection = new RTCPeerConnection(configuration);
+                const peerConnection = new RTCPeerConnection(configuration);
+                this.peerConnections.set(remotePeerId, peerConnection);
 
-                // Set up data channel
-                this.dataChannel = this.peerConnection.createDataChannel('chat', {
-                    ordered: true
-                });
+                // Create data channel for outgoing connections
+                const dataChannel = peerConnection.createDataChannel('chat', { ordered: true });
+                this.setupDataChannel(dataChannel, remotePeerId);
 
-                this.dataChannel.onopen = () => {
-                    this.updateStatus('connected', 'Connected');
-                    this.enableChat();
-                    this.addSystemMessage('Connected! You can now chat.');
-                };
-
-                this.dataChannel.onmessage = (event) => {
-                    this.addMessage(event.data, 'received');
-                };
-
-                this.dataChannel.onclose = () => {
-                    this.updateStatus('disconnected', 'Disconnected');
-                    this.disableChat();
-                    this.addSystemMessage('Connection closed.');
-                };
-
-                // Handle incoming data channel
-                this.peerConnection.ondatachannel = (event) => {
-                    const channel = event.channel;
-                    channel.onopen = () => {
-                        this.updateStatus('connected', 'Connected');
-                        this.enableChat();
-                        this.addSystemMessage('Connected! You can now chat.');
-                    };
-                    channel.onmessage = (event) => {
-                        this.addMessage(event.data, 'received');
-                    };
-                    channel.onclose = () => {
-                        this.updateStatus('disconnected', 'Disconnected');
-                        this.disableChat();
-                        this.addSystemMessage('Connection closed.');
-                    };
+                // Handle incoming data channels
+                peerConnection.ondatachannel = (event) => {
+                    this.setupDataChannel(event.channel, remotePeerId);
                 };
 
                 // Handle ICE candidates
-                this.peerConnection.onicecandidate = (event) => {
+                peerConnection.onicecandidate = (event) => {
                     if (event.candidate) {
                         this.sendSignalingMessage({
                             type: 'ice-candidate',
                             candidate: event.candidate,
-                            from: this.peerId
+                            from: this.peerId,
+                            to: remotePeerId
                         });
                     }
                 };
+
+                return peerConnection;
             }
 
-            async setupSignaling() {
-                // Use localStorage for simple signaling (works for same-device testing)
-                // In production, you'd use a WebSocket server, Firebase, or similar
-                const roomKey = `d1f-chat-${this.roomName}`;
-                
-                // Check if there's already an offer in the room
-                const existingOffer = this.getSignalingData(`${roomKey}-offer`);
-                
-                if (!existingOffer) {
-                    // We're the initiator
-                    this.isInitiator = true;
-                    await this.createOffer();
-                    this.pollForAnswer();
-                } else {
-                    // We're joining an existing room
-                    this.isInitiator = false;
-                    await this.handleOffer(existingOffer);
-                }
+            setupDataChannel(dataChannel, remotePeerId) {
+                this.dataChannels.set(remotePeerId, dataChannel);
 
-                // Poll for ICE candidates
-                this.pollForIceCandidates();
+                dataChannel.onopen = () => {
+                    this.connectedPeers.add(remotePeerId);
+                    this.updateConnectionStatus();
+                    
+                    const roomKey = `d1f-chat-${this.roomName}`;
+                    const peersData = this.getSignalingData(`${roomKey}-peers`) || {};
+                    const remoteUsername = peersData[remotePeerId]?.username || 'Unknown';
+                    
+                    this.addSystemMessage(`${remoteUsername} joined the chat`);
+                };
+
+                dataChannel.onmessage = (event) => {
+                    try {
+                        const messageData = JSON.parse(event.data);
+                        if (messageData.type === 'chat') {
+                            this.addMessage(messageData.text, 'received', messageData.username);
+                        } else if (messageData.type === 'heartbeat') {
+                            // Handle heartbeat - peer is still alive
+                        }
+                    } catch (e) {
+                        console.error('Failed to parse message:', e);
+                    }
+                };
+
+                dataChannel.onclose = () => {
+                    this.connectedPeers.delete(remotePeerId);
+                    this.updateConnectionStatus();
+                    
+                    const roomKey = `d1f-chat-${this.roomName}`;
+                    const peersData = this.getSignalingData(`${roomKey}-peers`) || {};
+                    const remoteUsername = peersData[remotePeerId]?.username || 'Unknown';
+                    
+                    this.addSystemMessage(`${remoteUsername} left the chat`);
+                    
+                    // Clean up
+                    this.dataChannels.delete(remotePeerId);
+                    this.peerConnections.delete(remotePeerId);
+                };
             }
 
-            async createOffer() {
-                const offer = await this.peerConnection.createOffer();
-                await this.peerConnection.setLocalDescription(offer);
+            pollForPeers() {
+                const checkForPeers = () => {
+                    const roomKey = `d1f-chat-${this.roomName}`;
+                    const peersData = this.getSignalingData(`${roomKey}-peers`) || {};
+                    
+                    // Clean up old peers (older than 30 seconds)
+                    const now = Date.now();
+                    Object.keys(peersData).forEach(peerId => {
+                        if (now - peersData[peerId].timestamp > 30000) {
+                            delete peersData[peerId];
+                        }
+                    });
+                    this.setSignalingData(`${roomKey}-peers`, peersData);
+                    
+                    // Find new peers to connect to
+                    Object.keys(peersData).forEach(async (peerId) => {
+                        if (peerId !== this.peerId && !this.peerConnections.has(peerId)) {
+                            // Only initiate connection if our peerId is "smaller" to avoid duplicate connections
+                            if (this.peerId < peerId) {
+                                await this.initiateConnection(peerId);
+                            }
+                        }
+                    });
+                    
+                    // Check for offers and answers
+                    this.checkForOffers();
+                    this.checkForAnswers();
+                    this.checkForIceCandidates();
+                    
+                    // Continue polling
+                    setTimeout(checkForPeers, 2000);
+                };
+                
+                setTimeout(checkForPeers, 1000);
+            }
+
+            async initiateConnection(remotePeerId) {
+                const peerConnection = await this.createPeerConnection(remotePeerId);
+                const offer = await peerConnection.createOffer();
+                await peerConnection.setLocalDescription(offer);
                 
                 const roomKey = `d1f-chat-${this.roomName}`;
-                this.setSignalingData(`${roomKey}-offer`, {
+                const offersData = this.getSignalingData(`${roomKey}-offers`) || {};
+                const offerKey = `${this.peerId}-${remotePeerId}`;
+                
+                offersData[offerKey] = {
                     offer: offer,
                     from: this.peerId,
+                    to: remotePeerId,
                     timestamp: Date.now()
-                });
+                };
                 
-                this.addSystemMessage('Waiting for someone to join the room...');
+                this.setSignalingData(`${roomKey}-offers`, offersData);
+            }
+
+            checkForOffers() {
+                const roomKey = `d1f-chat-${this.roomName}`;
+                const offersData = this.getSignalingData(`${roomKey}-offers`) || {};
+                
+                Object.keys(offersData).forEach(async (offerKey) => {
+                    const offerData = offersData[offerKey];
+                    if (offerData.to === this.peerId && !this.peerConnections.has(offerData.from)) {
+                        await this.handleOffer(offerData);
+                        // Remove processed offer
+                        delete offersData[offerKey];
+                        this.setSignalingData(`${roomKey}-offers`, offersData);
+                    }
+                });
             }
 
             async handleOffer(offerData) {
-                if (offerData.from === this.peerId) return; // Ignore our own offer
-                
-                await this.peerConnection.setRemoteDescription(offerData.offer);
-                const answer = await this.peerConnection.createAnswer();
-                await this.peerConnection.setLocalDescription(answer);
+                const peerConnection = await this.createPeerConnection(offerData.from);
+                await peerConnection.setRemoteDescription(offerData.offer);
+                const answer = await peerConnection.createAnswer();
+                await peerConnection.setLocalDescription(answer);
                 
                 const roomKey = `d1f-chat-${this.roomName}`;
-                this.setSignalingData(`${roomKey}-answer`, {
+                const answersData = this.getSignalingData(`${roomKey}-answers`) || {};
+                const answerKey = `${offerData.from}-${this.peerId}`;
+                
+                answersData[answerKey] = {
                     answer: answer,
                     from: this.peerId,
                     to: offerData.from,
                     timestamp: Date.now()
-                });
-                
-                // Clean up the offer since we've processed it
-                this.removeSignalingData(`${roomKey}-offer`);
-                
-                this.addSystemMessage('Joining room...');
-            }
-
-            pollForAnswer() {
-                const roomKey = `d1f-chat-${this.roomName}`;
-                const checkForAnswer = () => {
-                    const answerData = this.getSignalingData(`${roomKey}-answer`);
-                    if (answerData && answerData.to === this.peerId) {
-                        this.peerConnection.setRemoteDescription(answerData.answer);
-                        this.removeSignalingData(`${roomKey}-answer`);
-                        this.addSystemMessage('Someone joined the room!');
-                    } else {
-                        setTimeout(checkForAnswer, 1000);
-                    }
                 };
-                setTimeout(checkForAnswer, 1000);
+                
+                this.setSignalingData(`${roomKey}-answers`, answersData);
             }
 
-            pollForIceCandidates() {
+            checkForAnswers() {
                 const roomKey = `d1f-chat-${this.roomName}`;
-                const checkForCandidates = () => {
-                    const candidates = this.getSignalingData(`${roomKey}-candidates`) || [];
-                    candidates.forEach(candidateData => {
-                        if (candidateData.from !== this.peerId) {
-                            this.peerConnection.addIceCandidate(candidateData.candidate);
+                const answersData = this.getSignalingData(`${roomKey}-answers`) || {};
+                
+                Object.keys(answersData).forEach(async (answerKey) => {
+                    const answerData = answersData[answerKey];
+                    if (answerData.to === this.peerId) {
+                        const peerConnection = this.peerConnections.get(answerData.from);
+                        if (peerConnection) {
+                            await peerConnection.setRemoteDescription(answerData.answer);
+                            // Remove processed answer
+                            delete answersData[answerKey];
+                            this.setSignalingData(`${roomKey}-answers`, answersData);
                         }
-                    });
-                    // Clear processed candidates
-                    this.removeSignalingData(`${roomKey}-candidates`);
-                    setTimeout(checkForCandidates, 2000);
-                };
-                setTimeout(checkForCandidates, 2000);
+                    }
+                });
+            }
+
+            checkForIceCandidates() {
+                const roomKey = `d1f-chat-${this.roomName}`;
+                const candidatesData = this.getSignalingData(`${roomKey}-candidates`) || {};
+                
+                Object.keys(candidatesData).forEach((candidateKey) => {
+                    const candidateData = candidatesData[candidateKey];
+                    if (candidateData.to === this.peerId) {
+                        const peerConnection = this.peerConnections.get(candidateData.from);
+                        if (peerConnection) {
+                            peerConnection.addIceCandidate(candidateData.candidate);
+                            // Remove processed candidate
+                            delete candidatesData[candidateKey];
+                            this.setSignalingData(`${roomKey}-candidates`, candidatesData);
+                        }
+                    }
+                });
             }
 
             sendSignalingMessage(message) {
                 const roomKey = `d1f-chat-${this.roomName}`;
                 if (message.type === 'ice-candidate') {
-                    const candidates = this.getSignalingData(`${roomKey}-candidates`) || [];
-                    candidates.push({
+                    const candidatesData = this.getSignalingData(`${roomKey}-candidates`) || {};
+                    const candidateKey = `${message.from}-${message.to}-${Date.now()}`;
+                    
+                    candidatesData[candidateKey] = {
                         candidate: message.candidate,
                         from: message.from,
+                        to: message.to,
                         timestamp: Date.now()
-                    });
-                    this.setSignalingData(`${roomKey}-candidates`, candidates);
+                    };
+                    
+                    this.setSignalingData(`${roomKey}-candidates`, candidatesData);
                 }
+            }
+
+            updateConnectionStatus() {
+                const connectedCount = this.connectedPeers.size;
+                if (connectedCount === 0) {
+                    this.updateStatus('connecting', 'Looking for participants...');
+                    this.disableChat();
+                } else {
+                    this.updateStatus('connected', `Connected to ${connectedCount} peer${connectedCount > 1 ? 's' : ''}`);
+                    this.enableChat();
+                }
+                
+                // Update button visibility
+                if (this.roomName) {
+                    this.connectBtn.style.display = 'none';
+                    this.disconnectBtn.style.display = 'block';
+                } else {
+                    this.connectBtn.style.display = 'block';
+                    this.disconnectBtn.style.display = 'none';
+                }
+            }
+
+            startHeartbeat() {
+                // Send heartbeat every 10 seconds to keep presence alive
+                this.heartbeatInterval = setInterval(() => {
+                    this.announcePresence();
+                    
+                    // Send heartbeat to all connected peers
+                    this.dataChannels.forEach((dataChannel) => {
+                        if (dataChannel.readyState === 'open') {
+                            dataChannel.send(JSON.stringify({
+                                type: 'heartbeat',
+                                from: this.peerId,
+                                timestamp: Date.now()
+                            }));
+                        }
+                    });
+                }, 10000);
             }
 
             // Simple signaling data management using localStorage
@@ -704,22 +867,78 @@
                 this.connectBtn.disabled = false;
             }
 
+            disconnect() {
+                // Clean up all connections
+                this.peerConnections.forEach((peerConnection) => {
+                    peerConnection.close();
+                });
+                this.peerConnections.clear();
+                this.dataChannels.clear();
+                this.connectedPeers.clear();
+
+                // Stop heartbeat
+                if (this.heartbeatInterval) {
+                    clearInterval(this.heartbeatInterval);
+                    this.heartbeatInterval = null;
+                }
+
+                // Remove from room
+                const roomKey = `d1f-chat-${this.roomName}`;
+                const peersData = this.getSignalingData(`${roomKey}-peers`) || {};
+                delete peersData[this.peerId];
+                this.setSignalingData(`${roomKey}-peers`, peersData);
+
+                this.updateStatus('disconnected', 'Disconnected');
+                this.disableChat();
+                
+                // Reset room name and update buttons
+                this.roomName = '';
+                this.updateConnectionStatus();
+            }
+
             sendMessage() {
                 const message = this.messageInput.value.trim();
-                if (!message || !this.dataChannel || this.dataChannel.readyState !== 'open') {
+                if (!message || this.connectedPeers.size === 0) {
                     return;
                 }
 
-                this.dataChannel.send(message);
-                this.addMessage(message, 'sent');
+                const messageData = {
+                    type: 'chat',
+                    text: message,
+                    username: this.username,
+                    timestamp: Date.now()
+                };
+
+                // Send to all connected peers
+                this.dataChannels.forEach((dataChannel) => {
+                    if (dataChannel.readyState === 'open') {
+                        dataChannel.send(JSON.stringify(messageData));
+                    }
+                });
+
+                this.addMessage(message, 'sent', this.username);
                 this.messageInput.value = '';
                 this.messageInput.style.height = 'auto';
             }
 
-            addMessage(text, type) {
+            addMessage(text, type, username = null) {
                 const messageDiv = document.createElement('div');
                 messageDiv.className = `message ${type}`;
-                messageDiv.textContent = text;
+                
+                if (username && type !== 'system') {
+                    const headerDiv = document.createElement('div');
+                    headerDiv.className = 'message-header';
+                    headerDiv.textContent = username;
+                    
+                    const contentDiv = document.createElement('div');
+                    contentDiv.className = 'message-content';
+                    contentDiv.textContent = text;
+                    
+                    messageDiv.appendChild(headerDiv);
+                    messageDiv.appendChild(contentDiv);
+                } else {
+                    messageDiv.textContent = text;
+                }
                 
                 this.messagesContainer.appendChild(messageDiv);
                 this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
