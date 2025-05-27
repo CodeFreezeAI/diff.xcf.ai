@@ -836,48 +836,8 @@ class NumberProcessor:
         .copy-btn:hover {
             background: rgba(255, 255, 255, 0.2) !important;
         }
-        .performance-indicators {
-            display: flex;
-            gap: 12px;
-            margin-top: 8px;
-        }
-        .perf-indicator {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 8px 12px;
-            background: var(--bg-code);
-            border: 1px solid var(--border-primary);
-            border-radius: 8px;
-            min-width: 80px;
-            transition: all 0.2s ease;
-        }
-        .perf-indicator:hover {
-            border-color: var(--border-accent);
-            transform: translateY(-1px);
-        }
-        .perf-label {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            margin-bottom: 4px;
-        }
-        .perf-value {
-            font-size: 0.9rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            font-family: var(--font-mono);
-            min-width: 80px;
-            text-align: center;
-        }
-        .time-display {
-            color: #f59e0b !important;
-            font-weight: 600;
-            font-family: var(--font-mono);
-            font-size: 1rem;
-            line-height: 1.6;
-            min-width: 80px;
-            text-align: center;
-        }
+
+
         .stat-badge {
             min-height: 40px;
             display: flex;

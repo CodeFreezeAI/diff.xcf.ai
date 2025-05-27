@@ -1263,6 +1263,38 @@ let base64Diff = try MultiLineDiff.createBase64Diff(
         </div>
     </section>
 
+    <!-- Algorithm Comparison Section -->
+    <section id="algorithm-comparison" class="algo-comparison-section">
+        <div class="algo-comparison-container">
+            <h1 class="algo-comparison-title">🚀 Algorithm Performance Showdown</h1>
+            
+
+            
+            <div class="algo-comparison-legend">
+                <div class="algo-comparison-legend-item">
+                    <div class="algo-comparison-legend-color" style="background: #FF0000;"></div>
+                    <span><strong>Flash O(n)</strong> - Lightning fast for similar data</span>
+                </div>
+                <div class="algo-comparison-legend-item">
+                    <div class="algo-comparison-legend-color" style="background: #0066FF;"></div>
+                    <span><strong>Myers (O(n√n))</strong> - Average changes</span>
+                </div>
+                <div class="algo-comparison-legend-item">
+                    <div class="algo-comparison-legend-color" style="background: #00AA00;"></div>
+                    <span><strong>Optimus O(n log n)</strong> - Consistently reliable</span>
+                </div>
+                <div class="algo-comparison-legend-item">
+                    <div class="algo-comparison-legend-color" style="background: #FF6600;"></div>
+                    <span><strong>Myers (O(n²))</strong> - Major changes</span>
+                </div>
+            </div>
+            
+            <div class="algo-comparison-chart-container">
+                <canvas id="algoPerformanceChart"></canvas>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
@@ -1331,5 +1363,6 @@ let base64Diff = try MultiLineDiff.createBase64Diff(
     <script src="js/demo.js"></script>
     <script src="js/performance.js"></script>
     <script src="js/test-algorithms.js"></script>
+    <script src="js/algorithm-comparison.js"></script>
 </body>
 </html> 
