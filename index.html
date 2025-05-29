@@ -36,6 +36,7 @@
     <link rel="stylesheet" href="css/animations.css?v=1748498821">
     <link rel="stylesheet" href="css/components.css?v=1748498826">
     <link rel="stylesheet" href="css/js-styles.css?v=1748498822">
+    <link rel="stylesheet" href="css/d1f-algorithm-comparison.css?v=1748498827">
     
     <!-- Prism.js for syntax highlighting -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css?v=1748494378" rel="stylesheet">
@@ -1188,32 +1189,32 @@ let base64Diff = try MultiLineDiff.createBase64Diff(
     </section>
 
     <!-- Algorithm Comparison Section -->
-    <section id="algorithm-comparison" class="algo-comparison-section">
-        <div class="algo-comparison-container">
-            <h1 class="algo-comparison-title">🚀 Algorithm Performance Showdown</h1>
+    <section id="algorithm-comparison" class="d1f-alg-comparison-section">
+        <div class="d1f-alg-comparison-container">
+            <h1 class="d1f-alg-comparison-title">🚀 Algorithm Performance Showdown</h1>
             
 
             
-            <div class="algo-comparison-legend">
-                <div class="algo-comparison-legend-item">
-                    <div class="algo-comparison-legend-color" style="background: #FF0000;"></div>
+            <div class="d1f-alg-comparison-legend">
+                <div class="d1f-alg-comparison-legend-item">
+                    <div class="d1f-alg-comparison-legend-color" style="background: #FF0000;"></div>
                     <span><strong>Flash O(n)</strong></span>
                 </div>
-                <div class="algo-comparison-legend-item">
-                    <div class="algo-comparison-legend-color" style="background: #0066FF;"></div>
-                    <span><strong>Myers Typical O(n√n)</strong></span>
-                </div>
-                <div class="algo-comparison-legend-item">
-                    <div class="algo-comparison-legend-color" style="background: #00AA00;"></div>
+                <div class="d1f-alg-comparison-legend-item">
+                    <div class="d1f-alg-comparison-legend-color" style="background: #00AA00;"></div>
                     <span><strong>Optimus O(n log n)</strong></span>
                 </div>
-                <div class="algo-comparison-legend-item">
-                    <div class="algo-comparison-legend-color" style="background: #FF6600;"></div>
+                <div class="d1f-alg-comparison-legend-item">
+                    <div class="d1f-alg-comparison-legend-color" style="background: #0066FF;"></div>
+                    <span><strong>Myers Typical O(n√n)</strong></span>
+                </div>
+                <div class="d1f-alg-comparison-legend-item">
+                    <div class="d1f-alg-comparison-legend-color" style="background: #FF6600;"></div>
                     <span><strong>Myers Worst O(n²)</strong></span>
                 </div>
             </div>
             
-            <div class="algo-comparison-chart-container">
+            <div class="d1f-alg-comparison-chart-container">
                 <canvas id="algoPerformanceChart"></canvas>
             </div>
         </div>

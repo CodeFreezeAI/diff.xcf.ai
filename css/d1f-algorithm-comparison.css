@@ -1,0 +1,253 @@
+/* D1F Algorithm Performance Showdown Styles */
+
+.d1f-alg-comparison-section {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
+    padding: 35px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.d1f-alg-comparison-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 60%, rgba(147, 51, 234, 0.05) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.d1f-alg-comparison-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    position: relative;
+    z-index: 1;
+}
+
+.d1f-alg-comparison-title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 900;
+    text-align: center;
+    margin-bottom: 30px;
+    background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 50%, #cbd5e1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+}
+
+.d1f-alg-comparison-legend {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin-bottom: 50px;
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.d1f-alg-comparison-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    color: #ffffff;
+}
+
+.d1f-alg-comparison-legend-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.d1f-alg-comparison-legend-color {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    box-shadow: 
+        0 0 0 1px rgba(255, 255, 255, 0.2),
+        0 4px 8px rgba(0, 0, 0, 0.3);
+    flex-shrink: 0;
+}
+
+.d1f-alg-comparison-legend-item span {
+    font-size: 0.95rem;
+    white-space: nowrap;
+}
+
+.d1f-alg-comparison-chart-container {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    padding: 40px;
+    box-shadow: 
+        0 25px 50px rgba(0, 0, 0, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    position: relative;
+    overflow: hidden;
+}
+
+.d1f-alg-comparison-chart-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0%, transparent 50%, rgba(255, 255, 255, 0.01) 100%);
+    pointer-events: none;
+}
+
+.d1f-alg-comparison-chart-container canvas {
+    position: relative;
+    z-index: 1;
+    filter: contrast(1.1) brightness(1.05);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .d1f-alg-comparison-section {
+        padding: 80px 0;
+    }
+    
+    .d1f-alg-comparison-container {
+        padding: 0 15px;
+    }
+    
+    .d1f-alg-comparison-title {
+        margin-bottom: 40px;
+    }
+    
+    .d1f-alg-comparison-legend {
+        gap: 15px;
+        padding: 20px;
+        margin-bottom: 30px;
+    }
+    
+    .d1f-alg-comparison-legend-item {
+        padding: 10px 16px;
+        font-size: 0.9rem;
+    }
+    
+    .d1f-alg-comparison-chart-container {
+        padding: 25px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .d1f-alg-comparison-legend {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .d1f-alg-comparison-legend-item {
+        justify-content: center;
+    }
+    
+    .d1f-alg-comparison-chart-container {
+        padding: 20px 15px;
+    }
+}
+
+/* Animation for smooth entrance */
+@keyframes d1f-alg-fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.d1f-alg-comparison-section * {
+    animation: d1f-alg-fadeInUp 0.6s ease-out;
+}
+
+.d1f-alg-comparison-legend-item:nth-child(1) { animation-delay: 0.1s; }
+.d1f-alg-comparison-legend-item:nth-child(2) { animation-delay: 0.2s; }
+.d1f-alg-comparison-legend-item:nth-child(3) { animation-delay: 0.3s; }
+.d1f-alg-comparison-legend-item:nth-child(4) { animation-delay: 0.4s; }
+.d1f-alg-comparison-chart-container { animation-delay: 0.5s; }
+
+/* Enhanced visual effects */
+.d1f-alg-comparison-section {
+    background-attachment: fixed;
+}
+
+.d1f-alg-comparison-title {
+    filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.1));
+}
+
+.d1f-alg-comparison-legend-item strong {
+    background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Interactive Legend Styles */
+.d1f-alg-legend-clickable {
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.3s ease;
+}
+
+.d1f-alg-legend-clickable:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+.d1f-alg-legend-hidden {
+    opacity: 0.4;
+    filter: grayscale(70%);
+}
+
+.d1f-alg-legend-visible {
+    opacity: 1;
+    filter: grayscale(0%);
+}
+
+.d1f-alg-legend-hidden:hover {
+    opacity: 0.6;
+}
+
+/* Chart Container Enhancements */
+.d1f-alg-comparison-chart-container {
+    min-height: 500px;
+}
+
+@media (max-width: 768px) {
+    .d1f-alg-comparison-chart-container {
+        min-height: 400px;
+    }
+}
+
+@media (max-width: 480px) {
+    .d1f-alg-comparison-chart-container {
+        min-height: 350px;
+    }
+} 

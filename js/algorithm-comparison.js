@@ -16,40 +16,44 @@ function initializeAlgoComparisonChart() {
                 data: [1000, 2500, 5000, 10000, 25000, 100000],
                 borderColor: '#FF0000',
                 backgroundColor: 'rgba(255, 0, 0, 0.1)',
-                borderWidth: 4,
+                borderWidth: 2,
                 pointRadius: 6,
                 pointHoverRadius: 8,
-                tension: 0.4
-            },
-            {
-                label: 'Myers Typical O(n√n)',
-                data: [31623, 125000, 353553, 1000000, 3952847, 31622777],
-                borderColor: '#0066FF',
-                backgroundColor: 'rgba(0, 102, 255, 0.1)',
-                borderWidth: 4,
-                pointRadius: 6,
-                pointHoverRadius: 8,
-                tension: 0.4
+                tension: 0.4,
+                hoverBorderWidth: 2
             },
             {
                 label: 'Optimus O(n log n)',
                 data: [9966, 29897, 61439, 132877, 391927, 1660964],
                 borderColor: '#00AA00',
                 backgroundColor: 'rgba(0, 170, 0, 0.1)',
-                borderWidth: 4,
+                borderWidth: 2,
                 pointRadius: 6,
                 pointHoverRadius: 8,
-                tension: 0.4
+                tension: 0.4,
+                hoverBorderWidth: 2
+            },
+            {
+                label: 'Myers Typical O(n√n)',
+                data: [31623, 125000, 353553, 1000000, 3952847, 31622777],
+                borderColor: '#0066FF',
+                backgroundColor: 'rgba(0, 102, 255, 0.1)',
+                borderWidth: 2,
+                pointRadius: 6,
+                pointHoverRadius: 8,
+                tension: 0.4,
+                hoverBorderWidth: 2
             },
             {
                 label: 'Myers Worst O(n²)',
                 data: [1000000, 6250000, 25000000, 100000000, 625000000, 10000000000],
                 borderColor: '#FF6600',
                 backgroundColor: 'rgba(255, 102, 0, 0.1)',
-                borderWidth: 4,
+                borderWidth: 2,
                 pointRadius: 6,
                 pointHoverRadius: 8,
-                tension: 0.4
+                tension: 0.4,
+                hoverBorderWidth: 2
             }
         ]
     };
@@ -68,7 +72,7 @@ function initializeAlgoComparisonChart() {
                         size: 20,
                         weight: 'bold'
                     },
-                    color: '#333'
+                    color: '#ffffff'
                 },
                 legend: {
                     display: false
@@ -82,10 +86,14 @@ function initializeAlgoComparisonChart() {
                         font: {
                             size: 16,
                             weight: 'bold'
-                        }
+                        },
+                        color: '#ffffff'
+                    },
+                    ticks: {
+                        color: '#ffffff'
                     },
                     grid: {
-                        color: 'rgba(0,0,0,0.1)'
+                        color: 'rgba(255, 255, 255, 0.1)'
                     }
                 },
                 y: {
@@ -96,12 +104,11 @@ function initializeAlgoComparisonChart() {
                         font: {
                             size: 16,
                             weight: 'bold'
-                        }
-                    },
-                    grid: {
-                        color: 'rgba(0,0,0,0.1)'
+                        },
+                        color: '#ffffff'
                     },
                     ticks: {
+                        color: '#ffffff',
                         callback: function(value) {
                             const showValues = [1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000, 10000000000];
                             if (showValues.includes(value)) {
@@ -110,6 +117,9 @@ function initializeAlgoComparisonChart() {
                             return '';
                         },
                         padding: 20
+                    },
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.1)'
                     }
                 }
             },
@@ -135,10 +145,10 @@ function initializeAlgoComparisonChart() {
 }
 
 function setupLegendClickHandlers() {
-    const legendItems = document.querySelectorAll('.algo-comparison-legend-item');
+    const legendItems = document.querySelectorAll('.d1f-alg-comparison-legend-item');
     
     legendItems.forEach((item, index) => {
-        item.classList.add('algo-legend-clickable');
+        item.classList.add('d1f-alg-legend-clickable');
         item.addEventListener('click', function() {
             toggleDatasetVisibility(index);
         });
@@ -155,13 +165,13 @@ function toggleDatasetVisibility(datasetIndex) {
     meta.hidden = !meta.hidden;
     
     // Update legend item appearance
-    const legendItem = document.querySelectorAll('.algo-comparison-legend-item')[datasetIndex];
+    const legendItem = document.querySelectorAll('.d1f-alg-comparison-legend-item')[datasetIndex];
     if (meta.hidden) {
-        legendItem.classList.add('algo-legend-hidden');
-        legendItem.classList.remove('algo-legend-visible');
+        legendItem.classList.add('d1f-alg-legend-hidden');
+        legendItem.classList.remove('d1f-alg-legend-visible');
     } else {
-        legendItem.classList.add('algo-legend-visible');
-        legendItem.classList.remove('algo-legend-hidden');
+        legendItem.classList.add('d1f-alg-legend-visible');
+        legendItem.classList.remove('d1f-alg-legend-hidden');
     }
     
     algoComparisonChart.update();
