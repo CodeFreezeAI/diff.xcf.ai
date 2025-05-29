@@ -277,54 +277,41 @@ a:hover {
 
 .nav-link {
     position: relative;
-    display: block;
-    text-align: left;
-    padding: var(--space-sm) 0;
-    width: 100%;
-    color: var(--text-primary) !important;
-    font-weight: 500;
-    transition: all var(--transition-normal);
-    text-decoration: none;
-    border: none;
-    outline: none;
-    background: none;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.nav-link svg {
+    flex-shrink: 0;
 }
 
 .nav-link::after {
     content: '';
     position: absolute;
-    bottom: 4px;
+    bottom: -4px;
     left: 0;
     width: 0;
     height: 2px;
     background: var(--gradient-primary);
     transition: width var(--transition-normal);
-    border-radius: 1px;
 }
 
 .nav-link:hover::after {
     width: 100%;
 }
 
-.nav-link:hover {
-    color: var(--text-primary) !important;
-    transform: translateX(4px);
-    border: none;
-    outline: none;
-}
-
 .nav-link:focus {
-    color: var(--text-primary) !important;
-    border: none;
     outline: none;
 }
 
 .nav-link:visited {
-    color: var(--text-primary) !important;
+    color: var(--text-primary);
 }
 
 .nav-link:active {
-    color: var(--text-primary) !important;
+    color: var(--text-primary);
     border: none;
     outline: none;
     background: none;
@@ -333,21 +320,6 @@ a:hover {
 /* Override any active states from JavaScript */
 .nav-link.active {
     color: var(--text-primary) !important;
-    background: none !important;
-    border: none !important;
-    outline: none !important;
-}
-
-.nav-link::after {
-    content: '';
-    position: absolute;
-    bottom: 4px;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background: var(--gradient-primary);
-    transition: width var(--transition-normal);
-    border-radius: 1px;
 }
 
 .github-link {
@@ -364,7 +336,7 @@ a:hover {
     justify-content: center;
     align-items: center;
     width: 32px;
-    height: 24px;
+    height: 28px;
     cursor: pointer;
     padding: 4px;
     background: none;
@@ -399,18 +371,18 @@ a:hover {
 }
 
 .nav-toggle span:nth-child(2) {
-    top: 12px;
+    top: 14px;
     transform-origin: center;
 }
 
 .nav-toggle span:nth-child(3) {
-    top: 18px;
+    top: 22px;
     transform-origin: center;
 }
 
 /* Active state - X formation */
 .nav-toggle.active span:nth-child(1) {
-    top: 12px;
+    top: 14px;
     transform: rotate(45deg);
 }
 
@@ -420,7 +392,7 @@ a:hover {
 }
 
 .nav-toggle.active span:nth-child(3) {
-    top: 12px;
+    top: 14px;
     transform: rotate(-45deg);
 }
 
@@ -442,7 +414,7 @@ a:hover {
         background: #000000;
         border-left: 1px solid var(--border-primary);
         flex-direction: column;
-        padding: var(--space-lg) var(--space-lg) var(--space-lg) var(--space-lg);
+        padding: var(--space-lg);
         gap: 0;
         transform: translateX(100%);
         opacity: 0;
@@ -473,34 +445,24 @@ a:hover {
         font-weight: 500;
         transition: all var(--transition-normal);
         text-decoration: none;
-        border: none;
-        outline: none;
-        background: none;
+        border: none !important;
+        outline: none !important;
+        background: none !important;
     }
 
     .nav-link:hover {
         color: var(--text-primary) !important;
         transform: translateX(4px);
-        border: none;
-        outline: none;
     }
 
-    .nav-link:focus {
+    .nav-link:focus,
+    .nav-link:active,
+    .nav-link:visited,
+    .nav-link.active {
         color: var(--text-primary) !important;
-        border: none;
-        outline: none;
-        background: none;
-    }
-
-    .nav-link:active {
-        color: var(--text-primary) !important;
-        border: none;
-        outline: none;
-        background: none;
-    }
-
-    .nav-link:visited {
-        color: var(--text-primary) !important;
+        border: none !important;
+        outline: none !important;
+        background: none !important;
     }
 
     .nav-link::after {
