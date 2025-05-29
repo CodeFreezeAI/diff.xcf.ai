@@ -17,8 +17,18 @@ function initializeAlgoComparisonChart() {
                 borderColor: '#FF0000',
                 backgroundColor: 'rgba(255, 0, 0, 0.1)',
                 borderWidth: 4,
-                pointRadius: 8,
-                pointHoverRadius: 10,
+                pointRadius: 6,
+                pointHoverRadius: 8,
+                tension: 0.4
+            },
+            {
+                label: 'Myers Typical O(n√n)',
+                data: [31623, 125000, 353553, 1000000, 3952847, 31622777],
+                borderColor: '#0066FF',
+                backgroundColor: 'rgba(0, 102, 255, 0.1)',
+                borderWidth: 4,
+                pointRadius: 6,
+                pointHoverRadius: 8,
                 tension: 0.4
             },
             {
@@ -27,28 +37,18 @@ function initializeAlgoComparisonChart() {
                 borderColor: '#00AA00',
                 backgroundColor: 'rgba(0, 170, 0, 0.1)',
                 borderWidth: 4,
-                pointRadius: 8,
-                pointHoverRadius: 10,
+                pointRadius: 6,
+                pointHoverRadius: 8,
                 tension: 0.4
             },
             {
-                label: 'Myers (O(n√n))',
-                data: [31623, 125000, 353553, 1000000, 3952847, 31622777],
-                borderColor: '#0066FF',
-                backgroundColor: 'rgba(0, 102, 255, 0.1)',
-                borderWidth: 4,
-                pointRadius: 8,
-                pointHoverRadius: 10,
-                tension: 0.4
-            },
-            {
-                label: 'Myers (O(n²))',
+                label: 'Myers Worst O(n²)',
                 data: [1000000, 6250000, 25000000, 100000000, 625000000, 10000000000],
                 borderColor: '#FF6600',
                 backgroundColor: 'rgba(255, 102, 0, 0.1)',
                 borderWidth: 4,
-                pointRadius: 8,
-                pointHoverRadius: 10,
+                pointRadius: 6,
+                pointHoverRadius: 8,
                 tension: 0.4
             }
         ]

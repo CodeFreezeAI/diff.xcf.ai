@@ -108,17 +108,28 @@
     border: 1px solid var(--border-primary);
     border-radius: var(--radius-lg);
     text-align: center;
-    transition: var(--transition-base);
+    transition: all var(--transition-normal);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     min-height: 130px !important;
+    overflow: hidden; /* Prevent border overflow */
 }
 
 .showcase-stats .stat-item::before {
-    /* Remove default gradient - only show on hover or when active */
-    display: none;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--gradient-primary);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--transition-normal);
+    display: block;
 }
 
 .showcase-stats .stat-item:hover {
@@ -128,15 +139,7 @@
 }
 
 .showcase-stats .stat-item:hover::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: var(--gradient-primary);
-    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-    display: block;
+    transform: scaleX(1);
 }
 
 .showcase-stats .stat-item:nth-child(1):hover {
@@ -1355,6 +1358,7 @@
     width: 100%;
     padding: 0;
     overflow-x: hidden;
+    margin-bottom: 50px;
 }
 
 .performance .container {
@@ -1374,11 +1378,10 @@
     background: var(--bg-card);
     border: 1px solid var(--border-primary);
     border-radius: var(--radius-lg);
-    padding: clamp(0.5rem, 2vw, 1rem);
-    margin: var(--space-md) var(--space-xs) 0 var(--space-xs);
-    width: calc(100% - 2 * var(--space-xs));
-    max-width: none;
-    min-width: auto;
+    padding: var(--space-md);
+    margin: var(--space-md) auto 0 auto;
+    width: fit-content;
+    max-width: 1000px;
     box-sizing: border-box;
     overflow-x: hidden;
 }
@@ -1418,7 +1421,7 @@
 .performance-content {
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--space-md);
+    gap: 25px;
     width: 100%;
     max-width: none;
     min-width: auto;
@@ -1434,10 +1437,15 @@
     border-radius: var(--radius-lg);
     padding: clamp(0.5rem, 2vw, 1rem);
     width: 100%;
-    max-width: none;
+    max-width: 1200px;
     min-width: auto;
     box-sizing: border-box;
     overflow-x: hidden;
+    margin: 0 auto;
+}
+
+.performance-table {
+    margin-bottom: 50px;
 }
 
 .performance-chart h3,
@@ -1451,7 +1459,7 @@
 .chart-container {
     position: relative;
     height: clamp(200px, 30vh, 400px);
-    margin-bottom: var(--space-md);
+    margin-bottom: 50px;
     width: 100%;
     max-width: none;
     min-width: auto;
@@ -1466,11 +1474,10 @@
 }
 
 .table-container {
-    overflow-x: auto;
+    overflow-x: visible;
     width: 100%;
     max-width: none;
     min-width: auto;
-    -webkit-overflow-scrolling: touch;
 }
 
 .performance-data {
@@ -2250,7 +2257,7 @@
     }
     
     .table-container {
-        overflow-x: auto;
+        overflow-x: visible;
         -webkit-overflow-scrolling: touch;
     }
     
@@ -3195,5 +3202,24 @@
     .showcase-stats {
         margin-top: 0;
     }
+}
+
+.performance-data tr.winner {
+    background: rgba(16, 185, 129, 0.05);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.performance-data tr.winner td {
+    color: var(--text-primary);
+}
+
+/* Make Optimus row (3rd) have same winner styling as Flash (1st) */
+.performance-data tbody tr:nth-child(3) {
+    background: rgba(16, 185, 129, 0.05);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.performance-data tbody tr:nth-child(3) td {
+    color: var(--text-primary);
 }
 
