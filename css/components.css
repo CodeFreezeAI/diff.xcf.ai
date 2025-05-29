@@ -1,24 +1,21 @@
 /* Diff Showcase Section Components */
 .diff-showcase {
     background: transparent;
-    padding: var(--space-3xl) 0 var(--space-xl) 0;
-    overflow-x: hidden;
+    padding: var(--space-xl) 0 var(--space-lg) 0;
     width: 100%;
 }
 
 .showcase-content {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: var(--space-3xl);
-    align-items: end;
+    gap: var(--space-lg);
+    align-items: center;
     width: 100%;
-    overflow-x: hidden;
 }
 
 .showcase-text {
     width: 100%;
     max-width: none;
-    overflow-x: hidden;
 }
 
 .showcase-badge {
@@ -74,14 +71,12 @@
     background: var(--bg-card);
     border: 1px solid var(--border-primary);
     border-radius: var(--radius-lg);
-    transition: all var(--transition-normal);
     word-wrap: break-word;
     overflow-wrap: break-word;
 }
 
 .showcase-feature:hover {
     border-color: var(--border-accent);
-    transform: translateX(4px);
 }
 
 .feature-symbol {
@@ -105,7 +100,6 @@
     background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-tertiary) 100%);
     border: 1px solid var(--border-primary);
     border-radius: var(--radius-xl);
-    transition: all var(--transition-normal);
     position: relative;
     overflow: hidden;
     min-height: 120px;
@@ -125,14 +119,10 @@
     right: 0;
     height: 4px;
     background: var(--gradient-primary);
-    transform: scaleX(0);
-    transition: transform var(--transition-normal);
     border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
 }
 
 .showcase-stats .stat-item:hover {
-    transform: translateY(-6px);
-    box-shadow: var(--shadow-xl);
     border-color: var(--border-accent);
 }
 
@@ -149,7 +139,7 @@
 }
 
 .showcase-stats .stat-item:hover::before {
-    transform: scaleX(1);
+    /* Remove scale animation */
 }
 
 .showcase-stats .stat-item:nth-child(1) {
@@ -253,14 +243,12 @@
     border-radius: var(--radius-md);
     color: var(--text-secondary);
     cursor: pointer;
-    transition: all var(--transition-normal);
 }
 
 .code-action-btn:hover {
     background: var(--bg-primary);
     border-color: var(--border-accent);
     color: var(--text-primary);
-    transform: scale(1.05);
 }
 
 .code-footer {
@@ -301,7 +289,7 @@
 @media (max-width: 1024px) {
     .showcase-content {
         grid-template-columns: 1fr;
-        gap: var(--space-2xl);
+        gap: var(--space-lg);
         text-align: center;
     }
     
@@ -310,10 +298,19 @@
     }
     
     .showcase-stats {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(2, 1fr);
         max-width: 600px;
-        margin: 0 auto var(--space-xl) auto;
+        margin: 0 auto var(--space-md) auto;
         gap: var(--space-md);
+    }
+
+    /* Hide AI Native stat item */
+    .showcase-stats .stat-item:nth-child(3) {
+        display: none;
+    }
+
+    .showcase-stats .stat-item {
+        min-height: 80px;
     }
 
     .showcase-visual .code-demo {
@@ -323,8 +320,7 @@
 
 @media (max-width: 768px) {
     .diff-showcase {
-        padding: var(--space-2xl) 0 var(--space-lg) 0;
-        overflow-x: hidden;
+        padding: var(--space-md) 0;
     }
 
     .showcase-content {
@@ -344,10 +340,14 @@
     
     .showcase-stats {
         grid-template-columns: repeat(2, 1fr);
-        grid-template-rows: repeat(2, 1fr);
         gap: var(--space-md);
-        margin-top: var(--space-xl);
+        margin-top: var(--space-md);
         max-width: 400px;
+    }
+    
+    /* Hide AI Native stat item */
+    .showcase-stats .stat-item:nth-child(3) {
+        display: none;
     }
     
     .showcase-stats .stat-item {
@@ -358,7 +358,7 @@
     }
     
     .showcase-stats .stat-item:hover {
-        transform: translateY(-4px);
+        /* Remove transform animation */
     }
     
     .showcase-stats .stat-number {
@@ -374,7 +374,7 @@
     
     .showcase-features {
         max-width: 400px;
-        margin: 0 auto var(--space-xl) auto;
+        margin: 0 auto var(--space-md) auto;
     }
     
     .diff-stats {
@@ -428,7 +428,7 @@
 
 @media (max-width: 480px) {
     .diff-showcase {
-        padding: var(--space-xl) 0 var(--space-md) 0;
+        padding: var(--space-sm) 0;
         overflow-x: hidden;
     }
 
@@ -484,17 +484,20 @@
         flex-shrink: 0;
     }
 
-    /* Force 2x2 grid layout for stats */
     .showcase-stats {
         grid-template-columns: repeat(2, 1fr);
-        grid-template-rows: repeat(2, 1fr);
         gap: var(--space-sm);
-        margin-top: var(--space-xl);
+        margin-top: var(--space-md);
         max-width: 320px;
     }
     
+    /* Hide AI Native stat item */
+    .showcase-stats .stat-item:nth-child(3) {
+        display: none;
+    }
+    
     .showcase-stats .stat-item {
-        min-height: 70px;
+        min-height: 50px;
         padding: var(--space-sm) var(--space-xs);
         word-wrap: break-word;
         overflow-wrap: break-word;
@@ -518,16 +521,19 @@
         width: 100%;
     }
 
-    /* Keep 2x2 grid layout even on smallest screens */
     .showcase-stats {
         grid-template-columns: repeat(2, 1fr);
-        grid-template-rows: repeat(2, 1fr);
         gap: var(--space-xs);
         max-width: 280px;
     }
     
+    /* Hide AI Native stat item */
+    .showcase-stats .stat-item:nth-child(3) {
+        display: none;
+    }
+    
     .showcase-stats .stat-item {
-        min-height: 60px;
+        min-height: 45px;
         padding: var(--space-xs);
         word-wrap: break-word;
         overflow-wrap: break-word;
@@ -629,11 +635,11 @@
 .algorithm-panel {
     display: none;
     grid-template-columns: 1fr 1fr;
-    gap: var(--space-2xl);
+    gap: var(--space-lg);
     background: var(--bg-card);
     border: 1px solid var(--border-primary);
     border-radius: var(--radius-xl);
-    padding: var(--space-2xl);
+    padding: var(--space-lg);
 }
 
 .algorithm-panel.active {
@@ -755,7 +761,7 @@
 /* Demo Section Components */
 .demo {
     background: var(--bg-secondary);
-    padding: var(--space-lg) 0 var(--space-3xl) 0;
+    padding: var(--space-md) 0;
 }
 
 .demo-container {
@@ -1558,7 +1564,7 @@
 .footer {
     background: var(--bg-tertiary);
     border-top: 1px solid var(--border-primary);
-    padding: var(--space-3xl) 0 var(--space-xl) 0;
+    padding: var(--space-lg) 0 var(--space-md) 0;
 }
 
 .footer-content {
@@ -2021,9 +2027,9 @@
     background: rgba(255, 255, 255, 0.8);
     border-radius: 25px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    min-width: 280px;
     box-sizing: border-box;
     overflow: hidden;
+    flex: 1;
 }
 
 .algo-comparison-legend-item span {
@@ -2074,10 +2080,10 @@
 /* Responsive design for algorithm comparison */
 @media (max-width: 768px) {
     .algo-comparison-section {
-        padding: 15px 5px;
+        padding: var(--space-sm) 5px;
         overflow-x: hidden;
         min-height: auto;
-        width: 100vw;
+        width: 100%;
         margin: 0;
     }
     
@@ -2085,7 +2091,7 @@
         padding: 10px;
         margin: 0;
         max-width: 100%;
-        width: calc(100vw - 10px);
+        width: 100%;
         overflow-x: hidden;
         border-radius: 10px;
         box-sizing: border-box;
@@ -2121,14 +2127,15 @@
     }
     
     .algo-comparison-legend-item {
-        min-width: auto;
-        padding: 6px 10px;
+        padding: 6px 8px;
         font-size: 12px;
         width: 100%;
         justify-content: flex-start;
         border-radius: 15px;
         box-sizing: border-box;
         margin: 0;
+        gap: 8px;
+        flex: 1;
     }
     
     .algo-comparison-legend-item span {
@@ -2394,7 +2401,7 @@
 
 /* Documentation Styles - RESTORED */
 .docs-content {
-    margin-top: 3rem;
+    margin-top: var(--space-lg);
 }
 
 .doc-content {
@@ -2842,5 +2849,125 @@
         font-size: 0.65rem;
         padding: 2px;
     }
+}
+
+.output-stats .stat-badge.timing-badge {
+    font-size: 0.7rem !important;
+    font-variant-numeric: tabular-nums;
+    min-width: 120px;
+    width: 120px;
+    text-align: center;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+@media (max-width: 480px) {
+    .algo-comparison-section {
+        padding: 10px 2px;
+        width: 100%;
+    }
+    
+    .algo-comparison-container {
+        padding: 5px;
+        width: 100%;
+    }
+    
+    .algo-comparison-legend-item {
+        padding: 4px 6px;
+        font-size: 10px;
+        gap: 6px;
+        border-radius: 12px;
+        flex: 1;
+    }
+    
+    .algo-comparison-legend-item span {
+        font-size: 10px !important;
+        line-height: 1.1;
+    }
+    
+    .algo-comparison-chart-container {
+        height: 200px;
+        padding: 3px;
+    }
+    
+    .algo-comparison-title {
+        font-size: 1.2rem;
+        padding: 0 2px;
+    }
+}
+
+/* Mobile padding reductions for all sections */
+@media (max-width: 768px) {
+    .demo {
+        padding: var(--space-sm) 0;
+    }
+    
+    .footer {
+        padding: var(--space-md) 0 var(--space-sm) 0;
+    }
+    
+    .algorithms {
+        padding: var(--space-md) 0;
+    }
+    
+    .performance .section-header {
+        padding: var(--space-sm) var(--space-xs);
+    }
+    
+    .algorithm-panel {
+        padding: var(--space-md);
+        gap: var(--space-md);
+    }
+    
+    .docs-content {
+        margin-top: var(--space-md);
+    }
+}
+
+@media (max-width: 480px) {
+    .demo {
+        padding: var(--space-xs) 0;
+    }
+    
+    .footer {
+        padding: var(--space-sm) 0 var(--space-xs) 0;
+    }
+    
+    .algorithms {
+        padding: var(--space-sm) 0;
+    }
+    
+    .performance .section-header {
+        padding: var(--space-xs) var(--space-xs);
+    }
+    
+    .algo-comparison-section {
+        padding: var(--space-xs) 2px;
+    }
+    
+    .algorithm-panel {
+        padding: var(--space-sm);
+        gap: var(--space-sm);
+    }
+    
+    .docs-content {
+        margin-top: var(--space-sm);
+    }
+}
+
+.output-stats .stat-badge.timing-badge {
+    font-size: 0.7rem !important;
+    font-variant-numeric: tabular-nums;
+    min-width: 120px;
+    width: 120px;
+    text-align: center;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    white-space: nowrap;
+    overflow: hidden;
 }
 

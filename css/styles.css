@@ -552,21 +552,21 @@ a:hover {
 
 /* Section Styles */
 section {
-    padding: var(--space-3xl) 0;
+    padding: var(--space-lg) 0;
 }
 
 /* Add minimal top padding to first section after hero */
 .hero + section {
-    padding-top: 30px;
+    padding-top: var(--space-sm);
 }
 
 .features {
-    padding-top: var(--space-lg);
+    padding-top: var(--space-sm);
 }
 
 .section-header {
     text-align: center;
-    margin-bottom: var(--space-3xl);
+    margin-bottom: var(--space-lg);
 }
 
 .section-title {
@@ -729,7 +729,7 @@ section {
     }
     
     .hero {
-        padding: 85px 0 30px 0;
+        padding: 85px 0 var(--space-sm) 0;
     }
     
     .hero-title {
@@ -756,9 +756,29 @@ section {
     .features-grid {
         grid-template-columns: 1fr;
     }
+    
+    section {
+        padding: var(--space-md) 0;
+    }
+    
+    .hero + section {
+        padding-top: var(--space-xs);
+    }
+    
+    .features {
+        padding-top: var(--space-xs);
+    }
+    
+    .section-header {
+        margin-bottom: var(--space-md);
+    }
 }
 
 @media (max-width: 480px) {
+    .hero {
+        padding: 80px 0 var(--space-xs) 0;
+    }
+    
     .hero-title {
         font-size: 2rem;
     }
@@ -782,6 +802,14 @@ section {
     
     .feature-card {
         padding: var(--space-lg);
+    }
+    
+    section {
+        padding: var(--space-sm) 0;
+    }
+    
+    .section-header {
+        margin-bottom: var(--space-sm);
     }
 }
 

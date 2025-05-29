@@ -415,13 +415,13 @@ function initShowcaseInteractions() {
     // Code demo hover effects
     const codeDemo = document.querySelector('.showcase-visual .code-demo');
     if (codeDemo) {
+        // Removed scale animations - no more zoom effect
         codeDemo.addEventListener('mouseenter', () => {
-            codeDemo.style.transform = 'scale(1.02)';
-            codeDemo.style.transition = 'transform 0.3s ease';
+            // No transform applied
         });
         
         codeDemo.addEventListener('mouseleave', () => {
-            codeDemo.style.transform = 'scale(1)';
+            // No transform applied
         });
     }
 }
