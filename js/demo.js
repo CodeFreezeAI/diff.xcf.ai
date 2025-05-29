@@ -1054,18 +1054,26 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
         const lines = content.split('\n');
         
         const coloredLines = lines.map((line, index) => {
+            const isFirstLine = index === 0;
+            const isLastLine = index === lines.length - 1;
+            
+            // Calculate padding based on position
+            let topPadding = isFirstLine ? '12px' : '2px';
+            let bottomPadding = isLastLine ? '12px' : '2px';
+            let padding = `${topPadding} 8px ${bottomPadding} 18px`;
+            
             if (line.startsWith('📎 ')) {
-                // Retain lines - lighter gray with ghost gray background gradient
-                return `<div style="color: #bbbbbb; background: linear-gradient(to right, rgba(187,187,187,0.15), transparent); padding: 2px 8px;">${escapeHtml(line)}</div>`;
+                // Retain lines - lighter gray with more opaque ghost gray background gradient
+                return `<div style="color: #bbbbbb; background: linear-gradient(to right, rgba(187,187,187,0.25), transparent); padding: ${padding};">${escapeHtml(line)}</div>`;
             } else if (line.startsWith('❌ ')) {
                 // Delete lines - more saturated red with ghost red background gradient
-                return `<div style="color: #ff3333; background: linear-gradient(to right, rgba(255,51,51,0.15), transparent); padding: 2px 8px;">${escapeHtml(line)}</div>`;
+                return `<div style="color: #ff3333; background: linear-gradient(to right, rgba(255,51,51,0.15), transparent); padding: ${padding};">${escapeHtml(line)}</div>`;
             } else if (line.startsWith('✅ ')) {
-                // Insert lines - lighter green with ghost green background gradient
-                return `<div style="color: #88dd88; background: linear-gradient(to right, rgba(136,221,136,0.15), transparent); padding: 2px 8px;">${escapeHtml(line)}</div>`;
+                // Insert lines - moderately saturated green with ghost green background gradient
+                return `<div style="color: #44dd44; background: linear-gradient(to right, rgba(68,221,68,0.15), transparent); padding: ${padding};">${escapeHtml(line)}</div>`;
             } else {
                 // Other lines - default color
-                return `<div style="padding: 2px 8px;">${escapeHtml(line)}</div>`;
+                return `<div style="padding: ${padding};">${escapeHtml(line)}</div>`;
             }
         });
         
@@ -1393,6 +1401,13 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
             existingCopyBtn.remove();
         }
         
+        // Also check parent panel for copy button (for terminal format)
+        const parentPanel = diffOutput.closest('.demo-panel');
+        const existingParentCopyBtn = parentPanel?.querySelector('.copy-btn');
+        if (existingParentCopyBtn) {
+            existingParentCopyBtn.remove();
+        }
+        
         const copyBtn = document.createElement('button');
         copyBtn.className = 'copy-btn';
         copyBtn.innerHTML = `
@@ -1434,8 +1449,20 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
         });
 
         if (diffOutput) {
-            diffOutput.classList.add('demo-output-positioned');
-            diffOutput.appendChild(copyBtn);
+            const format = formatSelect?.value || 'ai';
+            
+            if (format === 'terminal') {
+                // For terminal format, append to parent panel so it doesn't scroll
+                const parentPanel = diffOutput.closest('.demo-panel');
+                if (parentPanel) {
+                    parentPanel.classList.add('demo-output-positioned');
+                    parentPanel.appendChild(copyBtn);
+                }
+            } else {
+                // For other formats, append to diff output as before
+                diffOutput.classList.add('demo-output-positioned');
+                diffOutput.appendChild(copyBtn);
+            }
         }
     }
 

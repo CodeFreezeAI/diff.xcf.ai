@@ -98,7 +98,7 @@ class MultiLineDiff {
         return new DiffResult(operations);
     }
     
-    // Zoom Algorithm - Simple character-based approach
+    // Zoom Algorithm - Simple complete-line matching (4 operations max)
     static createZoomDiff(source, destination) {
         if (source === destination) {
             return new DiffResult(source.length > 0 ? [DiffOperation.retain(source.length)] : []);
@@ -112,50 +112,53 @@ class MultiLineDiff {
             return new DiffResult([DiffOperation.delete(source.length)]);
         }
         
-        // Simple character-based prefix/suffix detection
-        // This is more basic than Flash's line-aware approach
-        const prefixLength = this.simpleCommonPrefix(source, destination);
+        // Simple approach: find complete matching lines at start and end only
+        const sourceLines = this.efficientLines(source);
+        const destLines = this.efficientLines(destination);
         
-        // Calculate remaining lengths after prefix
-        const sourceRemaining = source.length - prefixLength;
-        const destRemaining = destination.length - prefixLength;
+        // Find complete matching lines at the beginning
+        let prefixLines = 0;
+        const maxPrefix = Math.min(sourceLines.length, destLines.length);
+        while (prefixLines < maxPrefix && sourceLines[prefixLines] === destLines[prefixLines]) {
+            prefixLines++;
+        }
         
-        // Find common suffix in remaining text (simpler approach than Flash)
-        const suffixLength = sourceRemaining > 0 && destRemaining > 0 
-            ? this.simpleCommonSuffix(
-                source.slice(prefixLength), 
-                destination.slice(prefixLength)
-              )
-            : 0;
+        // Find complete matching lines at the end (simple, no overlap check like Flash)
+        let suffixLines = 0;
+        const maxSuffix = Math.min(sourceLines.length - prefixLines, destLines.length - prefixLines);
+        while (suffixLines < maxSuffix && 
+               sourceLines[sourceLines.length - 1 - suffixLines] === destLines[destLines.length - 1 - suffixLines]) {
+            suffixLines++;
+        }
         
-        // Build operations - simple sequential approach
+        // Build simple 4-operation diff
         const operations = [];
         
-        // Add prefix if exists
-        if (prefixLength > 0) {
+        // Retain prefix lines
+        if (prefixLines > 0) {
+            const prefixLength = sourceLines.slice(0, prefixLines).join('').length;
             operations.push(DiffOperation.retain(prefixLength));
         }
         
-        // Calculate middle section lengths
-        const sourceMiddleLength = sourceRemaining - suffixLength;
-        const destMiddleLength = destRemaining - suffixLength;
-        
-        // Add delete operation for middle of source
-        if (sourceMiddleLength > 0) {
-            operations.push(DiffOperation.delete(sourceMiddleLength));
+        // Insert middle section FIRST (different from Flash)
+        const destMiddleStart = prefixLines;
+        const destMiddleEnd = destLines.length - suffixLines;
+        if (destMiddleEnd > destMiddleStart) {
+            const middleText = destLines.slice(destMiddleStart, destMiddleEnd).join('');
+            operations.push(DiffOperation.insert(middleText));
         }
         
-        // Add insert operation for middle of destination  
-        if (destMiddleLength > 0) {
-            const insertText = destination.slice(
-                prefixLength, 
-                prefixLength + destMiddleLength
-            );
-            operations.push(DiffOperation.insert(insertText));
+        // Delete middle section SECOND (different from Flash)
+        const middleStart = prefixLines;
+        const middleEnd = sourceLines.length - suffixLines;
+        if (middleEnd > middleStart) {
+            const middleLength = sourceLines.slice(middleStart, middleEnd).join('').length;
+            operations.push(DiffOperation.delete(middleLength));
         }
         
-        // Add suffix if exists
-        if (suffixLength > 0) {
+        // Retain suffix lines
+        if (suffixLines > 0) {
+            const suffixLength = sourceLines.slice(-suffixLines).join('').length;
             operations.push(DiffOperation.retain(suffixLength));
         }
         
@@ -329,45 +332,41 @@ class MultiLineDiff {
     static cleanupEmojiPlacement(text) {
         if (!text) return text;
         
-        // Split into lines and only fix emoji symbols that are incorrectly placed as markers
+        // Split into lines
         const lines = text.split('\n');
         const fixedLines = [];
         
         for (let i = 0; i < lines.length; i++) {
             let line = lines[i];
             
-            // Only process lines that have a diff marker pattern at the start
-            const markerAtStart = /^(📎|❌|✅) /.test(line);
+            // Check if line already starts with proper diff marker
+            const startsWithMarker = /^(📎|❌|✅) /.test(line);
             
-            if (markerAtStart) {
-                // This line already has a proper marker at the start - check for additional markers in the content
-                const marker = line.substring(0, 2); // Get the emoji marker
-                const content = line.substring(2); // Get everything after the marker and space
+            if (startsWithMarker) {
+                // Line already has proper marker - leave it alone
+                fixedLines.push(line);
+                continue;
+            }
+            
+            // Look for misplaced diff markers - these are emojis that appear 
+            // immediately after code/text without proper spacing, suggesting
+            // they should be line markers instead of content
+            const misplacedMarkerRegex = /([a-zA-Z0-9\)\}\]])([📎❌✅])/g;
+            const misplacedMatches = [...line.matchAll(misplacedMarkerRegex)];
+            
+            if (misplacedMatches.length > 0) {
+                // Found what looks like a misplaced diff marker
+                // Extract the first misplaced emoji and use it as line marker
+                const firstMisplaced = misplacedMatches[0];
+                const beforeEmoji = firstMisplaced[1];
+                const emoji = firstMisplaced[2];
                 
-                // Look for additional marker emojis in the content part only
-                const additionalMarkersRegex = /(📎|❌|✅)/g;
-                const contentMatches = [...content.matchAll(additionalMarkersRegex)];
-                
-                if (contentMatches.length > 0) {
-                    // There are emoji symbols in the content - these should stay as content, not become markers
-                    // Just keep the line as is since the content emojis are legitimate content
-                    fixedLines.push(line);
-                } else {
-                    // No additional emojis in content - line is fine
-                    fixedLines.push(line);
-                }
+                // Remove the misplaced emoji and create proper line marker
+                const cleanLine = line.replace(misplacedMarkerRegex, '$1');
+                fixedLines.push(`${emoji} ${cleanLine}`);
             } else {
-                // Check if this line has emoji symbols that shouldn't be markers
-                const hasEmojiInMiddle = /(📎|❌|✅)/.test(line);
-                
-                if (hasEmojiInMiddle) {
-                    // Line has emoji symbols but not at the start as markers
-                    // These are content emojis - leave them alone
-                    fixedLines.push(line);
-                } else {
-                    // No emoji symbols - line is fine
-                    fixedLines.push(line);
-                }
+                // No misplaced markers - line is fine (may contain legitimate content emojis)
+                fixedLines.push(line);
             }
         }
         
