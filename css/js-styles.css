@@ -311,6 +311,42 @@
     background: rgba(255, 255, 255, 0.2) !important;
 }
 
+/* Terminal Format Specific Styles */
+.demo-output-content.terminal-format {
+    background: #000000 !important;
+    color: #ffffff !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    white-space: nowrap !important;
+    /* Hide scrollbar but allow scrolling */
+    scrollbar-width: none !important; /* Firefox */
+    -ms-overflow-style: none !important; /* Internet Explorer 10+ */
+}
+
+.demo-output-content.terminal-format::-webkit-scrollbar {
+    display: none !important; /* WebKit */
+}
+
+.demo-output-content.terminal-format div {
+    white-space: nowrap !important;
+    overflow: visible !important;
+}
+
+/* Copy button for terminal format should be more visible */
+.demo-output-content.terminal-format .copy-btn {
+    background: rgba(255, 255, 255, 0.2) !important;
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    opacity: 0.7 !important;
+}
+
+.demo-output-content.terminal-format:hover .copy-btn {
+    opacity: 1 !important;
+}
+
+.demo-output-content.terminal-format .copy-btn:hover {
+    background: rgba(255, 255, 255, 0.3) !important;
+}
+
 /* Stat Badge Styles */
 .stat-badge {
     min-height: 40px;

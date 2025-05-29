@@ -1058,8 +1058,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
                 // Retain lines - lighter gray with ghost gray background gradient
                 return `<div style="color: #bbbbbb; background: linear-gradient(to right, rgba(187,187,187,0.15), transparent); padding: 2px 8px;">${escapeHtml(line)}</div>`;
             } else if (line.startsWith('❌ ')) {
-                // Delete lines - lighter red with ghost red background gradient
-                return `<div style="color: #ff8888; background: linear-gradient(to right, rgba(255,136,136,0.15), transparent); padding: 2px 8px;">${escapeHtml(line)}</div>`;
+                // Delete lines - more saturated red with ghost red background gradient
+                return `<div style="color: #ff3333; background: linear-gradient(to right, rgba(255,51,51,0.15), transparent); padding: 2px 8px;">${escapeHtml(line)}</div>`;
             } else if (line.startsWith('✅ ')) {
                 // Insert lines - lighter green with ghost green background gradient
                 return `<div style="color: #88dd88; background: linear-gradient(to right, rgba(136,221,136,0.15), transparent); padding: 2px 8px;">${escapeHtml(line)}</div>`;
@@ -1083,8 +1083,12 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
         const format = formatSelect?.value || 'ai';
         console.log(`🎨 Displaying diff result with format: ${format}`);
         
+        // Remove any previous format classes
+        diffOutput.classList.remove('terminal-format', 'ai-format', 'base64-format', 'json-format');
+        
         if (format === 'ai') {
             // For AI format, escape HTML for syntax highlighting
+            diffOutput.classList.add('ai-format');
             diffOutput.innerHTML = `
                 <pre class="ascii-diff"><code class="language-swift">${escapeHtml(result.content)}</code></pre>
             `;
@@ -1098,15 +1102,18 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
             }
         } else if (format === 'terminal') {
             console.log(`💻 Displaying terminal format...`);
+            diffOutput.classList.add('terminal-format');
             diffOutput.innerHTML = result.content;
             console.log(`✅ Terminal format displayed successfully`);
         } else if (format === 'base64') {
             // For base64 format, add text wrapping
+            diffOutput.classList.add('base64-format');
             diffOutput.innerHTML = `
                 <pre class="base64-output"><code>${escapeHtml(result.content)}</code></pre>
             `;
         } else {
             // For JSON format
+            diffOutput.classList.add('json-format');
             diffOutput.innerHTML = `
                 <pre><code class="language-json">${escapeHtml(result.content)}</code></pre>
             `;
@@ -1380,6 +1387,12 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
     // Add copy to clipboard functionality
     function addCopyButton() {
+        // Remove existing copy button if present
+        const existingCopyBtn = diffOutput.querySelector('.copy-btn');
+        if (existingCopyBtn) {
+            existingCopyBtn.remove();
+        }
+        
         const copyBtn = document.createElement('button');
         copyBtn.className = 'copy-btn';
         copyBtn.innerHTML = `
@@ -1390,7 +1403,19 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
         `;
         
         copyBtn.addEventListener('click', () => {
-            const content = diffOutput.querySelector('pre')?.textContent || '';
+            // Get content based on format
+            let content = '';
+            const format = formatSelect?.value || 'ai';
+            
+            if (format === 'terminal') {
+                // For terminal format, extract text content from the styled divs
+                const terminalDivs = diffOutput.querySelectorAll('div');
+                content = Array.from(terminalDivs).map(div => div.textContent).join('\n');
+            } else {
+                // For other formats, get text content from pre element
+                content = diffOutput.querySelector('pre')?.textContent || diffOutput.textContent || '';
+            }
+            
             navigator.clipboard.writeText(content).then(() => {
                 copyBtn.innerHTML = `
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1408,17 +1433,20 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
             });
         });
 
-        if (diffOutput && diffOutput.querySelector('pre')) {
+        if (diffOutput) {
             diffOutput.classList.add('demo-output-positioned');
             diffOutput.appendChild(copyBtn);
         }
     }
 
-    // Add copy button when diff is generated
+    // Add copy button when diff is generated - ensure it works for all formats
     const originalDisplayDiffResult = displayDiffResult;
     displayDiffResult = function(result) {
         originalDisplayDiffResult(result);
-        addCopyButton();
+        // Always add copy button for any format that has content
+        if (result && result.content) {
+            addCopyButton();
+        }
     };
 
     // CSS styles are now in css/js-styles.css
