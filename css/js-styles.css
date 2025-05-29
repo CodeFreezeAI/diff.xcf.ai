@@ -322,7 +322,7 @@
     color: #ffffff !important;
     overflow-x: auto !important;
     overflow-y: hidden !important;
-    white-space: nowrap !important;
+    white-space: pre !important;
     position: relative !important;
     /* Hide scrollbar but allow scrolling */
     scrollbar-width: none !important; /* Firefox */
@@ -334,7 +334,7 @@
 }
 
 .demo-output-content.terminal-format div {
-    white-space: nowrap !important;
+    white-space: pre !important;
     overflow: visible !important;
 }
 

@@ -28,7 +28,7 @@ class DiffResult {
 }
 
 class MultiLineDiff {
-    // Flash Algorithm - Fastest (prefix/suffix detection with line awareness)
+    // Flash Algorithm - Simple 3-operation approach
     static createFlashDiff(source, destination) {
         if (source === destination) {
             return new DiffResult(source.length > 0 ? [DiffOperation.retain(source.length)] : []);
@@ -42,7 +42,55 @@ class MultiLineDiff {
             return new DiffResult([DiffOperation.delete(source.length)]);
         }
         
-        // Use line-aware approach for Flash to ensure proper emoji placement
+        // Find common prefix only (no suffix checking)
+        const sourceLines = this.efficientLines(source);
+        const destLines = this.efficientLines(destination);
+        
+        let prefixLines = 0;
+        const maxPrefix = Math.min(sourceLines.length, destLines.length);
+        while (prefixLines < maxPrefix && sourceLines[prefixLines] === destLines[prefixLines]) {
+            prefixLines++;
+        }
+        
+        // Simple 3-operation diff: prefix + delete rest + insert rest
+        const operations = [];
+        
+        // 1. Retain prefix lines (if any)
+        if (prefixLines > 0) {
+            const prefixLength = sourceLines.slice(0, prefixLines).join('').length;
+            operations.push(DiffOperation.retain(prefixLength));
+        }
+        
+        // 2. Delete everything else from source
+        if (prefixLines < sourceLines.length) {
+            const remainingLength = sourceLines.slice(prefixLines).join('').length;
+            operations.push(DiffOperation.delete(remainingLength));
+        }
+        
+        // 3. Insert everything else from destination
+        if (prefixLines < destLines.length) {
+            const remainingText = destLines.slice(prefixLines).join('');
+            operations.push(DiffOperation.insert(remainingText));
+        }
+        
+        return new DiffResult(operations);
+    }
+    
+    // Zoom Algorithm - Sophisticated line-aware approach with prefix/suffix detection
+    static createZoomDiff(source, destination) {
+        if (source === destination) {
+            return new DiffResult(source.length > 0 ? [DiffOperation.retain(source.length)] : []);
+        }
+        
+        if (source.length === 0) {
+            return new DiffResult(destination.length > 0 ? [DiffOperation.insert(destination)] : []);
+        }
+        
+        if (destination.length === 0) {
+            return new DiffResult([DiffOperation.delete(source.length)]);
+        }
+        
+        // Use line-aware approach for sophisticated prefix/suffix detection
         const sourceLines = this.efficientLines(source);
         const destLines = this.efficientLines(destination);
         
@@ -90,73 +138,6 @@ class MultiLineDiff {
         }
         
         // Add suffix lines
-        if (suffixLines > 0) {
-            const suffixLength = sourceLines.slice(-suffixLines).join('').length;
-            operations.push(DiffOperation.retain(suffixLength));
-        }
-        
-        return new DiffResult(operations);
-    }
-    
-    // Zoom Algorithm - Simple complete-line matching (4 operations max)
-    static createZoomDiff(source, destination) {
-        if (source === destination) {
-            return new DiffResult(source.length > 0 ? [DiffOperation.retain(source.length)] : []);
-        }
-        
-        if (source.length === 0) {
-            return new DiffResult(destination.length > 0 ? [DiffOperation.insert(destination)] : []);
-        }
-        
-        if (destination.length === 0) {
-            return new DiffResult([DiffOperation.delete(source.length)]);
-        }
-        
-        // Simple approach: find complete matching lines at start and end only
-        const sourceLines = this.efficientLines(source);
-        const destLines = this.efficientLines(destination);
-        
-        // Find complete matching lines at the beginning
-        let prefixLines = 0;
-        const maxPrefix = Math.min(sourceLines.length, destLines.length);
-        while (prefixLines < maxPrefix && sourceLines[prefixLines] === destLines[prefixLines]) {
-            prefixLines++;
-        }
-        
-        // Find complete matching lines at the end (simple, no overlap check like Flash)
-        let suffixLines = 0;
-        const maxSuffix = Math.min(sourceLines.length - prefixLines, destLines.length - prefixLines);
-        while (suffixLines < maxSuffix && 
-               sourceLines[sourceLines.length - 1 - suffixLines] === destLines[destLines.length - 1 - suffixLines]) {
-            suffixLines++;
-        }
-        
-        // Build simple 4-operation diff
-        const operations = [];
-        
-        // Retain prefix lines
-        if (prefixLines > 0) {
-            const prefixLength = sourceLines.slice(0, prefixLines).join('').length;
-            operations.push(DiffOperation.retain(prefixLength));
-        }
-        
-        // Insert middle section FIRST (different from Flash)
-        const destMiddleStart = prefixLines;
-        const destMiddleEnd = destLines.length - suffixLines;
-        if (destMiddleEnd > destMiddleStart) {
-            const middleText = destLines.slice(destMiddleStart, destMiddleEnd).join('');
-            operations.push(DiffOperation.insert(middleText));
-        }
-        
-        // Delete middle section SECOND (different from Flash)
-        const middleStart = prefixLines;
-        const middleEnd = sourceLines.length - suffixLines;
-        if (middleEnd > middleStart) {
-            const middleLength = sourceLines.slice(middleStart, middleEnd).join('').length;
-            operations.push(DiffOperation.delete(middleLength));
-        }
-        
-        // Retain suffix lines
         if (suffixLines > 0) {
             const suffixLength = sourceLines.slice(-suffixLines).join('').length;
             operations.push(DiffOperation.retain(suffixLength));

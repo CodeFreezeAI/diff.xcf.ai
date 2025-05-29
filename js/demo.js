@@ -1069,8 +1069,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
                 // Delete lines - more saturated red with ghost red background gradient
                 return `<div style="color: #ff3333; background: linear-gradient(to right, rgba(255,51,51,0.15), transparent); padding: ${padding};">${escapeHtml(line)}</div>`;
             } else if (line.startsWith('✅ ')) {
-                // Insert lines - moderately saturated green with ghost green background gradient
-                return `<div style="color: #44dd44; background: linear-gradient(to right, rgba(68,221,68,0.15), transparent); padding: ${padding};">${escapeHtml(line)}</div>`;
+                // Insert lines - slightly less bright green with ghost green background gradient
+                return `<div style="color: #55cc55; background: linear-gradient(to right, rgba(85,204,85,0.15), transparent); padding: ${padding};">${escapeHtml(line)}</div>`;
             } else {
                 // Other lines - default color
                 return `<div style="padding: ${padding};">${escapeHtml(line)}</div>`;

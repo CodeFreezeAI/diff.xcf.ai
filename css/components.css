@@ -1209,7 +1209,7 @@
     word-break: break-all !important;
     overflow-wrap: break-word !important;
     background: #0d1117 !important;
-    color: #22c55e !important;
+    color: #55cc55 !important;
     border: 1px solid #1f2937 !important;
     border-radius: var(--radius-lg) !important;
     padding: var(--space-md) !important;
@@ -1222,7 +1222,7 @@
     overflow-wrap: break-word !important;
     font-family: var(--font-mono);
     line-height: 1.5;
-    color: #22c55e !important;
+    color: #55cc55 !important;
     background: transparent !important;
 }
 
