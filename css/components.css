@@ -813,7 +813,7 @@
 .demo {
     background: var(--bg-secondary);
     padding: var(--space-lg) 0;
-    padding-bottom: calc(var(--space-lg) + 25px);
+    padding-bottom: calc(var(--space-lg) + 25px) !important;
 }
 
 .demo-container {
@@ -1361,7 +1361,7 @@
     padding: var(--space-lg) 0;
     padding-top: calc(var(--space-lg) - 25px);
     overflow-x: hidden;
-    margin-bottom: 50px;
+    margin-bottom: 25px;
 }
 
 .performance .container {

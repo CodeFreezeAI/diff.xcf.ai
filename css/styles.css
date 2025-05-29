@@ -708,6 +708,7 @@ section {
 /* Features Section */
 .features {
     background: var(--bg-secondary);
+    padding-bottom: 15px;
 }
 
 .features-grid {
