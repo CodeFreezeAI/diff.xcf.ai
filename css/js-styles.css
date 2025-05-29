@@ -57,29 +57,27 @@
     border-color: var(--border-accent);
 }
 
-/* Performance Table Animations */
+/* Performance Table Animations - DISABLED */
 .performance-table-row {
-    opacity: 0;
-    transform: translateX(-20px);
-    transition: opacity 0.5s ease, transform 0.5s ease;
+    opacity: 1;
+    transform: none;
 }
 
 .performance-table-row.visible {
     opacity: 1;
-    transform: translateX(0);
+    transform: none;
 }
 
 .performance-table-row:hover {
-    transform: scale(1.02);
-    transition: transform 0.2s ease;
+    transform: none;
 }
 
 .performance-table-row:not(:hover) {
-    transform: scale(1);
+    transform: none;
 }
 
 .performance-winner-glow {
-    box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+    box-shadow: none;
 }
 
 .performance-winner-glow:not(:hover) {

@@ -1511,7 +1511,6 @@
 
 .performance-data tr.winner {
     background: rgba(16, 185, 129, 0.05);
-    border: 1px solid rgba(16, 185, 129, 0.2);
 }
 
 .performance-data tr.winner td {
@@ -3206,7 +3205,6 @@
 
 .performance-data tr.winner {
     background: rgba(16, 185, 129, 0.05);
-    border: 1px solid rgba(16, 185, 129, 0.2);
 }
 
 .performance-data tr.winner td {
@@ -3216,7 +3214,6 @@
 /* Make Optimus row (3rd) have same winner styling as Flash (1st) */
 .performance-data tbody tr:nth-child(3) {
     background: rgba(16, 185, 129, 0.05);
-    border: 1px solid rgba(16, 185, 129, 0.2);
 }
 
 .performance-data tbody tr:nth-child(3) td {
