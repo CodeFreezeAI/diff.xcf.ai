@@ -233,415 +233,277 @@
         </div>
     </section>
 
-    <!-- Features Section -->
-    <section id="features" class="features">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Revolutionary Features</h2>
-                <p class="section-subtitle">Innovations not found anywhere else on Earth</p>
-            </div>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">⚡</div>
-                    <h3>Lightning Fast Performance</h3>
-                    <p>Flash algorithm delivers 400x faster performance than traditional methods with O(n) complexity and minimal memory usage.</p>
-                    <div class="feature-stats">
-                        <span class="stat-badge">14.5ms create</span>
-                        <span class="stat-badge">6.6ms apply</span>
-                    </div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🤖</div>
-                    <h3>AI-Native Integration</h3>
-                    <p>First diffing system designed for AI interaction with human-readable ASCII format and round-trip accuracy.</p>
-                    <div class="feature-highlight">
-                        <code>📎 ❌ ✅</code> symbols for instant AI understanding
-                    </div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🔐</div>
-                    <h3>Cryptographic Security</h3>
-                    <p>Built-in SHA256 integrity verification, tamper detection, and automatic undo generation for enterprise security.</p>
-                    <div class="feature-highlight">
-                        SHA256 + Checksum + Verification
-                    </div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🎯</div>
-                    <h3>Intelligent Context Matching</h3>
-                    <p>Dual context matching with confidence scoring handles truncated patches and repeated content intelligently.</p>
-                    <div class="feature-highlight">
-                        Auto-detects full vs. partial source
-                    </div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🔄</div>
-                    <h3>Perfect Round-Trip</h3>
-                    <p>100% accuracy with zero data loss through complete ASCII workflow: Create → Display → Parse → Apply.</p>
-                    <div class="feature-highlight">
-                        Character-perfect preservation
-                    </div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📊</div>
-                    <h3>Multiple I/O Formats</h3>
-                    <p>JSON, Base64, ASCII formats with compact encoding and cross-platform compatibility for any use case.</p>
-                    <div class="feature-stats">
-                        <span class="stat-badge">JSON</span>
-                        <span class="stat-badge">Base64</span>
-                        <span class="stat-badge">ASCII</span>
-                    </div>
-                </div>
+     <!-- Demo Section -->
+     <section id="demo" class="demo">
+        <div class="section-header">
+            <div>
+                <h2 class="section-title">Interactive Demo</h2>
+                <p class="section-subtitle">Experience the power of D1F - MultiLineDiff in real-time</p>
             </div>
         </div>
-    </section>
-
-    <!-- Algorithms Section -->
-    <section id="algorithms" class="algorithms">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Four Powerful Algorithms</h2>
-                <p class="section-subtitle">Choose the perfect algorithm for your specific needs</p>
-            </div>
-            <div class="algorithms-container">
-                <div class="algorithm-tabs">
-                    <button class="tab-button active" data-algorithm="flash">⚡ Flash</button>
-                    <button class="tab-button" data-algorithm="zoom">🔍 Zoom</button>
-                    <button class="tab-button" data-algorithm="optimus">🤖 Optimus</button>
-                    <button class="tab-button" data-algorithm="megatron">🧠 Megatron</button>
-                </div>
-                <div class="algorithm-content">
-                    <div class="algorithm-panel active" id="flash">
-                        <div class="algorithm-info">
-                            <div class="algorithm-header">
-                                <h3>⚡ Flash Algorithm</h3>
-                                <div class="algorithm-badges">
-                                    <span class="badge badge-primary">Fastest</span>
-                                    <span class="badge badge-success">O(n)</span>
-                                    <span class="badge badge-info">Swift Native</span>
-                                </div>
-                            </div>
-                            <p>Lightning-fast prefix/suffix detection using Swift's native string methods. Perfect for speed-critical applications and real-time editing.</p>
-                            <div class="algorithm-stats">
-                                <div class="stat-item">
-                                    <span class="stat-label">Create Time</span>
-                                    <span class="stat-value static-time">14.5ms</span>
-                                </div>
-                                <div class="stat-item">
-                                    <span class="stat-label">Apply Time</span>
-                                    <span class="stat-value static-time">6.6ms</span>
-                                </div>
-                                <div class="stat-item">
-                                    <span class="stat-label">Operations</span>
-                                    <span class="stat-value">3</span>
-                                </div>
-                                <div class="stat-item">
-                                    <span class="stat-label">Memory</span>
-                                    <span class="stat-value">Minimal</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="algorithm-code">
-                            <pre><code class="language-swift">// Flash: Fastest algorithm
-let diff = MultiLineDiff.createDiff(
-    source: "Hello, world!",
-    destination: "Hello, Swift!",
-    algorithm: .flash
-)
-// Result: 3 operations, 21.0ms total</code></pre>
-                        </div>
-                    </div>
-                    <div class="algorithm-panel" id="zoom">
-                        <div class="algorithm-info">
-                            <div class="algorithm-header">
-                                <h3>🔍 Zoom Algorithm</h3>
-                                <div class="algorithm-badges">
-                                    <span class="badge badge-primary">Simple</span>
-                                    <span class="badge badge-success">O(n)</span>
-                                    <span class="badge badge-info">Character-based</span>
-                                </div>
-                            </div>
-                            <p>Simple and fast character-based algorithm for straightforward text changes. Minimal operations with excellent performance.</p>
-                            <div class="algorithm-stats">
-                                <div class="stat-item">
-                                    <span class="stat-label">Create Time</span>
-                                    <span class="stat-value static-time">23.9ms</span>
-                                </div>
-                                <div class="stat-item">
-                                    <span class="stat-label">Apply Time</span>
-                                    <span class="stat-value static-time">9.1ms</span>
-                                </div>
-                                <div class="stat-item">
-                                    <span class="stat-label">Operations</span>
-                                    <span class="stat-value">4</span>
-                                </div>
-                                <div class="stat-item">
-                                    <span class="stat-label">Simplicity</span>
-                                    <span class="stat-value">Maximum</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="algorithm-code">
-                            <pre><code class="language-swift">// Zoom: Simple character-based
-let diff = MultiLineDiff.createDiff(
-    source: simpleText,
-    destination: modifiedText,
-    algorithm: .zoom
-)
-// Result: Minimal operations, fast processing</code></pre>
-                        </div>
-                    </div>
-                    <div class="algorithm-panel" id="optimus">
-                        <div class="algorithm-info">
-                            <div class="algorithm-header">
-                                <h3>🤖 Optimus Algorithm</h3>
-                                <div class="algorithm-badges">
-                                    <span class="badge badge-primary">Line-Aware</span>
-                                    <span class="badge badge-warning">O(n log n)</span>
-                                    <span class="badge badge-info">CollectionDiff</span>
-                                </div>
-                            </div>
-                            <p>Sophisticated CollectionDifference-based line analysis with semantic understanding. Ideal for code refactoring and structured text.</p>
-                            <div class="algorithm-stats">
-                                <div class="stat-item">
-                                    <span class="stat-label">Create Time</span>
-                                    <span class="stat-value static-time">43.7ms</span>
-                                </div>
-                                <div class="stat-item">
-                                    <span class="stat-label">Apply Time</span>
-                                    <span class="stat-value static-time">6.6ms</span>
-                                </div>
-                                <div class="stat-item">
-                                    <span class="stat-label">Operations</span>
-                                    <span class="stat-value">1256</span>
-                                </div>
-                                <div class="stat-item">
-                                    <span class="stat-label">Detail</span>
-                                    <span class="stat-value">High</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="algorithm-code">
-                            <pre><code class="language-swift">// Optimus: Line-aware processing
-let diff = MultiLineDiff.createDiff(
-    source: sourceCode,
-    destination: refactoredCode,
-    algorithm: .optimus
-)
-// Result: Detailed operations, semantic understanding</code></pre>
-                        </div>
-                    </div>
-                    <div class="algorithm-panel" id="megatron">
-                        <div class="algorithm-info">
-                            <div class="algorithm-header">
-                                <h3>🧠 Megatron Algorithm</h3>
-                                <div class="algorithm-badges">
-                                    <span class="badge badge-primary">Semantic</span>
-                                    <span class="badge badge-warning">O(n log n)</span>
-                                    <span class="badge badge-success">Balanced</span>
-                                </div>
-                            </div>
-                            <p>Advanced semantic analysis with balanced performance and accuracy. The default choice for most applications requiring detailed diff analysis.</p>
-                            <div class="algorithm-stats">
-                                <div class="stat-item">
-                                    <span class="stat-label">Create Time</span>
-                                    <span class="stat-value static-time">47.8ms</span>
-                                </div>
-                                <div class="stat-item">
-                                    <span class="stat-label">Apply Time</span>
-                                    <span class="stat-value static-time">7.0ms</span>
-                                </div>
-                                <div class="stat-item">
-                                    <span class="stat-label">Operations</span>
-                                    <span class="stat-value">1256</span>
-                                </div>
-                                <div class="stat-item">
-                                    <span class="stat-label">Accuracy</span>
-                                    <span class="stat-value">Excellent</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="algorithm-code">
-                            <pre><code class="language-swift">// Megatron: Semantic analysis (default)
-let diff = MultiLineDiff.createDiff(
-    source: source,
-    destination: destination,
-    algorithm: .megatron
-)
-// Result: Balanced performance and accuracy</code></pre>
-                        </div>
+        <div class="demo-container">
+            <div class="demo-controls">
+                <div class="controls-header">
+                    <div class="implementation-badge">
+                        <span class="badge-icon">✅</span>
+                        <span>Real JavaScript Implementation</span>
                     </div>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Demo Section -->
-    <section id="demo" class="demo">
-            <div class="section-header">
-                <div>
-                    <h2 class="section-title">Interactive Demo</h2>
-                    <p class="section-subtitle">Experience the power of D1F - MultiLineDiff in real-time</p>
-                </div>
-            </div>
-            <div class="demo-container">
-                <div class="demo-controls">
-                    <div class="controls-header">
-                        <div class="implementation-badge">
-                            <span class="badge-icon">✅</span>
-                            <span>Real JavaScript Implementation</span>
+                
+                <div class="controls-main">
+                    <div class="controls-section">
+                        <h4>Configuration</h4>
+                        <div class="controls-row">
+                            <div class="control-group">
+                                <label for="algorithm-select">Algorithm</label>
+                                <select id="algorithm-select" class="control-select">
+                                    <option value="flash">⚡ Flash</option>
+                                    <option value="zoom">🔍 Zoom</option>
+                                    <option value="optimus" selected>🤖 Optimus</option>
+                                    <option value="megatron">🧠 Megatron</option>
+                                </select>
+                            </div>
+                            <div class="control-group">
+                                <label for="format-select">Output Format</label>
+                                <select id="format-select" class="control-select">
+                                    <option value="ai" selected>🤖 AI Format</option>
+                                    <option value="terminal">💻 Terminal</option>
+                                    <option value="json">📊 JSON</option>
+                                    <option value="base64">🔐 Base64</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                     
-                    <div class="controls-main">
-                        <div class="controls-section">
-                            <h4>Configuration</h4>
-                            <div class="controls-row">
-                                <div class="control-group">
-                                    <label for="algorithm-select">Algorithm</label>
-                                    <select id="algorithm-select" class="control-select">
-                                        <option value="flash">⚡ Flash</option>
-                                        <option value="zoom">🔍 Zoom</option>
-                                        <option value="optimus" selected>🤖 Optimus</option>
-                                        <option value="megatron">🧠 Megatron</option>
-                                    </select>
-                                </div>
-                                <div class="control-group">
-                                    <label for="format-select">Output Format</label>
-                                    <select id="format-select" class="control-select">
-                                        <option value="ai" selected>🤖 AI Format</option>
-                                        <option value="terminal">💻 Terminal</option>
-                                        <option value="json">📊 JSON</option>
-                                        <option value="base64">🔐 Base64</option>
-                                    </select>
-                                </div>
+                    <div class="controls-section">
+                        <h4>Diff Legend</h4>
+                        <div class="diff-legend">
+                            <div class="legend-item">
+                                <span class="legend-symbol retain">📎</span>
+                                <span class="legend-label">Retain</span>
                             </div>
-                        </div>
-                        
-                        <div class="controls-section">
-                            <h4>Diff Legend</h4>
-                            <div class="diff-legend">
-                                <div class="legend-item">
-                                    <span class="legend-symbol retain">📎</span>
-                                    <span class="legend-label">Retain</span>
-                                </div>
-                                <div class="legend-item">
-                                    <span class="legend-symbol insert">✅</span>
-                                    <span class="legend-label">Insert</span>
-                                </div>
-                                <div class="legend-item">
-                                    <span class="legend-symbol delete">❌</span>
-                                    <span class="legend-label">Delete</span>
-                                </div>
+                            <div class="legend-item">
+                                <span class="legend-symbol insert">✅</span>
+                                <span class="legend-label">Insert</span>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="demo-panels">
-                    <div class="demo-panel">
-                        <div class="panel-header">
-                            <h4>Source</h4>
-                            <button class="btn-small btn-gradient" id="load-example">Load Example</button>
-                        </div>
-                        <textarea id="source-input" class="demo-textarea" placeholder="Enter your source code here..."></textarea>
-                    </div>
-                    <div class="demo-panel">
-                        <div class="panel-header">
-                            <h4>Destination</h4>
-                            <button class="btn-small btn-gradient" id="clear-dest">Clear</button>
-                        </div>
-                        <textarea id="dest-input" class="demo-textarea" placeholder="Enter your modified code here..."></textarea>
-                    </div>
-                    <div class="demo-panel demo-output">
-                        <div class="panel-header" style="flex-direction: column; align-items: center; gap: 12px;">
-                            <div class="output-stats" id="output-stats"></div>
-                        </div>
-                        <div id="diff-output" class="demo-output-content">
-                            <div class="placeholder">
-                                <div class="placeholder-icon">📊</div>
-                                <p>Generate a diff to see the output here</p>
+                            <div class="legend-item">
+                                <span class="legend-symbol delete">❌</span>
+                                <span class="legend-label">Delete</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="demo-panels">
+                <div class="demo-panel">
+                    <div class="panel-header">
+                        <h4>Source</h4>
+                        <button class="btn-small btn-gradient" id="load-example">Load Example</button>
+                    </div>
+                    <textarea id="source-input" class="demo-textarea" placeholder="Enter your source code here..."></textarea>
+                </div>
+                <div class="demo-panel">
+                    <div class="panel-header">
+                        <h4>Destination</h4>
+                        <button class="btn-small btn-gradient" id="clear-dest">Clear</button>
+                    </div>
+                    <textarea id="dest-input" class="demo-textarea" placeholder="Enter your modified code here..."></textarea>
+                </div>
+                <div class="demo-panel demo-output">
+                    <div class="panel-header" style="flex-direction: column; align-items: center; gap: 12px;">
+                        <div class="output-stats" id="output-stats"></div>
+                    </div>
+                    <div id="diff-output" class="demo-output-content">
+                        <div class="placeholder">
+                            <div class="placeholder-icon">📊</div>
+                            <p>Generate a diff to see the output here</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- Performance Section -->
-    <section id="performance" class="performance">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Performance Benchmarks</h2>
-                <p class="section-subtitle">Real-world comprehensive testing</p>
-                <div class="benchmark-details">
-                    <p><strong>Environment:</strong> Mac Mini M4 • 16TB RAM • Xcode 16.3</p>
-                    <p><strong>Methodology:</strong> 1000 runs • 5000-line files</p>
-                    <p><strong>Range:</strong> 3-1256 operations</p>
-                    <p><strong>Created by:</strong> Todd Bruss, <a href="https://d1f.ai" target="_blank">D1F.ai</a></p>
-                </div>
+  <!-- Algorithms Section -->
+  <section id="algorithms" class="algorithms">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Four Powerful Algorithms</h2>
+            <p class="section-subtitle">Choose the perfect algorithm for your specific needs</p>
+        </div>
+        <div class="algorithms-container">
+            <div class="algorithm-tabs">
+                <button class="tab-button active" data-algorithm="flash">⚡ Flash</button>
+                <button class="tab-button" data-algorithm="zoom">🔍 Zoom</button>
+                <button class="tab-button" data-algorithm="optimus">🤖 Optimus</button>
+                <button class="tab-button" data-algorithm="megatron">🧠 Megatron</button>
             </div>
-            <div class="performance-content">
-                <div class="performance-chart">
-                    <h3>Algorithm Performance Comparison</h3>
-                    <div class="chart-container">
-                        <canvas id="performance-chart"></canvas>
+            <div class="algorithm-content">
+                <div class="algorithm-panel active" id="flash">
+                    <div class="algorithm-info">
+                        <div class="algorithm-header">
+                            <h3>⚡ Flash Algorithm</h3>
+                            <div class="algorithm-badges">
+                                <span class="badge badge-primary">Fastest</span>
+                                <span class="badge badge-success">O(n)</span>
+                                <span class="badge badge-info">Swift Native</span>
+                            </div>
+                        </div>
+                        <p>Lightning-fast prefix/suffix detection using Swift's native string methods. Perfect for speed-critical applications and real-time editing.</p>
+                        <div class="algorithm-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">Create Time</span>
+                                <span class="stat-value static-time">14.5ms</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Apply Time</span>
+                                <span class="stat-value static-time">6.6ms</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Operations</span>
+                                <span class="stat-value">3</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Memory</span>
+                                <span class="stat-value">Minimal</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="algorithm-code">
+                        <pre><code class="language-swift">// Flash: Fastest algorithm
+let diff = MultiLineDiff.createDiff(
+source: "Hello, world!",
+destination: "Hello, Swift!",
+algorithm: .flash
+)
+// Result: 3 operations, 21.0ms total</code></pre>
                     </div>
                 </div>
-                <div class="performance-table">
-                    <h3>Detailed Benchmarks</h3>
-                    <div class="table-container">
-                        <table class="performance-data">
-                            <thead>
-                                <tr>
-                                    <th>Algorithm</th>
-                                    <th>Create (ms)</th>
-                                    <th>Apply (ms)</th>
-                                    <th>Total (ms)</th>
-                                    <th>Operations</th>
-                                    <th>Complexity</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="winner">
-                                    <td><span class="algorithm-name">⚡ Flash</span></td>
-                                    <td><strong>14.5</strong></td>
-                                    <td><strong>6.6</strong></td>
-                                    <td><strong>21.0</strong></td>
-                                    <td>3</td>
-                                    <td>O(n)</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="algorithm-name">🔍 Zoom</span></td>
-                                    <td>23.9</td>
-                                    <td>9.1</td>
-                                    <td>33.0</td>
-                                    <td>4</td>
-                                    <td>O(n)</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="algorithm-name">🤖 Optimus</span></td>
-                                    <td>43.7</td>
-                                    <td>6.6</td>
-                                    <td>50.3</td>
-                                    <td>1256</td>
-                                    <td>O(n log n)</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="algorithm-name">🧠 Megatron</span></td>
-                                    <td>47.8</td>
-                                    <td>7.0</td>
-                                    <td>54.8</td>
-                                    <td>1256</td>
-                                    <td>O(n log n)</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                <div class="algorithm-panel" id="zoom">
+                    <div class="algorithm-info">
+                        <div class="algorithm-header">
+                            <h3>🔍 Zoom Algorithm</h3>
+                            <div class="algorithm-badges">
+                                <span class="badge badge-primary">Simple</span>
+                                <span class="badge badge-success">O(n)</span>
+                                <span class="badge badge-info">Character-based</span>
+                            </div>
+                        </div>
+                        <p>Simple and fast character-based algorithm for straightforward text changes. Minimal operations with excellent performance.</p>
+                        <div class="algorithm-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">Create Time</span>
+                                <span class="stat-value static-time">23.9ms</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Apply Time</span>
+                                <span class="stat-value static-time">9.1ms</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Operations</span>
+                                <span class="stat-value">4</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Simplicity</span>
+                                <span class="stat-value">Maximum</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="algorithm-code">
+                        <pre><code class="language-swift">// Zoom: Simple character-based
+let diff = MultiLineDiff.createDiff(
+source: simpleText,
+destination: modifiedText,
+algorithm: .zoom
+)
+// Result: Minimal operations, fast processing</code></pre>
+                    </div>
+                </div>
+                <div class="algorithm-panel" id="optimus">
+                    <div class="algorithm-info">
+                        <div class="algorithm-header">
+                            <h3>🤖 Optimus Algorithm</h3>
+                            <div class="algorithm-badges">
+                                <span class="badge badge-primary">Line-Aware</span>
+                                <span class="badge badge-warning">O(n log n)</span>
+                                <span class="badge badge-info">CollectionDiff</span>
+                            </div>
+                        </div>
+                        <p>Sophisticated CollectionDifference-based line analysis with semantic understanding. Ideal for code refactoring and structured text.</p>
+                        <div class="algorithm-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">Create Time</span>
+                                <span class="stat-value static-time">43.7ms</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Apply Time</span>
+                                <span class="stat-value static-time">6.6ms</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Operations</span>
+                                <span class="stat-value">1256</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Detail</span>
+                                <span class="stat-value">High</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="algorithm-code">
+                        <pre><code class="language-swift">// Optimus: Line-aware processing
+let diff = MultiLineDiff.createDiff(
+source: sourceCode,
+destination: refactoredCode,
+algorithm: .optimus
+)
+// Result: Detailed operations, semantic understanding</code></pre>
+                    </div>
+                </div>
+                <div class="algorithm-panel" id="megatron">
+                    <div class="algorithm-info">
+                        <div class="algorithm-header">
+                            <h3>🧠 Megatron Algorithm</h3>
+                            <div class="algorithm-badges">
+                                <span class="badge badge-primary">Semantic</span>
+                                <span class="badge badge-warning">O(n log n)</span>
+                                <span class="badge badge-success">Balanced</span>
+                            </div>
+                        </div>
+                        <p>Advanced semantic analysis with balanced performance and accuracy. The default choice for most applications requiring detailed diff analysis.</p>
+                        <div class="algorithm-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">Create Time</span>
+                                <span class="stat-value static-time">47.8ms</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Apply Time</span>
+                                <span class="stat-value static-time">7.0ms</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Operations</span>
+                                <span class="stat-value">1256</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Accuracy</span>
+                                <span class="stat-value">Excellent</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="algorithm-code">
+                        <pre><code class="language-swift">// Megatron: Semantic analysis (default)
+let diff = MultiLineDiff.createDiff(
+source: source,
+destination: destination,
+algorithm: .megatron
+)
+// Result: Balanced performance and accuracy</code></pre>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
     <!-- Documentation Section -->
     <section id="docs" class="docs">
@@ -1186,6 +1048,144 @@ let base64Diff = try MultiLineDiff.createBase64Diff(
 )</code></pre>
 
                         <p><a href="https://github.com/codefreezeai/swift-multi-line-diff/blob/main/Sources/MultiLineDiff/MultiLineDiff.swift" target="_blank" class="external-link">📖 View Complete Source Code →</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+      <!-- Performance Section -->
+      <section id="performance" class="performance">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Performance Benchmarks</h2>
+                <p class="section-subtitle">Real-world comprehensive testing</p>
+                <div class="benchmark-details">
+                    <p><strong>Environment:</strong> Mac Mini M4 • 16TB RAM • Xcode 16.3</p>
+                    <p><strong>Methodology:</strong> 1000 runs • 5000-line files</p>
+                    <p><strong>Range:</strong> 3-1256 operations</p>
+                    <p><strong>Created by:</strong> Todd Bruss, <a href="https://d1f.ai" target="_blank">D1F.ai</a></p>
+                </div>
+            </div>
+            <div class="performance-content">
+                <div class="performance-chart">
+                    <h3>Algorithm Performance Comparison</h3>
+                    <div class="chart-container">
+                        <canvas id="performance-chart"></canvas>
+                    </div>
+                </div>
+                <div class="performance-table">
+                    <h3>Detailed Benchmarks</h3>
+                    <div class="table-container">
+                        <table class="performance-data">
+                            <thead>
+                                <tr>
+                                    <th>Algorithm</th>
+                                    <th>Create (ms)</th>
+                                    <th>Apply (ms)</th>
+                                    <th>Total (ms)</th>
+                                    <th>Operations</th>
+                                    <th>Complexity</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="winner">
+                                    <td><span class="algorithm-name">⚡ Flash</span></td>
+                                    <td><strong>14.5</strong></td>
+                                    <td><strong>6.6</strong></td>
+                                    <td><strong>21.0</strong></td>
+                                    <td>3</td>
+                                    <td>O(n)</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="algorithm-name">🔍 Zoom</span></td>
+                                    <td>23.9</td>
+                                    <td>9.1</td>
+                                    <td>33.0</td>
+                                    <td>4</td>
+                                    <td>O(n)</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="algorithm-name">🤖 Optimus</span></td>
+                                    <td>43.7</td>
+                                    <td>6.6</td>
+                                    <td>50.3</td>
+                                    <td>1256</td>
+                                    <td>O(n log n)</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="algorithm-name">🧠 Megatron</span></td>
+                                    <td>47.8</td>
+                                    <td>7.0</td>
+                                    <td>54.8</td>
+                                    <td>1256</td>
+                                    <td>O(n log n)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Revolutionary Features</h2>
+                <p class="section-subtitle">Innovations not found anywhere else on Earth</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Lightning Fast Performance</h3>
+                    <p>Flash algorithm delivers 400x faster performance than traditional methods with O(n) complexity and minimal memory usage.</p>
+                    <div class="feature-stats">
+                        <span class="stat-badge">14.5ms create</span>
+                        <span class="stat-badge">6.6ms apply</span>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3>AI-Native Integration</h3>
+                    <p>First diffing system designed for AI interaction with human-readable ASCII format and round-trip accuracy.</p>
+                    <div class="feature-highlight">
+                        <code>📎 ❌ ✅</code> symbols for instant AI understanding
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔐</div>
+                    <h3>Cryptographic Security</h3>
+                    <p>Built-in SHA256 integrity verification, tamper detection, and automatic undo generation for enterprise security.</p>
+                    <div class="feature-highlight">
+                        SHA256 + Checksum + Verification
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Intelligent Context Matching</h3>
+                    <p>Dual context matching with confidence scoring handles truncated patches and repeated content intelligently.</p>
+                    <div class="feature-highlight">
+                        Auto-detects full vs. partial source
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔄</div>
+                    <h3>Perfect Round-Trip</h3>
+                    <p>100% accuracy with zero data loss through complete ASCII workflow: Create → Display → Parse → Apply.</p>
+                    <div class="feature-highlight">
+                        Character-perfect preservation
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Multiple I/O Formats</h3>
+                    <p>JSON, Base64, ASCII formats with compact encoding and cross-platform compatibility for any use case.</p>
+                    <div class="feature-stats">
+                        <span class="stat-badge">JSON</span>
+                        <span class="stat-badge">Base64</span>
+                        <span class="stat-badge">ASCII</span>
                     </div>
                 </div>
             </div>
