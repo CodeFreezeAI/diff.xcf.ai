@@ -1,0 +1,436 @@
+/* VERTICAL SPACING & BACKGROUND COLOR FIXES */
+
+/* ============================================
+   GLOBAL SECTION STANDARDIZATION
+============================================ */
+
+/* Reset all section padding to consistent values */
+section {
+    padding: 40px 0 55px 0 !important;
+    margin: 0 !important;
+}
+
+/* ============================================
+   ALTERNATING BACKGROUND COLORS
+============================================ */
+
+/* Light sections (odd) */
+.hero,
+.demo,
+.docs,
+.features {
+    background: var(--bg-primary) !important;
+}
+
+/* Dark sections (even) */
+.diff-showcase,
+.algorithms,
+.performance,
+.d1f-alg-comparison-section {
+    background: var(--bg-secondary) !important;
+}
+
+/* Footer always tertiary */
+.footer {
+    background: var(--bg-tertiary) !important;
+    padding: 30px 0 20px 0 !important;
+}
+
+/* ============================================
+   STANDARDIZED SECTION HEADERS
+============================================ */
+
+/* All section headers use consistent container width and spacing */
+.section-header {
+    max-width: 1200px !important;
+    margin: 0 auto 30px auto !important;
+    padding: 0 var(--space-lg) !important;
+    text-align: center !important;
+}
+
+/* Consistent title styling across all sections */
+.section-title {
+    font-size: 3rem !important;
+    font-weight: 900 !important;
+    margin-bottom: var(--space-md) !important;
+    background: var(--gradient-primary) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    line-height: 1.2 !important;
+}
+
+/* Consistent subtitle styling across all sections */
+.section-subtitle {
+    font-size: 1.25rem !important;
+    color: var(--text-secondary) !important;
+    max-width: 600px !important;
+    margin: 0 auto !important;
+    line-height: 1.6 !important;
+}
+
+/* ============================================
+   INDIVIDUAL SECTION SPACING FIXES
+============================================ */
+
+/* Hero Section */
+.hero {
+    padding: 137px 0 69px 0 !important;
+}
+
+.hero .container {
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+    padding: 0 var(--space-lg) !important;
+}
+
+/* Diff Showcase Section */
+.diff-showcase {
+    padding: 40px 0 55px 0 !important;
+}
+
+.diff-showcase .container {
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+    padding: 0 var(--space-lg) !important;
+}
+
+/* Demo Section */
+.demo {
+    padding: 40px 0 55px 0 !important;
+}
+
+.demo .section-header {
+    margin-bottom: 20px !important;
+}
+
+.demo-container {
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 var(--space-lg) !important;
+}
+
+/* Algorithms Section */
+.algorithms {
+    padding: 40px 0 55px 0 !important;
+}
+
+.algorithms .container {
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+    padding: 0 var(--space-lg) !important;
+}
+
+/* Performance Section */
+.performance {
+    padding: 40px 0 55px 0 !important;
+}
+
+.performance .container {
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+    padding: 0 var(--space-lg) !important;
+}
+
+.benchmark-details {
+    margin: var(--space-lg) auto 0 auto !important;
+}
+
+/* Features Section */
+.features {
+    padding: 40px 0 55px 0 !important;
+}
+
+.features .container {
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+    padding: 0 var(--space-lg) !important;
+}
+
+/* Documentation Section */
+.docs {
+    padding: 40px 0 55px 0 !important;
+}
+
+.docs .container {
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+    padding: 0 var(--space-lg) !important;
+}
+
+/* Algorithm Comparison Section */
+.d1f-alg-comparison-section {
+    padding: 40px 0 55px 0 !important;
+}
+
+.d1f-alg-comparison-container {
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+    padding: 0 var(--space-lg) !important;
+}
+
+/* ============================================
+   CONTENT SPACING WITHIN SECTIONS
+============================================ */
+
+/* Consistent spacing for section content */
+.showcase-content,
+.algorithms-container,
+.performance-content,
+.docs-grid,
+.features-grid {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+/* Demo controls spacing */
+.demo-controls {
+    margin-top: 0 !important;
+    margin-bottom: var(--space-xl) !important;
+}
+
+.demo-panels {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+/* ============================================
+   MOBILE RESPONSIVE SPACING
+============================================ */
+
+@media (max-width: 1024px) {
+    section {
+        padding: 30px 0 45px 0 !important;
+    }
+    
+    .hero {
+        padding: 110px 0 26px 0 !important;
+    }
+    
+    .section-header {
+        margin-bottom: 20px !important;
+        padding: 0 var(--space-md) !important;
+    }
+    
+    .section-title {
+        font-size: 2.5rem !important;
+    }
+    
+    .section-subtitle {
+        font-size: 1.125rem !important;
+    }
+}
+
+@media (max-width: 768px) {
+    section {
+        padding: 20px 0 35px 0 !important;
+    }
+    
+    .hero {
+        padding: 93px 0 17px 0 !important;
+    }
+    
+    .footer {
+        padding: 20px 0 15px 0 !important;
+    }
+    
+    .section-header {
+        margin-bottom: 15px !important;
+        padding: 0 var(--space-md) !important;
+    }
+    
+    .section-title {
+        font-size: 2rem !important;
+    }
+    
+    .section-subtitle {
+        font-size: 1rem !important;
+    }
+    
+    /* Mobile container adjustments */
+    .hero .container,
+    .diff-showcase .container,
+    .algorithms .container,
+    .performance .container,
+    .docs .container,
+    .features .container,
+    .d1f-alg-comparison-container {
+        padding: 0 var(--space-md) !important;
+    }
+    
+    .demo-container {
+        padding: 0 var(--space-md) !important;
+    }
+}
+
+@media (max-width: 480px) {
+    section {
+        padding: 15px 0 30px 0 !important;
+    }
+    
+    .hero {
+        padding: 82px 0 13px 0 !important;
+    }
+    
+    .footer {
+        padding: 15px 0 10px 0 !important;
+    }
+    
+    .section-header {
+        margin-bottom: 10px !important;
+        padding: 0 var(--space-sm) !important;
+    }
+    
+    .section-title {
+        font-size: 1.75rem !important;
+    }
+    
+    .section-subtitle {
+        font-size: 0.95rem !important;
+    }
+    
+    /* Mobile container adjustments */
+    .hero .container,
+    .diff-showcase .container,
+    .algorithms .container,
+    .performance .container,
+    .docs .container,
+    .features .container,
+    .d1f-alg-comparison-container {
+        padding: 0 var(--space-sm) !important;
+    }
+    
+    .demo-container {
+        padding: 0 var(--space-sm) !important;
+    }
+}
+
+/* ============================================
+   NAVBAR SPACING ADJUSTMENT
+============================================ */
+
+/* Ensure navbar doesn't interfere with first section */
+.navbar {
+    height: 80px !important;
+}
+
+/* Adjust body top margin to account for fixed navbar */
+body {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+/* ============================================
+   REMOVE CONFLICTING MARGINS
+============================================ */
+
+/* Remove any conflicting margins from components */
+.showcase-content,
+.demo-content,
+.algorithm-content,
+.performance-chart,
+.performance-table,
+.docs-content,
+.features-grid {
+    margin-top: 0 !important;
+}
+
+/* Remove bottom margins that create uneven spacing */
+.hero-content,
+.showcase-text,
+.showcase-visual {
+    margin-bottom: 0 !important;
+}
+
+/* Remove inside borders from code examples */
+.code-header {
+    border-bottom: none !important;
+}
+
+.code-demo .code-header {
+    border-bottom: none !important;
+}
+
+.showcase-visual .code-demo .code-header {
+    border-bottom: none !important;
+}
+
+/* Fix algorithm code examples - remove double box and center vertically */
+.algorithm-code {
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: flex !important;
+    align-items: stretch !important;
+    justify-content: center !important;
+    height: 100% !important;
+}
+
+.algorithm-code pre {
+    background: var(--bg-code) !important;
+    border: 1px solid var(--border-primary) !important;
+    border-radius: var(--radius-lg) !important;
+    padding: var(--space-lg) !important;
+    margin: 0 !important;
+    width: 100% !important;
+    max-width: none !important;
+    overflow-x: auto !important;
+    display: flex !important;
+    align-items: center !important;
+    flex: 1 !important;
+}
+
+/* Ensure ONLY ACTIVE algorithm panels have equal height columns */
+.algorithm-panel.active {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: var(--space-lg) !important;
+    align-items: stretch !important;
+}
+
+.algorithm-panel.active .algorithm-info,
+.algorithm-panel.active .algorithm-code {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+}
+
+/* ============================================
+   FOOTER STANDARDIZATION
+============================================ */
+
+.footer-content {
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+    padding: 0 var(--space-lg) !important;
+}
+
+.footer-bottom {
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+    padding: var(--space-lg) var(--space-lg) 0 var(--space-lg) !important;
+}
+
+@media (max-width: 768px) {
+    .footer-content,
+    .footer-bottom {
+        padding: 0 var(--space-md) !important;
+    }
+    
+    .footer-bottom {
+        padding-top: var(--space-md) !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer-content,
+    .footer-bottom {
+        padding: 0 var(--space-sm) !important;
+    }
+    
+    .footer-bottom {
+        padding-top: var(--space-sm) !important;
+    }
+} 
