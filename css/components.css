@@ -1237,6 +1237,7 @@
     background: var(--bg-primary);
     width: 100%;
     padding: 0;
+    overflow-x: hidden;
 }
 
 .performance .container {
@@ -1244,22 +1245,25 @@
     width: 100%;
     padding: 0;
     margin: 0;
+    overflow-x: hidden;
 }
 
 .performance .section-header {
-    padding: var(--space-2xl) var(--space-md);
+    padding: var(--space-lg) var(--space-xs);
     text-align: center;
 }
 
 .benchmark-details {
     background: var(--bg-card);
     border: 1px solid var(--border-primary);
-    border-radius: var(--radius-xl);
-    padding: clamp(1rem, 4vw, 2rem);
-    margin: var(--space-xl) var(--space-md) 0 var(--space-md);
-    width: calc(100% - 2 * var(--space-md));
+    border-radius: var(--radius-lg);
+    padding: clamp(0.5rem, 2vw, 1rem);
+    margin: var(--space-md) var(--space-xs) 0 var(--space-xs);
+    width: calc(100% - 2 * var(--space-xs));
     max-width: none;
+    min-width: auto;
     box-sizing: border-box;
+    overflow-x: hidden;
 }
 
 .benchmark-details p {
@@ -1297,66 +1301,75 @@
 .performance-content {
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--space-xl);
+    gap: var(--space-md);
     width: 100%;
     max-width: none;
+    min-width: auto;
     margin: 0;
-    padding: 0 var(--space-md);
+    padding: 0 var(--space-xs);
+    overflow-x: hidden;
 }
 
 .performance-chart,
 .performance-table {
     background: var(--bg-card);
     border: 1px solid var(--border-primary);
-    border-radius: var(--radius-xl);
-    padding: var(--space-md);
+    border-radius: var(--radius-lg);
+    padding: clamp(0.5rem, 2vw, 1rem);
     width: 100%;
     max-width: none;
+    min-width: auto;
     box-sizing: border-box;
+    overflow-x: hidden;
 }
 
 .performance-chart h3,
 .performance-table h3 {
-    margin-bottom: var(--space-lg);
+    margin-bottom: var(--space-md);
     color: var(--text-primary);
     text-align: center;
-    font-size: clamp(1.25rem, 3vw, 1.5rem);
+    font-size: clamp(1rem, 4vw, 1.5rem);
 }
 
 .chart-container {
     position: relative;
-    height: clamp(250px, 40vh, 400px);
-    margin-bottom: var(--space-lg);
+    height: clamp(200px, 30vh, 400px);
+    margin-bottom: var(--space-md);
     width: 100%;
     max-width: none;
+    min-width: auto;
+    overflow: hidden;
 }
 
 .chart-container canvas {
     width: 100% !important;
     height: 100% !important;
     max-width: none !important;
+    min-width: auto !important;
 }
 
 .table-container {
     overflow-x: auto;
     width: 100%;
     max-width: none;
+    min-width: auto;
     -webkit-overflow-scrolling: touch;
 }
 
 .performance-data {
     width: 100%;
-    min-width: 100%;
+    min-width: auto;
     border-collapse: collapse;
-    font-size: clamp(0.75rem, 2vw, 0.875rem);
+    font-size: clamp(0.7rem, 2.5vw, 0.875rem);
 }
 
 .performance-data th,
 .performance-data td {
-    padding: clamp(0.5rem, 2vw, 1rem);
+    padding: clamp(0.25rem, 1.5vw, 0.75rem);
     text-align: left;
     border-bottom: 1px solid var(--border-primary);
     white-space: nowrap;
+    font-size: clamp(0.7rem, 2.5vw, 0.875rem);
 }
 
 .performance-data th {
@@ -1365,7 +1378,7 @@
     font-weight: 600;
     position: sticky;
     top: 0;
-    font-size: clamp(0.75rem, 2vw, 0.875rem);
+    font-size: clamp(0.7rem, 2.5vw, 0.875rem);
 }
 
 .performance-data td {
@@ -1384,7 +1397,7 @@
 .algorithm-name {
     font-weight: 600;
     color: var(--text-primary);
-    font-size: clamp(0.75rem, 2vw, 0.875rem);
+    font-size: clamp(0.7rem, 2.5vw, 0.875rem);
 }
 
 /* Documentation Section Components */
@@ -2662,5 +2675,65 @@
 
 .demo-output-section .demo-output-content {
     min-height: 300px;
+}
+
+/* Ultra-responsive Chart.js overrides for smallest screens */
+@media (max-width: 480px) {
+    .chart-container {
+        height: clamp(150px, 25vh, 250px) !important;
+        min-height: 150px !important;
+        overflow: hidden !important;
+    }
+    
+    .chart-container canvas {
+        width: 100% !important;
+        height: 100% !important;
+        max-width: none !important;
+        min-width: auto !important;
+        transform: scale(1) !important;
+    }
+    
+    .performance-chart,
+    .performance-table {
+        padding: clamp(0.25rem, 1vw, 0.5rem);
+        margin: 0;
+        border-radius: var(--radius-md);
+    }
+    
+    .performance-content {
+        padding: 0 clamp(0.25rem, 0.5vw, 0.5rem);
+        gap: clamp(0.25rem, 0.5vw, 0.5rem);
+    }
+    
+    .benchmark-details {
+        padding: clamp(0.25rem, 1vw, 0.5rem);
+        margin: var(--space-sm) clamp(0.25rem, 0.5vw, 0.5rem) 0 clamp(0.25rem, 0.5vw, 0.5rem);
+        width: calc(100% - 2 * clamp(0.25rem, 0.5vw, 0.5rem));
+    }
+}
+
+@media (max-width: 320px) {
+    .chart-container {
+        height: 120px !important;
+        min-height: 120px !important;
+    }
+    
+    .performance-chart h3,
+    .performance-table h3 {
+        font-size: clamp(0.85rem, 3vw, 1rem);
+        margin-bottom: clamp(0.25rem, 0.5vw, 0.5rem);
+    }
+    
+    .performance-data th,
+    .performance-data td {
+        padding: clamp(0.125rem, 0.5vw, 0.25rem);
+        font-size: clamp(0.6rem, 2vw, 0.7rem);
+    }
+    
+    .benchmark-details p {
+        font-size: clamp(0.6rem, 2vw, 0.75rem);
+        line-height: 1.4;
+        margin-bottom: clamp(0.25rem, 0.5vw, 0.5rem);
+    }
 }
 

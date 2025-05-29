@@ -78,6 +78,8 @@ function initPerformanceChart() {
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            devicePixelRatio: window.devicePixelRatio || 1,
+            resizeDelay: 0,
             interaction: {
                 intersect: false,
                 mode: 'index'
@@ -89,11 +91,12 @@ function initPerformanceChart() {
                         color: '#f8fafc',
                         font: {
                             family: 'Inter, sans-serif',
-                            size: 12,
+                            size: window.innerWidth <= 480 ? 10 : window.innerWidth <= 768 ? 11 : 12,
                             weight: '600'
                         },
                         usePointStyle: true,
-                        pointStyle: 'circle'
+                        pointStyle: 'circle',
+                        padding: window.innerWidth <= 480 ? 8 : 15
                     }
                 },
                 tooltip: {
@@ -132,9 +135,11 @@ function initPerformanceChart() {
                         color: '#cbd5e1',
                         font: {
                             family: 'Inter, sans-serif',
-                            size: 11,
+                            size: window.innerWidth <= 320 ? 8 : window.innerWidth <= 480 ? 9 : window.innerWidth <= 768 ? 10 : 11,
                             weight: '500'
-                        }
+                        },
+                        maxRotation: window.innerWidth <= 480 ? 45 : 0,
+                        minRotation: 0
                     }
                 },
                 y: {
@@ -147,34 +152,34 @@ function initPerformanceChart() {
                         color: '#cbd5e1',
                         font: {
                             family: 'Inter, sans-serif',
-                            size: 11
+                            size: window.innerWidth <= 320 ? 8 : window.innerWidth <= 480 ? 9 : window.innerWidth <= 768 ? 10 : 11
                         },
                         callback: function(value) {
                             return value + 'ms';
                         }
                     },
                     title: {
-                        display: true,
+                        display: window.innerWidth > 480,
                         text: 'Time (milliseconds)',
                         color: '#f8fafc',
                         font: {
                             family: 'Inter, sans-serif',
-                            size: 12,
+                            size: window.innerWidth <= 768 ? 10 : 12,
                             weight: '600'
                         }
                     }
                 }
             },
             animation: {
-                duration: 2000,
+                duration: window.innerWidth <= 480 ? 1000 : 2000,
                 easing: 'easeOutQuart',
                 delay: (context) => {
-                    return context.dataIndex * 200;
+                    return context.dataIndex * (window.innerWidth <= 480 ? 100 : 200);
                 }
             },
             elements: {
                 bar: {
-                    borderRadius: 8
+                    borderRadius: window.innerWidth <= 480 ? 4 : 8
                 }
             }
         }
@@ -183,9 +188,40 @@ function initPerformanceChart() {
     // Create chart
     const chart = new Chart(chartCanvas, config);
 
-    // Force chart to resize on window resize
+    // Force chart to resize on window resize and update responsive properties
+    let resizeTimeout;
     window.addEventListener('resize', () => {
-        chart.resize();
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            // Update responsive font sizes and properties
+            const isMobile = window.innerWidth <= 480;
+            const isTablet = window.innerWidth <= 768;
+            const isTiny = window.innerWidth <= 320;
+            
+            // Update legend font size
+            chart.options.plugins.legend.labels.font.size = isTiny ? 8 : isMobile ? 10 : isTablet ? 11 : 12;
+            chart.options.plugins.legend.labels.padding = isMobile ? 8 : 15;
+            
+            // Update axis font sizes
+            const fontSize = isTiny ? 8 : isMobile ? 9 : isTablet ? 10 : 11;
+            chart.options.scales.x.ticks.font.size = fontSize;
+            chart.options.scales.y.ticks.font.size = fontSize;
+            chart.options.scales.x.ticks.maxRotation = isMobile ? 45 : 0;
+            
+            // Update y-axis title visibility
+            chart.options.scales.y.title.display = !isMobile;
+            chart.options.scales.y.title.font.size = isTablet ? 10 : 12;
+            
+            // Update animation duration
+            chart.options.animation.duration = isMobile ? 1000 : 2000;
+            
+            // Update bar border radius
+            chart.options.elements.bar.borderRadius = isMobile ? 4 : 8;
+            
+            // Resize and update the chart
+            chart.resize();
+            chart.update('none');
+        }, 250);
     });
 
     // Add chart controls
