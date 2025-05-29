@@ -76,6 +76,31 @@ function initializeAlgoComparisonChart() {
                 },
                 legend: {
                     display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        labelPointStyle: function(context) {
+                            const emojis = ['⚡', '🤖', '🐌', '🦕'];
+                            return {
+                                pointStyle: 'circle',
+                                rotation: 0
+                            };
+                        },
+                        title: function(context) {
+                            return context[0].label;
+                        },
+                        label: function(context) {
+                            const emojis = ['⚡', '🤖', '🐌', '🦕'];
+                            const emoji = emojis[context.datasetIndex] || '⚪';
+                            return `${emoji} ${context.dataset.label}: ${context.parsed.y.toLocaleString()}`;
+                        }
+                    },
+                    displayColors: false,
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    titleColor: '#ffffff',
+                    bodyColor: '#ffffff',
+                    borderColor: 'rgba(255, 255, 255, 0.2)',
+                    borderWidth: 1
                 }
             },
             scales: {

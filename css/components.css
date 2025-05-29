@@ -774,11 +774,12 @@
 }
 
 .algorithm-code pre {
-    margin: 0;
-    padding: var(--space-lg);
-    font-family: var(--font-mono);
-    font-size: 0.875rem;
-    line-height: 1.6;
+    background: var(--bg-code) !important;
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-lg);
+    padding: var(--space-md);
+    margin: 0 0 25px 0;
+    font-size: 0.9rem;
     overflow-x: auto;
 }
 
@@ -1172,7 +1173,7 @@
 .demo-output-content pre {
     background: transparent !important;
     padding: var(--space-md) !important;
-    margin: 0 !important;
+    margin: 0 0 25px 0 !important;
     border-radius: 0 !important;
     overflow: visible;
     flex: 1;

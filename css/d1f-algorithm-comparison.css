@@ -80,14 +80,14 @@
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
 }
 
-.d1f-alg-comparison-legend-color {
-    width: 16px;
-    height: 16px;
-    border-radius: 4px;
-    box-shadow: 
-        0 0 0 1px rgba(255, 255, 255, 0.2),
-        0 4px 8px rgba(0, 0, 0, 0.3);
+.d1f-alg-comparison-legend-emoji {
+    font-size: 20px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     flex-shrink: 0;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
 
 .d1f-alg-comparison-legend-item span {
