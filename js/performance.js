@@ -10,19 +10,18 @@ function initPerformanceChart() {
 
     // Performance data
     const performanceData = {
-        algorithms: ['Flash', 'Zoom', 'Optimus', 'Starscream', 'Megatron'],
-        createTimes: [14.5, 23.9, 43.7, 45.1, 47.8],
-        applyTimes: [6.6, 9.1, 6.6, 6.9, 7.0],
-        totalTimes: [21.0, 33.0, 50.3, 52.0, 54.8],
-        operations: [3, 3, 1256, 1256, 1256],
+        algorithms: ['Flash', 'Zoom', 'Optimus', 'Megatron'],
+        createTimes: [14.5, 23.9, 43.7, 47.8],
+        applyTimes: [6.6, 9.1, 6.6, 7.0],
+        totalTimes: [21.0, 33.0, 50.3, 54.8],
+        operations: [3, 3, 1256, 1256],
         colors: {
-            flash: '#10b981',      // Green for fastest
-            zoom: '#6366f1',       // Blue
-            optimus: '#8b5cf6',    // Purple
-            starscream: '#f59e0b', // Orange
-            megatron: '#ef4444'    // Red for slowest
+            flash: '#ff6b6b',     // Red
+            zoom: '#4ecdc4',      // Teal
+            optimus: '#45b7d1',   // Blue
+            megatron: '#96ceb4'   // Green
         },
-        emojis: ['⚡', '🔍', '🤖', '🌟', '🧠']
+        emojis: ['⚡', '🔍', '🤖', '🧠']
     };
 
     // Chart configuration
@@ -38,14 +37,12 @@ function initPerformanceChart() {
                         performanceData.colors.flash + '80',
                         performanceData.colors.zoom + '80',
                         performanceData.colors.optimus + '80',
-                        performanceData.colors.starscream + '80',
                         performanceData.colors.megatron + '80'
                     ],
                     borderColor: [
                         performanceData.colors.flash,
                         performanceData.colors.zoom,
                         performanceData.colors.optimus,
-                        performanceData.colors.starscream,
                         performanceData.colors.megatron
                     ],
                     borderWidth: 2,
@@ -59,14 +56,12 @@ function initPerformanceChart() {
                         performanceData.colors.flash + '40',
                         performanceData.colors.zoom + '40',
                         performanceData.colors.optimus + '40',
-                        performanceData.colors.starscream + '40',
                         performanceData.colors.megatron + '40'
                     ],
                     borderColor: [
                         performanceData.colors.flash,
                         performanceData.colors.zoom,
                         performanceData.colors.optimus,
-                        performanceData.colors.starscream,
                         performanceData.colors.megatron
                     ],
                     borderWidth: 2,
@@ -367,7 +362,6 @@ function compareAlgorithms(alg1, alg2) {
         flash: { create: 14.5, apply: 6.6, total: 21.0, ops: 3 },
         zoom: { create: 23.9, apply: 9.1, total: 33.0, ops: 3 },
         optimus: { create: 43.7, apply: 6.6, total: 50.3, ops: 1256 },
-        starscream: { create: 45.1, apply: 6.9, total: 52.0, ops: 1256 },
         megatron: { create: 47.8, apply: 7.0, total: 54.8, ops: 1256 }
     };
 

@@ -1719,9 +1719,7 @@
         gap: var(--space-xl);
     }
     
-    .footer-links {
-        grid-template-columns: repeat(2, 1fr);
-    }
+    /* Removed footer-links 2-column rule to maintain 3 columns always */
 }
 
 @media (max-width: 768px) {

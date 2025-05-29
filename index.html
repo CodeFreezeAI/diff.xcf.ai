@@ -94,16 +94,16 @@
                 </h1>
                 <p class="hero-subtitle">
                     D1F - Swift MultiLineDiff makes Git diff, Myers algorithm, and traditional tools obsolete.
-                    Experience <strong>500x faster performance</strong>, <strong>AI integration</strong>,
+                    Experience <strong>400x faster performance</strong>, <strong>AI integration</strong>,
                     and <strong>100% accuracy</strong> with the most flexible diffing system in the Galaxy.
                 </p>
                 <div class="hero-stats">
                     <div class="stat">
-                        <div class="stat-number">500x</div>
+                        <div class="stat-number">400x</div>
                         <div class="stat-label">Faster</div>
                     </div>
                     <div class="stat">
-                        <div class="stat-number">5</div>
+                        <div class="stat-number">4</div>
                         <div class="stat-label">Algorithms</div>
                     </div>
                     <div class="stat">
@@ -168,7 +168,7 @@
                             <span class="stat-label">Round-trip Accuracy</span>
                         </div>
                         <div class="stat-item">
-                            <span class="stat-number">500x</span>
+                            <span class="stat-number">400x</span>
                             <span class="stat-label">Faster than Git</span>
                         </div>
                         <div class="stat-item">
@@ -241,7 +241,7 @@
                 <div class="feature-card">
                     <div class="feature-icon">⚡</div>
                     <h3>Lightning Fast Performance</h3>
-                    <p>Flash algorithm delivers 500x faster performance than traditional methods with O(n) complexity and minimal memory usage.</p>
+                    <p>Flash algorithm delivers 400x faster performance than traditional methods with O(n) complexity and minimal memory usage.</p>
                     <div class="feature-stats">
                         <span class="stat-badge">14.5ms create</span>
                         <span class="stat-badge">6.6ms apply</span>
@@ -297,7 +297,7 @@
     <section id="algorithms" class="algorithms">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">Five Powerful Algorithms</h2>
+                <h2 class="section-title">Four Powerful Algorithms</h2>
                 <p class="section-subtitle">Choose the perfect algorithm for your specific needs</p>
             </div>
             <div class="algorithms-container">
@@ -305,7 +305,6 @@
                     <button class="tab-button active" data-algorithm="flash">⚡ Flash</button>
                     <button class="tab-button" data-algorithm="optimus">🤖 Optimus</button>
                     <button class="tab-button" data-algorithm="megatron">🧠 Megatron</button>
-                    <button class="tab-button" data-algorithm="starscream">🌟 Starscream</button>
                     <button class="tab-button" data-algorithm="zoom">🔍 Zoom</button>
                 </div>
                 <div class="algorithm-content">
@@ -429,46 +428,6 @@ let diff = MultiLineDiff.createDiff(
 // Result: Balanced performance and accuracy</code></pre>
                         </div>
                     </div>
-                    <div class="algorithm-panel" id="starscream">
-                        <div class="algorithm-info">
-                            <div class="algorithm-header">
-                                <h3>🌟 Starscream Algorithm</h3>
-                                <div class="algorithm-badges">
-                                    <span class="badge badge-primary">Line-Aware</span>
-                                    <span class="badge badge-warning">O(n log n)</span>
-                                    <span class="badge badge-info">Swift Native</span>
-                                </div>
-                            </div>
-                            <p>Swift-native line-aware processing with excellent performance for structured content and code with clear line boundaries.</p>
-                            <div class="algorithm-stats">
-                                <div class="stat-item">
-                                    <span class="stat-label">Create Time</span>
-                                    <span class="stat-value static-time">45.1ms</span>
-                                </div>
-                                <div class="stat-item">
-                                    <span class="stat-label">Apply Time</span>
-                                    <span class="stat-value static-time">6.9ms</span>
-                                </div>
-                                <div class="stat-item">
-                                    <span class="stat-label">Operations</span>
-                                    <span class="stat-value">1256</span>
-                                </div>
-                                <div class="stat-item">
-                                    <span class="stat-label">Structure</span>
-                                    <span class="stat-value">Aware</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="algorithm-code">
-                            <pre><code class="language-swift">// Starscream: Line-aware Swift native
-let diff = MultiLineDiff.createDiff(
-    source: structuredText,
-    destination: modifiedText,
-    algorithm: .starscream
-)
-// Result: Structure-aware processing</code></pre>
-                        </div>
-                    </div>
                     <div class="algorithm-panel" id="zoom">
                         <div class="algorithm-info">
                             <div class="algorithm-header">
@@ -541,6 +500,7 @@ let diff = MultiLineDiff.createDiff(
                                         <option value="flash">⚡ Flash</option>
                                         <option value="optimus" selected>🤖 Optimus</option>
                                         <option value="megatron">🧠 Megatron</option>
+                                        <option value="zoom">🔍 Zoom</option>
                                     </select>
                                 </div>
                                 <div class="control-group">
@@ -660,14 +620,6 @@ let diff = MultiLineDiff.createDiff(
                                     <td>43.7</td>
                                     <td>6.6</td>
                                     <td>50.3</td>
-                                    <td>1256</td>
-                                    <td>O(n log n)</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="algorithm-name">🌟 Starscream</span></td>
-                                    <td>45.1</td>
-                                    <td>6.9</td>
-                                    <td>52.0</td>
                                     <td>1256</td>
                                     <td>O(n log n)</td>
                                 </tr>
@@ -1193,7 +1145,6 @@ Line 9: ✅     }                     (insert)
     case flash      // ⚡ Fastest (14.5ms)
     case optimus    // 🤖 Line-aware CollectionDiff
     case megatron   // 🧠 Semantic analysis (default)
-    case starscream // 🌟 Swift native line processing
     case zoom       // 🔍 Simple character-based
 }</code></pre>
 

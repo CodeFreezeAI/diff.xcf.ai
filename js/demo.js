@@ -484,7 +484,8 @@ class NumberProcessor:
         const algorithmEmojis = {
             flash: '⚡',
             optimus: '🤖',
-            megatron: '🧠'
+            megatron: '🧠',
+            zoom: '🔍'
         };
 
         // Create live timing display with real precision
@@ -540,7 +541,8 @@ class NumberProcessor:
             const algorithmEmojis = {
                 flash: '⚡',
                 optimus: '🤖',
-                megatron: '🧠'
+                megatron: '🧠',
+                zoom: '🔍'
             };
             
             // Check screen width to conditionally render badges

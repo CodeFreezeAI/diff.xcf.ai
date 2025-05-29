@@ -42,7 +42,7 @@ function testAlgorithms() {
         }
     ];
     
-    const algorithms = ['flash', 'zoom', 'optimus', 'starscream', 'megatron'];
+    const algorithms = ['flash', 'zoom', 'optimus', 'megatron'];
     
     testCases.forEach((testCase, index) => {
         console.log(`\n📝 Test Case ${index + 1}: ${testCase.name}`);

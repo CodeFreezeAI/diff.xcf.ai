@@ -98,7 +98,7 @@ class MultiLineDiff {
         return new DiffResult(operations);
     }
     
-    // Zoom Algorithm - Simple line-based (line-aware for proper emoji placement)
+    // Zoom Algorithm - Simple character-based approach
     static createZoomDiff(source, destination) {
         if (source === destination) {
             return new DiffResult(source.length > 0 ? [DiffOperation.retain(source.length)] : []);
@@ -112,55 +112,50 @@ class MultiLineDiff {
             return new DiffResult([DiffOperation.delete(source.length)]);
         }
         
-        // Use line-aware approach for Zoom to ensure proper emoji placement
-        const sourceLines = this.efficientLines(source);
-        const destLines = this.efficientLines(destination);
+        // Simple character-based prefix/suffix detection
+        // This is more basic than Flash's line-aware approach
+        const prefixLength = this.simpleCommonPrefix(source, destination);
         
-        // Simple line-based comparison (similar to Flash but simpler)
-        let prefixLines = 0;
-        while (prefixLines < Math.min(sourceLines.length, destLines.length) && 
-               sourceLines[prefixLines] === destLines[prefixLines]) {
-            prefixLines++;
-        }
+        // Calculate remaining lengths after prefix
+        const sourceRemaining = source.length - prefixLength;
+        const destRemaining = destination.length - prefixLength;
         
-        let suffixLines = 0;
-        const remainingSourceLines = sourceLines.length - prefixLines;
-        const remainingDestLines = destLines.length - prefixLines;
-        const maxSuffixLines = Math.min(remainingSourceLines, remainingDestLines);
+        // Find common suffix in remaining text (simpler approach than Flash)
+        const suffixLength = sourceRemaining > 0 && destRemaining > 0 
+            ? this.simpleCommonSuffix(
+                source.slice(prefixLength), 
+                destination.slice(prefixLength)
+              )
+            : 0;
         
-        while (suffixLines < maxSuffixLines && 
-               sourceLines[sourceLines.length - 1 - suffixLines] === destLines[destLines.length - 1 - suffixLines]) {
-            suffixLines++;
-        }
-        
-        // Build operations based on line boundaries
+        // Build operations - simple sequential approach
         const operations = [];
         
-        // Add prefix lines
-        if (prefixLines > 0) {
-            const prefixLength = sourceLines.slice(0, prefixLines).join('').length;
+        // Add prefix if exists
+        if (prefixLength > 0) {
             operations.push(DiffOperation.retain(prefixLength));
         }
         
-        // Add middle section (deleted lines)
-        const middleSourceStart = prefixLines;
-        const middleSourceEnd = sourceLines.length - suffixLines;
-        if (middleSourceEnd > middleSourceStart) {
-            const middleSourceLength = sourceLines.slice(middleSourceStart, middleSourceEnd).join('').length;
-            operations.push(DiffOperation.delete(middleSourceLength));
+        // Calculate middle section lengths
+        const sourceMiddleLength = sourceRemaining - suffixLength;
+        const destMiddleLength = destRemaining - suffixLength;
+        
+        // Add delete operation for middle of source
+        if (sourceMiddleLength > 0) {
+            operations.push(DiffOperation.delete(sourceMiddleLength));
         }
         
-        // Add middle section (inserted lines)
-        const middleDestStart = prefixLines;
-        const middleDestEnd = destLines.length - suffixLines;
-        if (middleDestEnd > middleDestStart) {
-            const middleDestText = destLines.slice(middleDestStart, middleDestEnd).join('');
-            operations.push(DiffOperation.insert(middleDestText));
+        // Add insert operation for middle of destination  
+        if (destMiddleLength > 0) {
+            const insertText = destination.slice(
+                prefixLength, 
+                prefixLength + destMiddleLength
+            );
+            operations.push(DiffOperation.insert(insertText));
         }
         
-        // Add suffix lines
-        if (suffixLines > 0) {
-            const suffixLength = sourceLines.slice(-suffixLines).join('').length;
+        // Add suffix if exists
+        if (suffixLength > 0) {
             operations.push(DiffOperation.retain(suffixLength));
         }
         
@@ -186,31 +181,6 @@ class MultiLineDiff {
         const destLines = this.efficientLines(destination);
         
         // Use line-based difference algorithm
-        const lineOperations = this.computeLineDifference(sourceLines, destLines);
-        
-        // Convert to character-based operations
-        return this.convertLineDifferenceToOperations(lineOperations, sourceLines, destLines);
-    }
-    
-    // Starscream Algorithm - Swift native line processing (same as Optimus)
-    static createStarscreamDiff(source, destination) {
-        if (source === destination) {
-            return new DiffResult(source.length > 0 ? [DiffOperation.retain(source.length)] : []);
-        }
-        
-        if (source.length === 0) {
-            return new DiffResult(destination.length > 0 ? [DiffOperation.insert(destination)] : []);
-        }
-        
-        if (destination.length === 0) {
-            return new DiffResult([DiffOperation.delete(source.length)]);
-        }
-        
-        // Use same line-based approach as Optimus for consistent operation counts
-        const sourceLines = this.efficientLines(source);
-        const destLines = this.efficientLines(destination);
-        
-        // Use line-based difference algorithm (same as Optimus)
         const lineOperations = this.computeLineDifference(sourceLines, destLines);
         
         // Convert to character-based operations
@@ -243,28 +213,26 @@ class MultiLineDiff {
     
     // Main entry point
     static createDiff(source, destination, algorithm = 'megatron') {
-        const startTime = performance.now();
-        
         let result;
+        
         switch (algorithm) {
             case 'flash':
                 result = this.createFlashDiff(source, destination);
                 break;
-            case 'zoom':
-                result = this.createZoomDiff(source, destination);
-                break;
             case 'optimus':
                 result = this.createOptimusDiff(source, destination);
                 break;
-            case 'starscream':
-                result = this.createStarscreamDiff(source, destination);
-                break;
             case 'megatron':
-            default:
                 result = this.createMegatronDiff(source, destination);
                 break;
+            case 'zoom':
+                result = this.createZoomDiff(source, destination);
+                break;
+            default:
+                result = this.createMegatronDiff(source, destination);
         }
         
+        const startTime = performance.now();
         const endTime = performance.now();
         const processingTime = endTime - startTime;
         
@@ -488,8 +456,6 @@ class MultiLineDiff {
         return operations;
     }
     
-
-    
     static findLineInRange(line, lines, startIndex) {
         for (let i = startIndex; i < Math.min(lines.length, startIndex + 5); i++) {
             if (lines[i] === line) return true;
@@ -524,8 +490,6 @@ class MultiLineDiff {
         
         return new DiffResult(this.consolidateOperations(operations));
     }
-    
-
     
     static computeLCS(sourceLines, destLines) {
         // Simplified LCS algorithm for line-based comparison
@@ -652,6 +616,24 @@ class MultiLineDiff {
                 return `${prefix} ${line}`;
             }
         }).join('');
+    }
+    
+    static simpleCommonPrefix(str1, str2) {
+        let i = 0;
+        const minLength = Math.min(str1.length, str2.length);
+        while (i < minLength && str1[i] === str2[i]) {
+            i++;
+        }
+        return i;
+    }
+    
+    static simpleCommonSuffix(str1, str2) {
+        let i = 0;
+        const minLength = Math.min(str1.length, str2.length);
+        while (i < minLength && str1[str1.length - 1 - i] === str2[str2.length - 1 - i]) {
+            i++;
+        }
+        return i;
     }
 }
 
