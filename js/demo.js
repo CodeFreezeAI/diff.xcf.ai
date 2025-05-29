@@ -882,14 +882,14 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
     
     if (sourceInput) {
         sourceInput.addEventListener('input', () => {
-            debouncedGenerate();
+            generateDiff(); // Remove debounce for immediate diff generation
             debouncedHighlight();
         });
     }
     
     if (destInput) {
         destInput.addEventListener('input', () => {
-            debouncedGenerate();
+            generateDiff(); // Remove debounce for immediate diff generation
             debouncedHighlight();
         });
     }
