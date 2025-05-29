@@ -369,6 +369,7 @@ a:hover {
     align-items: center;
     padding: 125px 0 30px 0;
     overflow: hidden;
+    text-align: center;
 }
 
 .hero-background {
@@ -387,6 +388,7 @@ a:hover {
     flex: 0 0 auto;
     max-width: 600px;
     z-index: 1;
+    margin: 0 auto;
 }
 
 .hero-badge {
@@ -456,6 +458,7 @@ a:hover {
     display: flex;
     gap: var(--space-xl);
     margin-bottom: var(--space-sm);
+    justify-content: center;
 }
 
 .stat {
@@ -479,6 +482,7 @@ a:hover {
     display: flex;
     gap: var(--space-lg);
     flex-wrap: wrap;
+    justify-content: center;
 }
 
 .hero-visual {
@@ -672,7 +676,6 @@ section {
 @media (max-width: 1024px) {
     .hero {
         flex-direction: column;
-        text-align: center;
         gap: var(--space-sm);
         height: auto;
         padding: 105px 0 30px 0;
@@ -684,10 +687,6 @@ section {
     
     .hero-title {
         font-size: 3rem;
-    }
-    
-    .hero-stats {
-        justify-content: center;
     }
 }
 
@@ -744,7 +743,6 @@ section {
     
     .hero-actions {
         flex-direction: column;
-        align-items: center;
     }
     
     .section-title {
