@@ -293,21 +293,31 @@ class MultiLineDiff {
                 case 'delete':
                     const deleteText = source.slice(sourceIndex, sourceIndex + operation.value);
                     if (deleteText) {
-                        parts.push(this.prefixLines(deleteText, '❌'));
+                        let prefixedDelete = this.prefixLines(deleteText, '❌');
+                        // Ensure delete operation ends with newline for proper separation
+                        if (!prefixedDelete.endsWith('\n')) {
+                            prefixedDelete += '\n';
+                        }
+                        parts.push(prefixedDelete);
                     }
                     sourceIndex += operation.value;
                     break;
                     
                 case 'insert':
                     if (operation.value) {
-                        parts.push(this.prefixLines(operation.value, '✅'));
+                        let prefixedInsert = this.prefixLines(operation.value, '✅');
+                        // Ensure insert operation ends with newline for proper separation
+                        if (!prefixedInsert.endsWith('\n')) {
+                            prefixedInsert += '\n';
+                        }
+                        parts.push(prefixedInsert);
                     }
                     break;
             }
         }
         
-        // Join parts and ensure proper line separation
-        let result = parts.join('');
+        // Join parts and remove any trailing newline to avoid extra empty line at end
+        let result = parts.join('').replace(/\n$/, '');
         
         // Fix any cases where emoji symbols appear in the middle of lines
         // This can happen when operations don't align with line boundaries
@@ -319,49 +329,45 @@ class MultiLineDiff {
     static cleanupEmojiPlacement(text) {
         if (!text) return text;
         
-        // Split into lines and fix any emoji symbols that appear in the middle
+        // Split into lines and only fix emoji symbols that are incorrectly placed as markers
         const lines = text.split('\n');
         const fixedLines = [];
         
         for (let i = 0; i < lines.length; i++) {
             let line = lines[i];
             
-            // Check if line has emoji symbols in the middle (not at the start)
-            const emojiRegex = /(📎|❌|✅)/g;
-            const matches = [...line.matchAll(emojiRegex)];
+            // Only process lines that have a diff marker pattern at the start
+            const markerAtStart = /^(📎|❌|✅) /.test(line);
             
-            if (matches.length > 1) {
-                // Multiple emoji symbols on the same line - need to split into separate lines
-                let currentPos = 0;
+            if (markerAtStart) {
+                // This line already has a proper marker at the start - check for additional markers in the content
+                const marker = line.substring(0, 2); // Get the emoji marker
+                const content = line.substring(2); // Get everything after the marker and space
                 
-                for (let j = 0; j < matches.length; j++) {
-                    const match = matches[j];
-                    const emojiPos = match.index;
-                    const emoji = match[0];
-                    
-                    if (j === 0 && emojiPos === 0) {
-                        // First emoji at start of line - this is correct
-                        continue;
-                    }
-                    
-                    // Split the line at this emoji position
-                    const beforeEmoji = line.slice(currentPos, emojiPos);
-                    const afterEmoji = line.slice(emojiPos + 2); // +2 to skip emoji and space
-                    
-                    if (beforeEmoji.trim()) {
-                        // Add the content before the emoji as a separate line
-                        fixedLines.push(beforeEmoji);
-                    }
-                    
-                    // Start a new line with the emoji
-                    line = `${emoji} ${afterEmoji}`;
-                    currentPos = 0;
+                // Look for additional marker emojis in the content part only
+                const additionalMarkersRegex = /(📎|❌|✅)/g;
+                const contentMatches = [...content.matchAll(additionalMarkersRegex)];
+                
+                if (contentMatches.length > 0) {
+                    // There are emoji symbols in the content - these should stay as content, not become markers
+                    // Just keep the line as is since the content emojis are legitimate content
+                    fixedLines.push(line);
+                } else {
+                    // No additional emojis in content - line is fine
+                    fixedLines.push(line);
                 }
-                
-                fixedLines.push(line);
             } else {
-                // Single or no emoji - line is fine as is
-                fixedLines.push(line);
+                // Check if this line has emoji symbols that shouldn't be markers
+                const hasEmojiInMiddle = /(📎|❌|✅)/.test(line);
+                
+                if (hasEmojiInMiddle) {
+                    // Line has emoji symbols but not at the start as markers
+                    // These are content emojis - leave them alone
+                    fixedLines.push(line);
+                } else {
+                    // No emoji symbols - line is fine
+                    fixedLines.push(line);
+                }
             }
         }
         

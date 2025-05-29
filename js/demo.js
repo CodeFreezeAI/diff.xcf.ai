@@ -852,11 +852,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
             if (sourceInput) sourceInput.value = randomExample.source;
             if (destInput) destInput.value = randomExample.destination;
             
-            // Automatically generate diff after loading example
-            setTimeout(() => {
+            // Automatically generate diff after loading example - immediate execution
                 generateDiff();
                 applySyntaxHighlighting();
-            }, 100);
         });
     }
 
@@ -921,8 +919,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
         // Set generating flag for live timing
         isGenerating = true;
 
-        // Use real algorithm implementation with minimal delay for UI feedback
-        setTimeout(() => {
+        // Use real algorithm implementation - immediate execution
             console.log(`🚀 Starting ${algorithm} algorithm...`);
             const result = generateRealDiff(source, destination, algorithm, format);
             
@@ -936,7 +933,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
             updatePerformanceDisplay();
             
             displayDiffResult(result);
-        }, 50); // Minimal delay for UI feedback
     }
 
     function generateRealDiff(source, destination, algorithm, format) {
@@ -1384,7 +1380,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
     const originalDisplayDiffResult = displayDiffResult;
     displayDiffResult = function(result) {
         originalDisplayDiffResult(result);
-        setTimeout(addCopyButton, 100);
+        addCopyButton();
     };
 
     // CSS styles are now in css/js-styles.css

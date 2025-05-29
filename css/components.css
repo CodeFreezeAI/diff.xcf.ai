@@ -812,7 +812,7 @@
 .demo {
     background: var(--bg-secondary);
     padding: var(--space-lg) 0;
-    padding-top: calc(var(--space-lg) + 15px);
+    padding-bottom: calc(var(--space-lg) + 25px);
 }
 
 .demo-container {
@@ -1134,7 +1134,7 @@
     flex: 1;
     min-height: 300px;
     padding: 0 var(--space-md) var(--space-md) var(--space-md);
-    background: var(--bg-tertiary);
+    background: #16213e !important;
     border: none;
     color: var(--text-secondary);
     font-family: var(--font-mono);
@@ -2004,7 +2004,7 @@
 .demo-textarea.language-javascript,
 .demo-textarea.language-python {
     color: var(--text-primary);
-    background: var(--bg-code);
+    background: #16213e !important;
 }
 
 /* Apply Prism.js token colors to textareas */
@@ -3220,5 +3220,9 @@
 
 .performance-data tbody tr:nth-child(3) td {
     color: var(--text-primary);
+}
+
+.demo .section-header {
+    padding-top: 15px;
 }
 
