@@ -274,6 +274,9 @@ a:hover {
 }
 
 .nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
     color: var(--text-secondary);
     font-weight: 500;
     transition: color var(--transition-fast);
@@ -300,20 +303,11 @@ a:hover {
 }
 
 .github-link {
-    display: flex;
-    align-items: center;
-    gap: var(--space-sm);
-    padding: var(--space-sm) var(--space-md);
-    background: var(--bg-card);
-    border: 1px solid var(--border-primary);
-    border-radius: var(--radius-md);
-    transition: all var(--transition-normal);
+    /* Removed custom styling */
 }
 
 .github-link:hover {
-    background: var(--bg-tertiary);
-    border-color: var(--border-accent);
-    transform: translateY(-1px);
+    /* Removed custom hover styling */
 }
 
 .nav-toggle {
