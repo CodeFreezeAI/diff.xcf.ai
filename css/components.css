@@ -1121,7 +1121,7 @@
 .demo-output .panel-header {
     background: var(--bg-tertiary);
     border-bottom: 1px solid var(--border-primary);
-    padding: var(--space-sm) var(--space-lg);
+    padding: calc(var(--space-sm) + 1px) var(--space-lg);
 }
 
 .panel-header h4 {
@@ -3224,5 +3224,10 @@
 
 .demo .section-header {
     padding-top: 15px;
+}
+
+/* Make Source and Destination headers 2px taller (but not output header) */
+.demo-panel:not(.demo-output) .panel-header {
+    padding: calc(var(--space-sm) + 1px) var(--space-lg);
 }
 
