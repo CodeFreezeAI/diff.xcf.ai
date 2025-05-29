@@ -812,6 +812,7 @@
 .demo {
     background: var(--bg-secondary);
     padding: var(--space-lg) 0;
+    padding-top: calc(var(--space-lg) + 15px);
 }
 
 .demo-container {
@@ -1357,6 +1358,7 @@
     background: var(--bg-primary);
     width: 100%;
     padding: var(--space-lg) 0;
+    padding-top: calc(var(--space-lg) - 25px);
     overflow-x: hidden;
     margin-bottom: 50px;
 }
