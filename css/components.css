@@ -1235,17 +1235,31 @@
 /* Performance Section Components */
 .performance {
     background: var(--bg-primary);
+    width: 100%;
+    padding: 0;
+}
+
+.performance .container {
+    max-width: none;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+.performance .section-header {
+    padding: var(--space-2xl) var(--space-md);
+    text-align: center;
 }
 
 .benchmark-details {
     background: var(--bg-card);
     border: 1px solid var(--border-primary);
     border-radius: var(--radius-xl);
-    padding: var(--space-xl);
-    margin-top: var(--space-xl);
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
+    padding: clamp(1rem, 4vw, 2rem);
+    margin: var(--space-xl) var(--space-md) 0 var(--space-md);
+    width: calc(100% - 2 * var(--space-md));
+    max-width: none;
+    box-sizing: border-box;
 }
 
 .benchmark-details p {
@@ -1283,9 +1297,11 @@
 .performance-content {
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--space-2xl);
-    max-width: 1200px;
-    margin: 0 auto;
+    gap: var(--space-xl);
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0 var(--space-md);
 }
 
 .performance-chart,
@@ -1293,7 +1309,10 @@
     background: var(--bg-card);
     border: 1px solid var(--border-primary);
     border-radius: var(--radius-xl);
-    padding: var(--space-2xl);
+    padding: var(--space-md);
+    width: 100%;
+    max-width: none;
+    box-sizing: border-box;
 }
 
 .performance-chart h3,
@@ -1301,29 +1320,43 @@
     margin-bottom: var(--space-lg);
     color: var(--text-primary);
     text-align: center;
+    font-size: clamp(1.25rem, 3vw, 1.5rem);
 }
 
 .chart-container {
     position: relative;
-    height: 300px;
+    height: clamp(250px, 40vh, 400px);
     margin-bottom: var(--space-lg);
+    width: 100%;
+    max-width: none;
+}
+
+.chart-container canvas {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: none !important;
 }
 
 .table-container {
     overflow-x: auto;
+    width: 100%;
+    max-width: none;
+    -webkit-overflow-scrolling: touch;
 }
 
 .performance-data {
     width: 100%;
+    min-width: 100%;
     border-collapse: collapse;
-    font-size: 0.875rem;
+    font-size: clamp(0.75rem, 2vw, 0.875rem);
 }
 
 .performance-data th,
 .performance-data td {
-    padding: var(--space-md);
+    padding: clamp(0.5rem, 2vw, 1rem);
     text-align: left;
     border-bottom: 1px solid var(--border-primary);
+    white-space: nowrap;
 }
 
 .performance-data th {
@@ -1332,6 +1365,7 @@
     font-weight: 600;
     position: sticky;
     top: 0;
+    font-size: clamp(0.75rem, 2vw, 0.875rem);
 }
 
 .performance-data td {
@@ -1350,6 +1384,7 @@
 .algorithm-name {
     font-weight: 600;
     color: var(--text-primary);
+    font-size: clamp(0.75rem, 2vw, 0.875rem);
 }
 
 /* Documentation Section Components */
@@ -1599,10 +1634,6 @@
         gap: calc(var(--space-lg) / 3);
     }
     
-    .performance-content {
-        gap: var(--space-xl);
-    }
-    
     .footer-content {
         grid-template-columns: 1fr;
         gap: var(--space-xl);
@@ -1692,8 +1723,6 @@
 
 @media (max-width: 480px) {
     .demo-panel,
-    .performance-chart,
-    .performance-table,
     .doc-card {
         padding: var(--space-lg);
     }
@@ -2051,7 +2080,7 @@
         width: 100% !important;
     }
     
-    /* Performance/Benchmarks Table */
+    /* Performance/Benchmarks Table - REMOVED FOR FULL RESPONSIVENESS */
     .performance-data,
     .docs-table,
     .comparison-table {
@@ -2061,20 +2090,11 @@
         white-space: nowrap;
     }
     
-    .performance-data th,
-    .performance-data td,
-    .docs-table th,
-    .docs-table td,
-    .comparison-table th,
-    .comparison-table td {
-        padding: 8px 4px;
-        min-width: 60px;
-    }
-    
     .table-container {
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
     }
+    
     
     /* Stats Grid Mobile Fix */
     .stats-grid {
@@ -2149,157 +2169,161 @@
         gap: var(--space-sm);
         text-align: center;
     }
-}
+} 
 
-@media (max-width: 480px) {
-    .algo-comparison-section {
-        padding: 8px 2px !important;
-        width: 100vw !important;
-        margin: 0 !important;
-        overflow-x: hidden !important;
-        box-sizing: border-box !important;
-    }
-    
-    .algo-comparison-container {
-        padding: 5px !important;
-        border-radius: 6px !important;
-        width: calc(100vw - 4px) !important;
-        margin: 0 !important;
-        box-sizing: border-box !important;
-        overflow: hidden !important;
-    }
-    
-    .algo-comparison-title {
-        font-size: 1.1rem !important;
-        padding: 0 3px !important;
-        margin-bottom: 8px !important;
-        line-height: 1.1 !important;
-        overflow-wrap: break-word !important;
-    }
-    
-    .algo-comparison-chart-container {
-        height: 180px !important;
-        padding: 3px !important;
-        border-radius: 4px !important;
-        margin: 5px 0 !important;
-        position: relative !important;
-        overflow: hidden !important;
-    }
-    
-    .algo-comparison-legend {
-        grid-template-columns: 1fr 1fr !important;
-        grid-template-rows: 1fr 1fr !important;
-        gap: 4px !important;
-        margin: 6px 0 !important;
-        max-width: 100% !important;
-        width: 100% !important;
-        padding: 0 !important;
-    }
-    
-    .algo-comparison-legend-item {
-        padding: 3px 6px !important;
-        font-size: 9px !important;
-        border-radius: 8px !important;
-    }
-    
-    .algo-comparison-legend-item span {
-        font-size: 8px !important;
-        line-height: 1.0 !important;
-    }
-    
-    .algo-comparison-legend-color {
-        width: 10px !important;
-        height: 10px !important;
-    }
-    
-    .algo-comparison-toggle-btn {
-        padding: 4px 8px !important;
-        font-size: 9px !important;
-        border-radius: 12px !important;
-    }
-    
-    /* Ultra-aggressive canvas scaling for tiny screens */
-    .algo-comparison-chart-container canvas {
-        max-width: 100% !important;
-        height: auto !important;
-        width: 100% !important;
-        transform: scale(0.8) !important;
-        transform-origin: center !important;
-        position: absolute !important;
-        top: 0 !important;
-        left: 0 !important;
-        box-sizing: border-box !important;
-    }
-    
-    .performance-data,
-    .docs-table,
-    .comparison-table {
-        font-size: 10px !important;
-    }
-    
-    .performance-data th,
-    .performance-data td,
-    .docs-table th,
-    .docs-table td,
-    .comparison-table th,
-    .comparison-table td {
-        padding: 4px 2px !important;
-        min-width: 40px !important;
+/* Remove emoji when space is limited */
+@media (max-width: 768px) {
+    .output-stats .stat-badge .badge-emoji {
+        display: none;
     }
     
     .output-stats .stat-badge {
-        font-size: 10px !important;
-        padding: 4px !important;
+        min-width: 80px;
+        width: 80px;
+        min-height: 28px;
+        font-size: 0.7rem;
+        padding: var(--space-xs);
     }
 }
 
-/* Loading States */
-.loading {
-    opacity: 0.6;
-    pointer-events: none;
-}
-
-.loading::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 20px;
-    height: 20px;
-    margin: -10px 0 0 -10px;
-    border: 2px solid var(--border-primary);
-    border-top-color: var(--primary);
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
+@media (max-width: 480px) {
+    .output-stats .stat-badge {
+        min-width: 70px;
+        width: 70px;
+        min-height: 24px;
+        font-size: 0.65rem;
+        padding: 2px;
     }
 }
 
-/* Error States */
-.error {
-    color: #ef4444;
-    background: rgba(239, 68, 68, 0.1);
-    border: 1px solid rgba(239, 68, 68, 0.3);
-    padding: var(--space-md);
-    border-radius: var(--radius-md);
-    font-size: 0.875rem;
+@media (max-width: 1371px) {
+    .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-areas: 
+            "ops timing success";
+        max-width: 100%;
+        justify-content: center;
+    }
+    
+    .algorithm-badge {
+        display: none !important;
+    }
+    
+    .output-stats .stat-badge {
+        min-width: 120px;
+        width: 120px;
+        min-height: 36px;
+        font-size: 0.75rem;
+        padding: var(--space-xs) var(--space-sm);
+    }
 }
 
-/* Success States */
-.success {
+@media (max-width: 1176px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-areas: 
+            "timing success";
+        max-width: 100%;
+        justify-content: center;
+    }
+    
+    .algorithm-badge,
+    .ops-badge {
+        display: none !important;
+    }
+    
+    .output-stats .stat-badge {
+        min-width: 140px;
+        width: 140px;
+        min-height: 36px;
+        font-size: 0.75rem;
+        padding: var(--space-xs) var(--space-sm);
+    }
+}
+
+@media (max-width: 1113px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-areas: 
+            "timing success";
+        max-width: 100%;
+        justify-content: center;
+    }
+    
+    .algorithm-badge,
+    .ops-badge {
+        display: none !important;
+    }
+    
+    .output-stats .stat-badge {
+        min-width: 140px;
+        width: 140px;
+        min-height: 36px;
+        font-size: 0.75rem;
+        padding: var(--space-xs) var(--space-sm);
+    }
+}
+
+@media (max-width: 1024px) {
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-areas: 
+            "ops algorithm timing success";
+        max-width: 100%;
+    }
+    
+    .algorithm-badge,
+    .ops-badge {
+        display: flex !important;
+    }
+    
+    .output-stats .stat-badge {
+        min-width: 100px;
+        width: 100px;
+        min-height: 32px;
+        font-size: 0.7rem;
+        padding: var(--space-xs);
+    }
+}
+
+/* Individual stat badge colors - using class selectors instead of nth-child */
+.output-stats .ops-badge {
+    color: var(--primary-light);
+    border-color: rgba(99, 102, 241, 0.3);
+}
+
+.output-stats .ops-badge::before {
+    background: var(--gradient-primary);
+}
+
+.output-stats .algorithm-badge {
+    color: var(--text-accent);
+    border-color: rgba(96, 165, 250, 0.3);
+}
+
+.output-stats .algorithm-badge::before {
+    background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+}
+
+.output-stats .timing-badge {
+    color: var(--accent);
+    border-color: rgba(245, 158, 11, 0.3);
+}
+
+.output-stats .timing-badge::before {
+    background: var(--gradient-accent);
+}
+
+.output-stats .success-badge {
     color: var(--secondary);
-    background: rgba(16, 185, 129, 0.1);
-    border: 1px solid rgba(16, 185, 129, 0.3);
-    padding: var(--space-md);
-    border-radius: var(--radius-md);
-    font-size: 0.875rem;
+    border-color: rgba(16, 185, 129, 0.3);
 }
 
-/* Documentation Styles */
+.output-stats .success-badge::before {
+    background: var(--gradient-secondary);
+}
+
+/* Documentation Styles - RESTORED */
 .docs-content {
     margin-top: 3rem;
 }
@@ -2638,344 +2662,5 @@
 
 .demo-output-section .demo-output-content {
     min-height: 300px;
-}
-
-/* Ultra-aggressive mobile responsive design */
-@media (max-width: 768px) {
-    .algo-comparison-section {
-        padding: 10px 5px !important;
-        overflow-x: hidden !important;
-        min-height: auto !important;
-        width: 100vw !important;
-        margin: 0 !important;
-        box-sizing: border-box !important;
-    }
-    
-    .algo-comparison-container {
-        padding: 8px !important;
-        margin: 0 !important;
-        max-width: 100% !important;
-        width: calc(100vw - 10px) !important;
-        overflow: hidden !important;
-        border-radius: 8px !important;
-        box-sizing: border-box !important;
-    }
-    
-    .algo-comparison-title {
-        font-size: 1.3rem !important;
-        text-align: center !important;
-        word-wrap: break-word !important;
-        margin-bottom: 10px !important;
-        padding: 0 5px !important;
-        line-height: 1.2 !important;
-        overflow-wrap: break-word !important;
-    }
-    
-    .algo-comparison-chart-container {
-        height: 220px !important;
-        padding: 5px !important;
-        overflow: hidden !important;
-        border-radius: 6px !important;
-        width: 100% !important;
-        box-sizing: border-box !important;
-        margin: 8px 0 !important;
-        position: relative !important;
-    }
-    
-    /* Ultra-aggressive canvas forcing */
-    .algo-comparison-chart-container canvas {
-        max-width: 100% !important;
-        height: auto !important;
-        width: 100% !important;
-    }
-    
-    .algo-comparison-legend {
-        grid-template-columns: 1fr 1fr !important;
-        grid-template-rows: 1fr 1fr !important;
-        gap: 4px !important;
-        margin: 6px 0 !important;
-        max-width: 100% !important;
-        width: 100% !important;
-        padding: 0 !important;
-    }
-    
-    .algo-comparison-legend-item {
-        min-width: auto !important;
-        padding: 5px 8px !important;
-        font-size: 11px !important;
-        width: 100% !important;
-        justify-content: flex-start !important;
-        border-radius: 12px !important;
-        box-sizing: border-box !important;
-        margin: 0 !important;
-    }
-    
-    .algo-comparison-legend-item span {
-        font-size: 10px !important;
-        line-height: 1.1 !important;
-    }
-    
-    .algo-comparison-legend-color {
-        width: 12px !important;
-        height: 12px !important;
-        flex-shrink: 0 !important;
-    }
-    
-    .algo-comparison-toggle-btn {
-        padding: 6px 12px !important;
-        font-size: 11px !important;
-        border-radius: 15px !important;
-    }
-    
-    /* Performance/Benchmarks Table */
-    .performance-data,
-    .docs-table,
-    .comparison-table {
-        font-size: 12px;
-        overflow-x: auto;
-        display: block;
-        white-space: nowrap;
-    }
-    
-    .performance-data th,
-    .performance-data td,
-    .docs-table th,
-    .docs-table td,
-    .comparison-table th,
-    .comparison-table td {
-        padding: 8px 4px;
-        min-width: 60px;
-    }
-    
-    .table-container {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-    
-    /* Stats Grid Mobile Fix */
-    .stats-grid {
-        grid-template-columns: repeat(3, 1fr);
-        grid-template-areas: 
-            "ops timing success";
-    }
-    
-    .algorithm-badge {
-        display: none !important;
-    }
-    
-    .output-stats .stat-badge {
-        font-size: 12px;
-        padding: 8px;
-        min-width: auto;
-        width: 100%;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
-    }
-    
-    /* Footer Stats Fix */
-    .footer-content {
-        grid-template-columns: 1fr;
-        gap: var(--space-lg);
-        overflow: hidden;
-    }
-    
-    .footer-brand {
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        max-width: none;
-        width: 100%;
-    }
-    
-    .footer-brand-left .footer-logo {
-        font-size: 1rem;
-    }
-    
-    .footer-brand-right {
-        gap: var(--space-xs);
-    }
-    
-    .footer-brand-right .social-link {
-        width: 32px;
-        height: 32px;
-    }
-    
-    .footer-links {
-        grid-template-columns: repeat(3, 1fr);
-        gap: var(--space-sm);
-    }
-    
-    .footer-section {
-        text-align: center;
-    }
-    
-    .footer-section h4 {
-        font-size: 0.9rem;
-        margin-bottom: var(--space-sm);
-    }
-    
-    .footer-section a {
-        font-size: 0.8rem;
-        margin-bottom: var(--space-xs);
-    }
-    
-    .footer-bottom {
-        flex-direction: column;
-        gap: var(--space-sm);
-        text-align: center;
-    }
-} 
-
-/* Remove emoji when space is limited */
-@media (max-width: 768px) {
-    .output-stats .stat-badge .badge-emoji {
-        display: none;
-    }
-    
-    .output-stats .stat-badge {
-        min-width: 80px;
-        width: 80px;
-        min-height: 28px;
-        font-size: 0.7rem;
-        padding: var(--space-xs);
-    }
-}
-
-@media (max-width: 480px) {
-    .output-stats .stat-badge {
-        min-width: 70px;
-        width: 70px;
-        min-height: 24px;
-        font-size: 0.65rem;
-        padding: 2px;
-    }
-}
-
-@media (max-width: 1371px) {
-    .stats-grid {
-        grid-template-columns: repeat(3, 1fr);
-        grid-template-areas: 
-            "ops timing success";
-        max-width: 100%;
-        justify-content: center;
-    }
-    
-    .algorithm-badge {
-        display: none !important;
-    }
-    
-    .output-stats .stat-badge {
-        min-width: 120px;
-        width: 120px;
-        min-height: 36px;
-        font-size: 0.75rem;
-        padding: var(--space-xs) var(--space-sm);
-    }
-}
-
-@media (max-width: 1176px) {
-    .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-        grid-template-areas: 
-            "timing success";
-        max-width: 100%;
-        justify-content: center;
-    }
-    
-    .algorithm-badge,
-    .ops-badge {
-        display: none !important;
-    }
-    
-    .output-stats .stat-badge {
-        min-width: 140px;
-        width: 140px;
-        min-height: 36px;
-        font-size: 0.75rem;
-        padding: var(--space-xs) var(--space-sm);
-    }
-}
-
-@media (max-width: 1113px) {
-    .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-        grid-template-areas: 
-            "timing success";
-        max-width: 100%;
-        justify-content: center;
-    }
-    
-    .algorithm-badge,
-    .ops-badge {
-        display: none !important;
-    }
-    
-    .output-stats .stat-badge {
-        min-width: 140px;
-        width: 140px;
-        min-height: 36px;
-        font-size: 0.75rem;
-        padding: var(--space-xs) var(--space-sm);
-    }
-}
-
-@media (max-width: 1024px) {
-    .stats-grid {
-        grid-template-columns: repeat(4, 1fr);
-        grid-template-areas: 
-            "ops algorithm timing success";
-        max-width: 100%;
-    }
-    
-    .algorithm-badge,
-    .ops-badge {
-        display: flex !important;
-    }
-    
-    .output-stats .stat-badge {
-        min-width: 100px;
-        width: 100px;
-        min-height: 32px;
-        font-size: 0.7rem;
-        padding: var(--space-xs);
-    }
-}
-
-/* Individual stat badge colors - using class selectors instead of nth-child */
-.output-stats .ops-badge {
-    color: var(--primary-light);
-    border-color: rgba(99, 102, 241, 0.3);
-}
-
-.output-stats .ops-badge::before {
-    background: var(--gradient-primary);
-}
-
-.output-stats .algorithm-badge {
-    color: var(--text-accent);
-    border-color: rgba(96, 165, 250, 0.3);
-}
-
-.output-stats .algorithm-badge::before {
-    background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
-}
-
-.output-stats .timing-badge {
-    color: var(--accent);
-    border-color: rgba(245, 158, 11, 0.3);
-}
-
-.output-stats .timing-badge::before {
-    background: var(--gradient-accent);
-}
-
-.output-stats .success-badge {
-    color: var(--secondary);
-    border-color: rgba(16, 185, 129, 0.3);
-}
-
-.output-stats .success-badge::before {
-    background: var(--gradient-secondary);
 }
 

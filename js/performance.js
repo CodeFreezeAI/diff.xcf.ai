@@ -183,6 +183,11 @@ function initPerformanceChart() {
     // Create chart
     const chart = new Chart(chartCanvas, config);
 
+    // Force chart to resize on window resize
+    window.addEventListener('resize', () => {
+        chart.resize();
+    });
+
     // Add chart controls
     addChartControls(chart, performanceData);
 
