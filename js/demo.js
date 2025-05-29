@@ -487,43 +487,38 @@ class NumberProcessor:
             megatron: '🧠'
         };
 
-        const formatEmojis = {
-            ai: '🤖',
-            json: '📊',
-            base64: '🔐'
-        };
-
         // Create live timing display with real precision
         const preciseCreateTime = Math.max(stats.createTime, 0.000).toFixed(3);
         
+        // Check screen width to conditionally render badges
+        const windowWidth = window.innerWidth;
+        
+        let algorithmBadge = '';
+        let opsBadge = '';
+        
+        if (windowWidth > 1371 || windowWidth <= 1024) {
+            // Show all 4 badges for large screens (>1371px) and small screens (<=1024px)
+            algorithmBadge = `
+                <span class="stat-badge algorithm-badge">
+                    <span class="badge-emoji">${algorithmEmojis[stats.algorithm] || '🔧'}</span> 
+                    ${stats.algorithm}
+                </span>
+            `;
+            opsBadge = `<span class="stat-badge ops-badge"><span class="badge-emoji">📊</span> ${stats.operations} ops</span>`;
+        } else if (windowWidth <= 1371 && windowWidth > 1176) {
+            // Show 3 badges for medium screens (1371px down to 1177px)
+            opsBadge = `<span class="stat-badge ops-badge"><span class="badge-emoji">📊</span> ${stats.operations} ops</span>`;
+        }
+        // For 1176px down to 1025px, show only timing and success (no ops or algorithm badges)
+        
         outputStats.innerHTML = `
             <div class="stats-grid">
-                <span class="stat-badge">🔨 D1F</span>
-                <span class="stat-badge algorithm-badge">${algorithmEmojis[stats.algorithm] || '🔧'} ${stats.algorithm}</span>
-                <span class="stat-badge timing-badge live-timing">⚡ ${preciseCreateTime}ms</span>
-                <span class="stat-badge format-badge">${formatEmojis[stats.format] || '📄'} ${stats.format}</span>
-                <span class="stat-badge ops-badge">📊 ${stats.operations} ops</span>
+                ${opsBadge}
+                ${algorithmBadge}
+                <span class="stat-badge timing-badge live-timing"><span class="badge-emoji">⚡</span> ${preciseCreateTime}ms</span>
+                <span class="stat-badge success-badge"><span class="badge-emoji">✅</span> ${stats.accuracy}</span>
             </div>
         `;
-
-        // Add accuracy indicator if there's an error
-        if (stats.accuracy && stats.accuracy !== '100%') {
-            const currentContent = outputStats.innerHTML;
-            const updatedContent = currentContent.replace(
-                '</div>',
-                '<span class="stat-badge error-badge">❌ ' + stats.accuracy + '</span></div>'
-            );
-            outputStats.innerHTML = updatedContent;
-        } else if (stats.accuracy) {
-            const currentContent = outputStats.innerHTML;
-            const updatedContent = currentContent.replace(
-                '</div>',
-                '<span class="stat-badge success-badge">✅ ' + stats.accuracy + '</span></div>'
-            );
-            outputStats.innerHTML = updatedContent;
-        }
-
-        // D1F DIFF is now a card, no click handler needed
     }
 
     function showPlaceholder() {
@@ -538,37 +533,45 @@ class NumberProcessor:
         
         // Reset timing displays with real precision
         lastDiffTime = 0;
-        const liveTiming = document.querySelector('.live-timing');
-        if (liveTiming) {
-            liveTiming.innerHTML = `⚡ <span style="display: inline-block; min-width: 60px;">0.000ms</span>`;
-        }
-        
-        const timeDisplays = document.querySelectorAll('.time-display');
-        timeDisplays.forEach(display => {
-            display.innerHTML = '<span style="display: inline-block; min-width: 60px;">0.000ms</span>';
-        });
         
         if (outputStats) {
             // Get current algorithm selection
-            const currentAlgorithm = algorithmSelect?.value || 'flash';
+            const currentAlgorithm = algorithmSelect?.value || 'optimus';
             const algorithmEmojis = {
                 flash: '⚡',
                 optimus: '🤖',
                 megatron: '🧠'
             };
             
+            // Check screen width to conditionally render badges
+            const windowWidth = window.innerWidth;
+            
+            let algorithmBadge = '';
+            let opsBadge = '';
+            
+            if (windowWidth > 1371 || windowWidth <= 1024) {
+                // Show all 4 badges for large screens (>1371px) and small screens (<=1024px)
+                algorithmBadge = `
+                    <span class="stat-badge algorithm-badge">
+                        <span class="badge-emoji">${algorithmEmojis[currentAlgorithm] || '🔧'}</span> 
+                        ${currentAlgorithm}
+                    </span>
+                `;
+                opsBadge = `<span class="stat-badge ops-badge"><span class="badge-emoji">📊</span> 0 ops</span>`;
+            } else if (windowWidth <= 1371 && windowWidth > 1176) {
+                // Show 3 badges for medium screens (1371px down to 1177px)
+                opsBadge = `<span class="stat-badge ops-badge"><span class="badge-emoji">📊</span> 0 ops</span>`;
+            }
+            // For 1176px down to 1025px, show only timing and success (no ops or algorithm badges)
+            
             outputStats.innerHTML = `
                 <div class="stats-grid">
-                    <span class="stat-badge">🔨 D1F</span>
-                    <span class="stat-badge algorithm-badge">${algorithmEmojis[currentAlgorithm] || '🔧'} ${currentAlgorithm}</span>
-                    <span class="stat-badge timing-badge">⚡ 0.000ms</span>
-                    <span class="stat-badge success-badge">✅ 100%</span>
-                    <span class="stat-badge format-badge">🤖 ai</span>
-                    <span class="stat-badge ops-badge">📊 0 ops</span>
+                    ${opsBadge}
+                    ${algorithmBadge}
+                    <span class="stat-badge timing-badge"><span class="badge-emoji">⚡</span> 0.000ms</span>
+                    <span class="stat-badge success-badge"><span class="badge-emoji">✅</span> 100%</span>
                 </div>
             `;
-            
-            // D1F DIFF is now a card, no click handler needed
         }
     }
 
@@ -637,6 +640,27 @@ class NumberProcessor:
             if (callNow) func(...args);
         };
     }
+
+    // Add resize event listener to update layout
+    window.addEventListener('resize', () => {
+        // Re-render stats when window is resized
+        if (outputStats && outputStats.innerHTML.includes('stats-grid')) {
+            // Check if we're in a generated diff state or placeholder state
+            const hasRealData = outputStats.innerHTML.includes('live-timing');
+            if (hasRealData) {
+                // Re-trigger the last diff generation if there was real data
+                const source = sourceInput?.value || '';
+                const destination = destInput?.value || '';
+                if (source.trim() && destination.trim()) {
+                    generateDiff();
+                } else {
+                    showPlaceholder();
+                }
+            } else {
+                showPlaceholder();
+            }
+        }
+    });
 
     // Initialize with placeholder
     showPlaceholder();

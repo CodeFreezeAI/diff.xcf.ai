@@ -343,10 +343,11 @@
     }
     
     .showcase-stats {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(2, 1fr);
         gap: var(--space-md);
         margin-top: var(--space-xl);
-        max-width: 320px;
+        max-width: 400px;
     }
     
     .showcase-stats .stat-item {
@@ -505,6 +506,18 @@
     .feature-symbol {
         font-size: 1.1rem;
         min-width: 24px;
+    }
+}
+
+@media (max-width: 360px) {
+    .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-areas: 
+            "ops timing success";
+    }
+    
+    .algorithm-badge {
+        display: none;
     }
 }
 
@@ -1117,28 +1130,23 @@
 
 .stats-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    gap: var(--space-md);
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-sm);
     align-items: center;
     justify-items: center;
     width: 100%;
-    max-width: 420px;
+    max-width: 100%;
     grid-template-areas: 
-        "button algorithm timing"
-        "accuracy format ops";
+        "ops algorithm timing success";
 }
 
-.diff-button { grid-area: button; }
+.ops-badge { grid-area: ops; }
 .algorithm-badge { grid-area: algorithm; }
 .timing-badge { grid-area: timing; }
-.success-badge { grid-area: accuracy; }
-.error-badge { grid-area: accuracy; }
-.format-badge { grid-area: format; }
-.ops-badge { grid-area: ops; }
+.success-badge { grid-area: success; }
 
 .output-stats .stat-badge {
-    padding: var(--space-sm) var(--space-md);
+    padding: var(--space-xs) var(--space-sm);
     background: linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-card) 100%);
     border: 1px solid var(--border-primary);
     border-radius: var(--radius-lg);
@@ -1148,9 +1156,9 @@
     position: relative;
     overflow: hidden;
     box-shadow: var(--shadow-sm);
-    min-width: 140px;
-    width: 140px;
-    min-height: 40px;
+    min-width: 100px;
+    width: 100px;
+    min-height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1158,6 +1166,7 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-size: 0.75rem;
 }
 
 .output-stats .stat-badge::before {
@@ -1183,6 +1192,7 @@
 }
 
 /* Individual stat badge colors */
+/*
 .output-stats .stat-badge:nth-child(1) {
     color: var(--primary-light);
     border-color: rgba(99, 102, 241, 0.3);
@@ -1218,6 +1228,7 @@
 .output-stats .stat-badge:nth-child(4)::before {
     background: var(--gradient-secondary);
 }
+*/
 
 /* D1F DIFF Card Styling - Now styled same as other cards */
 
@@ -1641,14 +1652,9 @@
     }
     
     .stats-grid {
-        grid-template-columns: 1fr 1fr 1fr;
-        grid-template-rows: 1fr 1fr;
-        gap: 8px;
-        max-width: 100%;
-        overflow: hidden;
+        grid-template-columns: repeat(4, 1fr);
         grid-template-areas: 
-            "button algorithm timing"
-            "accuracy format ops";
+            "ops algorithm timing success";
     }
     
     .output-stats .stat-badge {
@@ -1711,11 +1717,9 @@
     
     .stats-grid {
         max-width: 320px;
-        grid-template-columns: 1fr 1fr 1fr;
-        grid-template-rows: 1fr 1fr;
+        grid-template-columns: repeat(4, 1fr);
         grid-template-areas: 
-            "button algorithm timing"
-            "accuracy format ops";
+            "ops algorithm timing success";
     }
     
     .output-stats .stat-badge {
@@ -1754,11 +1758,9 @@
     
     .stats-grid {
         max-width: 320px;
-        grid-template-columns: 1fr 1fr 1fr;
-        grid-template-rows: 1fr 1fr;
+        grid-template-columns: repeat(4, 1fr);
         grid-template-areas: 
-            "button algorithm timing"
-            "accuracy format ops";
+            "ops algorithm timing success";
     }
     
     .output-stats .stat-badge {
@@ -2076,14 +2078,13 @@
     
     /* Stats Grid Mobile Fix */
     .stats-grid {
-        grid-template-columns: 1fr 1fr 1fr;
-        grid-template-rows: 1fr 1fr;
-        gap: 8px;
-        max-width: 100%;
-        overflow: hidden;
+        grid-template-columns: repeat(3, 1fr);
         grid-template-areas: 
-            "button algorithm timing"
-            "accuracy format ops";
+            "ops timing success";
+    }
+    
+    .algorithm-badge {
+        display: none !important;
     }
     
     .output-stats .stat-badge {
@@ -2753,14 +2754,13 @@
     
     /* Stats Grid Mobile Fix */
     .stats-grid {
-        grid-template-columns: 1fr 1fr 1fr;
-        grid-template-rows: 1fr 1fr;
-        gap: 8px;
-        max-width: 100%;
-        overflow: hidden;
+        grid-template-columns: repeat(3, 1fr);
         grid-template-areas: 
-            "button algorithm timing"
-            "accuracy format ops";
+            "ops timing success";
+    }
+    
+    .algorithm-badge {
+        display: none !important;
     }
     
     .output-stats .stat-badge {
@@ -2826,4 +2826,156 @@
         text-align: center;
     }
 } 
+
+/* Remove emoji when space is limited */
+@media (max-width: 768px) {
+    .output-stats .stat-badge .badge-emoji {
+        display: none;
+    }
+    
+    .output-stats .stat-badge {
+        min-width: 80px;
+        width: 80px;
+        min-height: 28px;
+        font-size: 0.7rem;
+        padding: var(--space-xs);
+    }
+}
+
+@media (max-width: 480px) {
+    .output-stats .stat-badge {
+        min-width: 70px;
+        width: 70px;
+        min-height: 24px;
+        font-size: 0.65rem;
+        padding: 2px;
+    }
+}
+
+@media (max-width: 1371px) {
+    .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-areas: 
+            "ops timing success";
+        max-width: 100%;
+        justify-content: center;
+    }
+    
+    .algorithm-badge {
+        display: none !important;
+    }
+    
+    .output-stats .stat-badge {
+        min-width: 120px;
+        width: 120px;
+        min-height: 36px;
+        font-size: 0.75rem;
+        padding: var(--space-xs) var(--space-sm);
+    }
+}
+
+@media (max-width: 1176px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-areas: 
+            "timing success";
+        max-width: 100%;
+        justify-content: center;
+    }
+    
+    .algorithm-badge,
+    .ops-badge {
+        display: none !important;
+    }
+    
+    .output-stats .stat-badge {
+        min-width: 140px;
+        width: 140px;
+        min-height: 36px;
+        font-size: 0.75rem;
+        padding: var(--space-xs) var(--space-sm);
+    }
+}
+
+@media (max-width: 1113px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-areas: 
+            "timing success";
+        max-width: 100%;
+        justify-content: center;
+    }
+    
+    .algorithm-badge,
+    .ops-badge {
+        display: none !important;
+    }
+    
+    .output-stats .stat-badge {
+        min-width: 140px;
+        width: 140px;
+        min-height: 36px;
+        font-size: 0.75rem;
+        padding: var(--space-xs) var(--space-sm);
+    }
+}
+
+@media (max-width: 1024px) {
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-areas: 
+            "ops algorithm timing success";
+        max-width: 100%;
+    }
+    
+    .algorithm-badge,
+    .ops-badge {
+        display: flex !important;
+    }
+    
+    .output-stats .stat-badge {
+        min-width: 100px;
+        width: 100px;
+        min-height: 32px;
+        font-size: 0.7rem;
+        padding: var(--space-xs);
+    }
+}
+
+/* Individual stat badge colors - using class selectors instead of nth-child */
+.output-stats .ops-badge {
+    color: var(--primary-light);
+    border-color: rgba(99, 102, 241, 0.3);
+}
+
+.output-stats .ops-badge::before {
+    background: var(--gradient-primary);
+}
+
+.output-stats .algorithm-badge {
+    color: var(--text-accent);
+    border-color: rgba(96, 165, 250, 0.3);
+}
+
+.output-stats .algorithm-badge::before {
+    background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+}
+
+.output-stats .timing-badge {
+    color: var(--accent);
+    border-color: rgba(245, 158, 11, 0.3);
+}
+
+.output-stats .timing-badge::before {
+    background: var(--gradient-accent);
+}
+
+.output-stats .success-badge {
+    color: var(--secondary);
+    border-color: rgba(16, 185, 129, 0.3);
+}
+
+.output-stats .success-badge::before {
+    background: var(--gradient-secondary);
+}
 
