@@ -128,6 +128,12 @@ function initializeAlgoComparisonChart() {
                             weight: 'bold'
                         },
                         callback: function(value) {
+                            // Remove specific tick values
+                            const removeValues = [6000, 50000, 5000000, 50000000, 500000000, 5000000000];
+                            if (removeValues.includes(value)) {
+                                return null; // Hide these ticks
+                            }
+                            
                             if (algoIsLogScale) {
                                 return value.toLocaleString();
                             } else {

@@ -274,15 +274,13 @@ function initSmoothScrolling() {
 
 // Intersection Observer for various animations
 function initIntersectionObserver() {
-    // Stagger animations for feature cards
+    // Stagger animations for feature cards - REMOVED ANIMATIONS
     const featureCards = document.querySelectorAll('.feature-card');
     
     const staggerObserver = new IntersectionObserver((entries) => {
         entries.forEach((entry, index) => {
             if (entry.isIntersecting) {
-                setTimeout(() => {
-                    entry.target.classList.add('animate-fade-in');
-                }, index * 100);
+                // No animation added - cards display immediately
                 staggerObserver.unobserve(entry.target);
             }
         });
@@ -292,15 +290,13 @@ function initIntersectionObserver() {
         staggerObserver.observe(card);
     });
     
-    // Doc cards animation
+    // Doc cards - REMOVED ANIMATIONS
     const docCards = document.querySelectorAll('.doc-card');
     
     const docObserver = new IntersectionObserver((entries) => {
         entries.forEach((entry, index) => {
             if (entry.isIntersecting) {
-                setTimeout(() => {
-                    entry.target.classList.add('animate-slide-in-up');
-                }, index * 150);
+                // No animation added - cards display immediately
                 docObserver.unobserve(entry.target);
             }
         });
