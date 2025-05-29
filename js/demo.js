@@ -899,7 +899,11 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
     }
 
     if (formatSelect) {
-        formatSelect.addEventListener('change', generateDiff);
+        formatSelect.addEventListener('change', () => {
+            const selectedFormat = formatSelect.value;
+            console.log(`🔄 Format changed to: ${selectedFormat}`);
+            generateDiff();
+        });
     }
 
     function generateDiff() {
@@ -997,10 +1001,16 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
         
         if (format === 'ai') {
             diffContent = MultiLineDiff.generateASCIIDiff(diffResult, source);
-        } else if (format === 'json') {
-            diffContent = generateJSONFromDiffResult(diffResult, actualCreateTime);
+        } else if (format === 'terminal') {
+            console.log(`💻 Processing terminal format...`);
+            // For Terminal format, apply color coding to lines
+            const coloredContent = colorTerminalDiff(source);
+            diffContent = coloredContent;
+            console.log(`✅ Terminal format applied successfully`);
         } else if (format === 'base64') {
             diffContent = generateBase64FromDiffResult(diffResult, actualCreateTime);
+        } else if (format === 'json') {
+            diffContent = generateJSONFromDiffResult(diffResult, actualCreateTime);
         }
 
         return {
@@ -1041,6 +1051,32 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
         return btoa(jsonDiff);
     }
 
+    // Function to color terminal diff lines
+    function colorTerminalDiff(content) {
+        console.log(`🎨 colorTerminalDiff called with ${content.split('\n').length} lines`);
+        const lines = content.split('\n');
+        
+        const coloredLines = lines.map((line, index) => {
+            if (line.startsWith('📎 ')) {
+                // Retain lines - blue
+                return `<div style="color: #0066ff;">${escapeHtml(line)}</div>`;
+            } else if (line.startsWith('❌ ')) {
+                // Delete lines - red
+                return `<div style="color: #ff0000;">${escapeHtml(line)}</div>`;
+            } else if (line.startsWith('✅ ')) {
+                // Insert lines - green
+                return `<div style="color: #00aa00;">${escapeHtml(line)}</div>`;
+            } else {
+                // Other lines - default color
+                return `<div>${escapeHtml(line)}</div>`;
+            }
+        });
+        
+        const result = coloredLines.join('');
+        console.log(`✅ Terminal format applied with colored lines`);
+        return result;
+    }
+
     // Remove old simulation functions - now using real algorithms
 
     function displayDiffResult(result) {
@@ -1048,6 +1084,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
         
         // Display the diff content
         const format = formatSelect?.value || 'ai';
+        console.log(`🎨 Displaying diff result with format: ${format}`);
         
         if (format === 'ai') {
             // For AI format, escape HTML for syntax highlighting
@@ -1055,13 +1092,19 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
                 <pre class="ascii-diff"><code class="language-swift">${escapeHtml(result.content)}</code></pre>
             `;
             
-            // Apply syntax highlighting for ASCII diff (AI format only)
+            // Apply syntax highlighting for ASCII diff (AI format)
             highlightASCIIDiff(diffOutput.querySelector('.ascii-diff'));
             
             // Apply Prism.js syntax highlighting for AI format
             if (window.Prism) {
                 Prism.highlightElement(diffOutput.querySelector('code'));
             }
+        } else if (format === 'terminal') {
+            console.log(`💻 Processing terminal format...`);
+            // For Terminal format, apply color coding to lines
+            const coloredContent = colorTerminalDiff(result.content);
+            diffOutput.innerHTML = coloredContent;
+            console.log(`✅ Terminal format applied successfully`);
         } else if (format === 'base64') {
             // For base64 format, add text wrapping
             diffOutput.innerHTML = `
