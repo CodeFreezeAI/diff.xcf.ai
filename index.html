@@ -303,9 +303,9 @@
             <div class="algorithms-container">
                 <div class="algorithm-tabs">
                     <button class="tab-button active" data-algorithm="flash">⚡ Flash</button>
+                    <button class="tab-button" data-algorithm="zoom">🔍 Zoom</button>
                     <button class="tab-button" data-algorithm="optimus">🤖 Optimus</button>
                     <button class="tab-button" data-algorithm="megatron">🧠 Megatron</button>
-                    <button class="tab-button" data-algorithm="zoom">🔍 Zoom</button>
                 </div>
                 <div class="algorithm-content">
                     <div class="algorithm-panel active" id="flash">
@@ -346,6 +346,46 @@ let diff = MultiLineDiff.createDiff(
     algorithm: .flash
 )
 // Result: 3 operations, 21.0ms total</code></pre>
+                        </div>
+                    </div>
+                    <div class="algorithm-panel" id="zoom">
+                        <div class="algorithm-info">
+                            <div class="algorithm-header">
+                                <h3>🔍 Zoom Algorithm</h3>
+                                <div class="algorithm-badges">
+                                    <span class="badge badge-primary">Simple</span>
+                                    <span class="badge badge-success">O(n)</span>
+                                    <span class="badge badge-info">Character-based</span>
+                                </div>
+                            </div>
+                            <p>Simple and fast character-based algorithm for straightforward text changes. Minimal operations with excellent performance.</p>
+                            <div class="algorithm-stats">
+                                <div class="stat-item">
+                                    <span class="stat-label">Create Time</span>
+                                    <span class="stat-value static-time">23.9ms</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Apply Time</span>
+                                    <span class="stat-value static-time">9.1ms</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Operations</span>
+                                    <span class="stat-value">4</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Simplicity</span>
+                                    <span class="stat-value">Maximum</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="algorithm-code">
+                            <pre><code class="language-swift">// Zoom: Simple character-based
+let diff = MultiLineDiff.createDiff(
+    source: simpleText,
+    destination: modifiedText,
+    algorithm: .zoom
+)
+// Result: Minimal operations, fast processing</code></pre>
                         </div>
                     </div>
                     <div class="algorithm-panel" id="optimus">
@@ -428,46 +468,6 @@ let diff = MultiLineDiff.createDiff(
 // Result: Balanced performance and accuracy</code></pre>
                         </div>
                     </div>
-                    <div class="algorithm-panel" id="zoom">
-                        <div class="algorithm-info">
-                            <div class="algorithm-header">
-                                <h3>🔍 Zoom Algorithm</h3>
-                                <div class="algorithm-badges">
-                                    <span class="badge badge-primary">Simple</span>
-                                    <span class="badge badge-success">O(n)</span>
-                                    <span class="badge badge-info">Character-based</span>
-                                </div>
-                            </div>
-                            <p>Simple and fast character-based algorithm for straightforward text changes. Minimal operations with excellent performance.</p>
-                            <div class="algorithm-stats">
-                                <div class="stat-item">
-                                    <span class="stat-label">Create Time</span>
-                                    <span class="stat-value static-time">23.9ms</span>
-                                </div>
-                                <div class="stat-item">
-                                    <span class="stat-label">Apply Time</span>
-                                    <span class="stat-value static-time">9.1ms</span>
-                                </div>
-                                <div class="stat-item">
-                                    <span class="stat-label">Operations</span>
-                                    <span class="stat-value">3</span>
-                                </div>
-                                <div class="stat-item">
-                                    <span class="stat-label">Simplicity</span>
-                                    <span class="stat-value">Maximum</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="algorithm-code">
-                            <pre><code class="language-swift">// Zoom: Simple character-based
-let diff = MultiLineDiff.createDiff(
-    source: simpleText,
-    destination: modifiedText,
-    algorithm: .zoom
-)
-// Result: Minimal operations, fast processing</code></pre>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -498,9 +498,9 @@ let diff = MultiLineDiff.createDiff(
                                     <label for="algorithm-select">Algorithm</label>
                                     <select id="algorithm-select" class="control-select">
                                         <option value="flash">⚡ Flash</option>
+                                        <option value="zoom">🔍 Zoom</option>
                                         <option value="optimus" selected>🤖 Optimus</option>
                                         <option value="megatron">🧠 Megatron</option>
-                                        <option value="zoom">🔍 Zoom</option>
                                     </select>
                                 </div>
                                 <div class="control-group">
@@ -612,7 +612,7 @@ let diff = MultiLineDiff.createDiff(
                                     <td>23.9</td>
                                     <td>9.1</td>
                                     <td>33.0</td>
-                                    <td>3</td>
+                                    <td>4</td>
                                     <td>O(n)</td>
                                 </tr>
                                 <tr>
@@ -866,7 +866,7 @@ let finalResult = try MultiLineDiff.applyDiff(to: source, diff: parsedDiff)
                                     <td>23.9</td>
                                     <td>9.1</td>
                                     <td>33.0</td>
-                                    <td>3</td>
+                                    <td>4</td>
                                     <td>Character-based</td>
                                 </tr>
                             </tbody>

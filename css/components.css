@@ -220,11 +220,15 @@
     max-width: 550px;
     width: 100%;
     box-shadow: var(--shadow-xl);
-    border: 1px solid var(--border-primary);
     border-radius: var(--radius-xl);
     overflow: hidden;
     background: var(--bg-code);
     position: relative;
+}
+
+/* Remove padding from code-content in showcase only */
+.showcase-visual .code-content {
+    padding: 0;
 }
 
 .code-actions {
@@ -822,6 +826,7 @@
     width: 100%;
     min-width: 0;
     height: 100%;
+    justify-content: space-between;
 }
 
 .controls-section h4 {
@@ -849,10 +854,11 @@
 
 .controls-row {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
     gap: var(--space-md);
     flex: 1;
     align-content: center;
+    align-items: end;
 }
 
 .diff-legend {
@@ -895,6 +901,7 @@
     text-align: center;
     position: relative;
     overflow: hidden;
+    margin-bottom: 3px;
 }
 
 .legend-item {
@@ -1733,6 +1740,10 @@
         padding: var(--space-sm);
     }
     
+    .controls-row {
+        grid-template-columns: 1fr;
+    }
+    
     .diff-legend {
         grid-template-columns: repeat(3, 1fr);
         gap: var(--space-sm);
@@ -2006,6 +2017,7 @@
     font-weight: bold;
     word-wrap: break-word;
     overflow-wrap: break-word;
+    padding-top: 15px;
 }
 
 .algo-comparison-chart-container {
@@ -2176,6 +2188,12 @@
         max-width: 100% !important;
         height: auto !important;
         width: 100% !important;
+    }
+    
+    /* Performance Table - Hide Complexity column on mobile */
+    .performance-data th:nth-child(6),
+    .performance-data td:nth-child(6) {
+        display: none;
     }
     
     /* Performance/Benchmarks Table - REMOVED FOR FULL RESPONSIVENESS */
@@ -3030,16 +3048,17 @@
     }
     
     .legend-item {
-        min-height: 70px;
-        padding: var(--space-sm);
+        min-height: 50px;
+        padding: var(--space-xs);
     }
     
     .legend-symbol {
         font-size: 1.2rem;
+        margin-bottom: 2px;
     }
     
     .legend-label {
-        font-size: 0.75rem;
+        font-size: 0.7rem;
     }
     
     .control-select {
@@ -3049,6 +3068,75 @@
     
     .control-group label {
         font-size: 0.75rem;
+    }
+}
+
+/* Desktop spacing optimization - reduce dead space */
+@media (min-width: 769px) {
+    .demo {
+        padding: var(--space-sm) 0;
+    }
+    
+    .demo-controls {
+        margin-bottom: var(--space-md);
+    }
+    
+    .controls-header {
+        padding: var(--space-xs) var(--space-md);
+    }
+    
+    .controls-main {
+        padding: var(--space-sm);
+        gap: var(--space-md);
+    }
+    
+    .controls-section {
+        gap: var(--space-md);
+    }
+    
+    .controls-section h4 {
+        padding-bottom: var(--space-xs);
+    }
+    
+    .legend-item {
+        min-height: 25px;
+        padding: var(--space-xs);
+        flex-direction: row;
+        gap: var(--space-xs);
+    }
+    
+    .legend-symbol {
+        font-size: 1.2rem;
+        margin-bottom: 0;
+    }
+    
+    .legend-label {
+        font-size: 0.7rem;
+    }
+    
+    .control-select {
+        padding: var(--space-md);
+    }
+    
+    .demo-panels {
+        gap: var(--space-xs);
+    }
+    
+    .demo-textarea {
+        min-height: 250px;
+        padding: var(--space-sm) var(--space-sm) var(--space-sm) var(--space-sm);
+    }
+    
+    .panel-header {
+        padding: var(--space-xs) var(--space-md);
+    }
+    
+    .placeholder {
+        min-height: 250px;
+    }
+    
+    .implementation-badge {
+        padding: var(--space-xs) var(--space-md);
     }
 }
 

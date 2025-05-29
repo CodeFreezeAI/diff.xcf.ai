@@ -14,7 +14,7 @@ function initPerformanceChart() {
         createTimes: [14.5, 23.9, 43.7, 47.8],
         applyTimes: [6.6, 9.1, 6.6, 7.0],
         totalTimes: [21.0, 33.0, 50.3, 54.8],
-        operations: [3, 3, 1256, 1256],
+        operations: [3, 4, 1256, 1256],
         colors: {
             flash: '#ff6b6b',     // Red
             zoom: '#4ecdc4',      // Teal
@@ -360,7 +360,7 @@ function initPerformanceAnimations() {
 function compareAlgorithms(alg1, alg2) {
     const data = {
         flash: { create: 14.5, apply: 6.6, total: 21.0, ops: 3 },
-        zoom: { create: 23.9, apply: 9.1, total: 33.0, ops: 3 },
+        zoom: { create: 23.9, apply: 9.1, total: 33.0, ops: 4 },
         optimus: { create: 43.7, apply: 6.6, total: 50.3, ops: 1256 },
         megatron: { create: 47.8, apply: 7.0, total: 54.8, ops: 1256 }
     };
