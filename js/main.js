@@ -22,18 +22,53 @@ function initNavigation() {
 
     // Mobile menu toggle
     if (navToggle && navMenu) {
-        navToggle.addEventListener('click', () => {
+        // Click handler
+        navToggle.addEventListener('click', toggleMenu);
+        
+        // Keyboard handler for accessibility
+        navToggle.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                toggleMenu();
+            }
+        });
+        
+        function toggleMenu() {
             navMenu.classList.toggle('active');
             navToggle.classList.toggle('active');
             
-            // Animate hamburger menu
-            const spans = navToggle.querySelectorAll('span');
-            spans.forEach((span, index) => {
-                span.style.transform = navToggle.classList.contains('active') 
-                    ? `rotate(${index === 0 ? 45 : index === 1 ? 0 : -45}deg) translate(${index === 1 ? '100%' : '0'}, ${index === 0 ? '6px' : index === 2 ? '-6px' : '0'})`
-                    : 'none';
-                span.style.opacity = index === 1 && navToggle.classList.contains('active') ? '0' : '1';
-            });
+            // Add haptic feedback for mobile devices
+            if ('vibrate' in navigator) {
+                navigator.vibrate(50);
+            }
+            
+            // Update ARIA attributes for accessibility
+            const isExpanded = navToggle.classList.contains('active');
+            navToggle.setAttribute('aria-expanded', isExpanded);
+            navMenu.setAttribute('aria-hidden', !isExpanded);
+            
+            // Focus management
+            if (isExpanded) {
+                // Focus first menu item when opening
+                const firstLink = navMenu.querySelector('.nav-link');
+                if (firstLink) {
+                    setTimeout(() => firstLink.focus(), 100);
+                }
+            } else {
+                // Return focus to toggle button when closing
+                navToggle.focus();
+            }
+        }
+        
+        // Handle escape key to close menu
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && navMenu.classList.contains('active')) {
+                navMenu.classList.remove('active');
+                navToggle.classList.remove('active');
+                navToggle.setAttribute('aria-expanded', 'false');
+                navMenu.setAttribute('aria-hidden', 'true');
+                navToggle.focus();
+            }
         });
     }
 
@@ -43,6 +78,8 @@ function initNavigation() {
             if (navMenu.classList.contains('active')) {
                 navMenu.classList.remove('active');
                 navToggle.classList.remove('active');
+                navToggle.setAttribute('aria-expanded', 'false');
+                navMenu.setAttribute('aria-hidden', 'true');
             }
         });
     });
