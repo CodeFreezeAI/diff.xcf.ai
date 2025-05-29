@@ -615,6 +615,17 @@ function initDocumentation() {
             if (docContent) {
                 docContent.classList.remove('active');
                 
+                // Scroll back to documentation section
+                const docsSection = document.querySelector('.docs');
+                if (docsSection) {
+                    setTimeout(() => {
+                        docsSection.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }, 100);
+                }
+                
                 // Track event
                 const docType = docContent.id.replace('-content', '');
                 trackEvent('documentation_close', {
@@ -637,6 +648,17 @@ function initDocumentation() {
             if (docContent) {
                 docContent.classList.remove('active');
                 
+                // Scroll back to documentation section
+                const docsSection = document.querySelector('.docs');
+                if (docsSection) {
+                    setTimeout(() => {
+                        docsSection.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }, 100);
+                }
+                
                 // Track event
                 const docType = docContent.id.replace('-content', '');
                 trackEvent('documentation_close', {
@@ -650,9 +672,25 @@ function initDocumentation() {
     // Close documentation when clicking outside
     document.addEventListener('click', (e) => {
         if (!e.target.closest('.doc-content') && !e.target.closest('.doc-card')) {
+            // Check if any documentation is open before scrolling
+            const hasActiveDoc = document.querySelector('.doc-content.active');
+            
             docContents.forEach(content => {
                 content.classList.remove('active');
             });
+            
+            // Scroll back to documentation section if any was open
+            if (hasActiveDoc) {
+                const docsSection = document.querySelector('.docs');
+                if (docsSection) {
+                    setTimeout(() => {
+                        docsSection.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }, 100);
+                }
+            }
         }
     });
     
@@ -670,10 +708,26 @@ function initDocumentation() {
     // Keyboard navigation for documentation
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
+            // Check if any documentation is open before scrolling
+            const hasActiveDoc = document.querySelector('.doc-content.active');
+            
             // Close all open documentation
             docContents.forEach(content => {
                 content.classList.remove('active');
             });
+            
+            // Scroll back to documentation section if any was open
+            if (hasActiveDoc) {
+                const docsSection = document.querySelector('.docs');
+                if (docsSection) {
+                    setTimeout(() => {
+                        docsSection.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }, 100);
+                }
+            }
         }
     });
     

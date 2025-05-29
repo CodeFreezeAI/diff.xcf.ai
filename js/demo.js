@@ -381,9 +381,9 @@ class NumberProcessor:
         if (format === 'ai') {
             diffContent = MultiLineDiff.generateASCIIDiff(diffResult, source);
         } else if (format === 'json') {
-            diffContent = generateJSONFromDiffResult(diffResult);
+            diffContent = generateJSONFromDiffResult(diffResult, actualCreateTime);
         } else if (format === 'base64') {
-            diffContent = generateBase64FromDiffResult(diffResult);
+            diffContent = generateBase64FromDiffResult(diffResult, actualCreateTime);
         }
 
         return {
@@ -393,9 +393,7 @@ class NumberProcessor:
         };
     }
 
-
-
-    function generateJSONFromDiffResult(diffResult) {
+    function generateJSONFromDiffResult(diffResult, timing) {
         const operations = diffResult.operations.map(op => {
             switch (op.type) {
                 case 'retain':
@@ -412,7 +410,7 @@ class NumberProcessor:
         const metadata = {
             "alg": diffResult.metadata?.algorithm || "unknown",
             "ops": diffResult.operations.length,
-            "tim": diffResult.metadata?.processingTime || 0
+            "tim": timing
         };
 
         return JSON.stringify({
@@ -421,8 +419,8 @@ class NumberProcessor:
         }, null, 2);
     }
 
-    function generateBase64FromDiffResult(diffResult) {
-        const jsonDiff = generateJSONFromDiffResult(diffResult);
+    function generateBase64FromDiffResult(diffResult, timing) {
+        const jsonDiff = generateJSONFromDiffResult(diffResult, timing);
         return btoa(jsonDiff);
     }
 
