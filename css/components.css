@@ -811,7 +811,7 @@
 /* Demo Section Components */
 .demo {
     background: var(--bg-secondary);
-    padding: var(--space-md) 0;
+    padding: var(--space-lg) 0;
 }
 
 .demo-container {
@@ -1158,7 +1158,7 @@
     font-family: var(--font-mono);
     font-size: 0.9625rem;
     line-height: 1.6;
-    overflow: auto;
+    overflow: hidden;
     white-space: pre-wrap;
     word-wrap: break-word;
     word-break: break-all;
@@ -1356,7 +1356,7 @@
 .performance {
     background: var(--bg-primary);
     width: 100%;
-    padding: 0;
+    padding: var(--space-lg) 0;
     overflow-x: hidden;
     margin-bottom: 50px;
 }
