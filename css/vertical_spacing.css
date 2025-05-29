@@ -397,6 +397,13 @@ body {
     height: 100% !important;
 }
 
+/* Fix algorithm tabs container to fit content */
+.algorithm-tabs {
+    width: fit-content !important;
+    margin: 0 auto 40px auto !important;
+    max-width: none !important;
+}
+
 /* ============================================
    FOOTER STANDARDIZATION
 ============================================ */

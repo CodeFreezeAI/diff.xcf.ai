@@ -128,10 +128,20 @@ function initializeAlgoComparisonChart() {
                             weight: 'bold'
                         },
                         callback: function(value) {
-                            // Remove specific tick values
-                            const removeValues = [6000, 50000, 5000000, 50000000, 500000000, 5000000000];
-                            if (removeValues.includes(value)) {
-                                return null; // Hide these ticks
+                            // Only show specific clean tick values
+                            const allowedValues = [
+                                1000,        // 1,000
+                                10000,       // 10,000
+                                100000,      // 100,000
+                                1000000,     // 1,000,000
+                                10000000,    // 10,000,000
+                                100000000,   // 100,000,000
+                                1000000000,  // 1,000,000,000
+                                10000000000  // 10,000,000,000
+                            ];
+                            
+                            if (!allowedValues.includes(value)) {
+                                return null; // Hide all other ticks
                             }
                             
                             if (algoIsLogScale) {
@@ -144,7 +154,7 @@ function initializeAlgoComparisonChart() {
                     },
                     title: {
                         display: true,
-                        text: 'Operations (Log Scale)',
+                        text: 'Operations',
                         color: '#ffffff',
                         font: {
                             size: 14,
