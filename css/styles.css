@@ -737,8 +737,12 @@ section {
     }
     
     .hero-stats {
-        flex-direction: column;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(2, 1fr);
         gap: var(--space-md);
+        max-width: 400px;
+        margin: 0 auto var(--space-sm) auto;
     }
     
     .hero-actions {
@@ -761,6 +765,19 @@ section {
     
     .hero-subtitle {
         font-size: 1rem;
+    }
+    
+    .hero-stats {
+        max-width: 320px;
+        gap: var(--space-sm);
+    }
+    
+    .stat-number {
+        font-size: 1.5rem;
+    }
+    
+    .stat-label {
+        font-size: 0.75rem;
     }
     
     .feature-card {

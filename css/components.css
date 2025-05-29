@@ -378,9 +378,29 @@
     }
     
     .diff-stats {
-        flex-direction: column;
-        align-items: center;
-        gap: var(--space-sm);
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--space-xs);
+        justify-items: center;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .diff-stat {
+        font-size: 0.65rem;
+        padding: 2px var(--space-xs);
+        text-align: center;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        min-width: 0;
+        width: 100%;
+        background: rgba(99, 102, 241, 0.1);
+        border: 1px solid rgba(99, 102, 241, 0.3);
+        border-radius: var(--radius-md);
+        color: var(--primary-light);
+        font-family: var(--font-mono);
+        font-weight: 600;
     }
 
     .showcase-visual {
@@ -463,6 +483,33 @@
         white-space: nowrap;
         flex-shrink: 0;
     }
+
+    /* Force 2x2 grid layout for stats */
+    .showcase-stats {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(2, 1fr);
+        gap: var(--space-sm);
+        margin-top: var(--space-xl);
+        max-width: 320px;
+    }
+    
+    .showcase-stats .stat-item {
+        min-height: 70px;
+        padding: var(--space-sm) var(--space-xs);
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+    
+    .showcase-stats .stat-number {
+        font-size: 1.5rem;
+    }
+    
+    .showcase-stats .stat-label {
+        font-size: 0.7rem;
+        max-width: none;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
 }
 
 @media (max-width: 360px) {
@@ -471,19 +518,28 @@
         width: 100%;
     }
 
+    /* Keep 2x2 grid layout even on smallest screens */
     .showcase-stats {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(2, 1fr);
+        gap: var(--space-xs);
         max-width: 280px;
     }
     
     .showcase-stats .stat-item {
-        min-height: 70px;
-        padding: var(--space-sm);
+        min-height: 60px;
+        padding: var(--space-xs);
         word-wrap: break-word;
         overflow-wrap: break-word;
     }
 
     .showcase-stats .stat-number {
-        font-size: 1.75rem;
+        font-size: 1.3rem;
+    }
+
+    .showcase-stats .stat-label {
+        font-size: 0.65rem;
+        line-height: 1.2;
     }
 
     .showcase-features {
@@ -2734,6 +2790,57 @@
         font-size: clamp(0.6rem, 2vw, 0.75rem);
         line-height: 1.4;
         margin-bottom: clamp(0.25rem, 0.5vw, 0.5rem);
+    }
+}
+
+/* Show emojis on all screen sizes - adjusted badge widths */
+@media (max-width: 768px) {
+    .output-stats .stat-badge {
+        min-width: 90px;
+        width: 90px;
+        min-height: 28px;
+        font-size: 0.7rem;
+        padding: var(--space-xs);
+    }
+}
+
+@media (max-width: 480px) {
+    .output-stats .stat-badge {
+        min-width: 75px;
+        width: 75px;
+        min-height: 24px;
+        font-size: 0.65rem;
+        padding: 2px;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Override the display: none rule for badge emojis */
+    .output-stats .stat-badge .badge-emoji {
+        display: inline !important;
+    }
+    
+    .output-stats .stat-badge {
+        min-width: 90px;
+        width: 90px;
+        min-height: 28px;
+        font-size: 0.7rem;
+        padding: var(--space-xs);
+    }
+}
+
+@media (max-width: 480px) {
+    /* Override the display: none rule for badge emojis */
+    .output-stats .stat-badge .badge-emoji {
+        display: inline !important;
+    }
+    
+    .output-stats .stat-badge {
+        min-width: 75px;
+        width: 75px;
+        min-height: 24px;
+        font-size: 0.65rem;
+        padding: 2px;
     }
 }
 
