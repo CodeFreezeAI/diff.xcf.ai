@@ -1002,11 +1002,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
         if (format === 'ai') {
             diffContent = MultiLineDiff.generateASCIIDiff(diffResult, source);
         } else if (format === 'terminal') {
-            console.log(`💻 Processing terminal format...`);
-            // For Terminal format, apply color coding to lines
-            const coloredContent = colorTerminalDiff(source);
-            diffContent = coloredContent;
-            console.log(`✅ Terminal format applied successfully`);
+            const asciiContent = MultiLineDiff.generateASCIIDiff(diffResult, source);
+            diffContent = colorTerminalDiff(asciiContent);
         } else if (format === 'base64') {
             diffContent = generateBase64FromDiffResult(diffResult, actualCreateTime);
         } else if (format === 'json') {
@@ -1058,17 +1055,17 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
         
         const coloredLines = lines.map((line, index) => {
             if (line.startsWith('📎 ')) {
-                // Retain lines - blue
-                return `<div style="color: #0066ff;">${escapeHtml(line)}</div>`;
+                // Retain lines - lighter gray with ghost gray background gradient
+                return `<div style="color: #bbbbbb; background: linear-gradient(to right, rgba(187,187,187,0.15), transparent); padding: 2px 8px;">${escapeHtml(line)}</div>`;
             } else if (line.startsWith('❌ ')) {
-                // Delete lines - red
-                return `<div style="color: #ff0000;">${escapeHtml(line)}</div>`;
+                // Delete lines - lighter red with ghost red background gradient
+                return `<div style="color: #ff8888; background: linear-gradient(to right, rgba(255,136,136,0.15), transparent); padding: 2px 8px;">${escapeHtml(line)}</div>`;
             } else if (line.startsWith('✅ ')) {
-                // Insert lines - green
-                return `<div style="color: #00aa00;">${escapeHtml(line)}</div>`;
+                // Insert lines - lighter green with ghost green background gradient
+                return `<div style="color: #88dd88; background: linear-gradient(to right, rgba(136,221,136,0.15), transparent); padding: 2px 8px;">${escapeHtml(line)}</div>`;
             } else {
                 // Other lines - default color
-                return `<div>${escapeHtml(line)}</div>`;
+                return `<div style="padding: 2px 8px;">${escapeHtml(line)}</div>`;
             }
         });
         
@@ -1100,11 +1097,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
                 Prism.highlightElement(diffOutput.querySelector('code'));
             }
         } else if (format === 'terminal') {
-            console.log(`💻 Processing terminal format...`);
-            // For Terminal format, apply color coding to lines
-            const coloredContent = colorTerminalDiff(result.content);
-            diffOutput.innerHTML = coloredContent;
-            console.log(`✅ Terminal format applied successfully`);
+            console.log(`💻 Displaying terminal format...`);
+            diffOutput.innerHTML = result.content;
+            console.log(`✅ Terminal format displayed successfully`);
         } else if (format === 'base64') {
             // For base64 format, add text wrapping
             diffOutput.innerHTML = `
