@@ -984,16 +984,41 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
         
         console.log(`✅ DISPLAY TIMING: Create=${actualCreateTime}ms, Apply=${actualApplyTime}ms`);
         
+        // Calculate additional metadata
+        const sourceLinesArr = source.split(/\r?\n/);
+        const destLinesArr = destination.split(/\r?\n/);
+        const sourceTotalLines = sourceLinesArr.length;
+        const destTotalLines = destLinesArr.length;
+        const sourceStartLine = (() => {
+            for (let i = 0; i < sourceLinesArr.length; i++) {
+                if (sourceLinesArr[i] !== destLinesArr[i]) return i;
+            }
+            return 0;
+        })();
+        const precedingContext = sourceLinesArr[0] || '';
+        const followingContext = sourceLinesArr[sourceLinesArr.length - 1] || '';
+        const algorithmUsed = algorithm;
+        const applicationType = 'requiresFullSource';
+
         const stats = {
             algorithm: algorithm,
             format: format,
-            sourceLines: sourceLines.length,
-            destLines: destLines.length,
+            sourceLines: sourceLinesArr.length,
+            destLines: destLinesArr.length,
             operations: diffResult.operations.length,
-            createTime: actualCreateTime, // Show real timing, no artificial minimum
-            applyTime: actualApplyTime,   // Show real timing, no artificial minimum
+            createTime: actualCreateTime,
+            applyTime: actualApplyTime,
             totalTime: actualCreateTime + actualApplyTime,
-            accuracy: appliedResult === destination ? '100%' : 'ERROR'
+            accuracy: appliedResult === destination ? '100%' : 'ERROR',
+            // Additional metadata
+            sourceStartLine,
+            sourceTotalLines,
+            precedingContext,
+            followingContext,
+            sourceContent: source,
+            destinationContent: destination,
+            algorithmUsed,
+            applicationType
         };
 
         // Generate output based on format
@@ -1030,13 +1055,21 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
                     return {};
             }
         });
-        
+        // Add more metadata fields
+        const m = diffResult.metadata || {};
         const metadata = {
-            "alg": diffResult.metadata?.algorithm || "unknown",
+            "alg": m.algorithm || "unknown",
             "ops": diffResult.operations.length,
-            "tim": timing
+            "tim": timing,
+            "sourceStartLine": m.sourceStartLine,
+            "sourceTotalLines": m.sourceTotalLines,
+            "precedingContext": m.precedingContext,
+            "followingContext": m.followingContext,
+            "sourceContent": m.sourceContent,
+            "destinationContent": m.destinationContent,
+            "algorithmUsed": m.algorithmUsed,
+            "applicationType": m.applicationType
         };
-
         return JSON.stringify({
             "operations": operations,
             "metadata": metadata
