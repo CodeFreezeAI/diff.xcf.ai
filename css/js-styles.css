@@ -325,8 +325,8 @@
     white-space: pre !important;
     position: relative !important;
     font-family: 'JetBrains Mono', monospace !important;
-    font-size: 0.95rem !important;
-    line-height: 1.6 !important;
+    font-size: 0.89rem !important;
+    line-height: 1.35 !important;
     border-radius: 8px !important;
     box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3) !important;
     /* Hide scrollbar but allow scrolling */
@@ -346,6 +346,9 @@
     position: relative !important;
     padding-left: 18px !important;
     margin-left: 0 !important;
+    padding-top: 2px !important;
+    padding-bottom: 2px !important;
+    padding-right: 8px !important;
 }
 
 .demo-output-content.terminal-format div::before {
@@ -525,17 +528,64 @@
     }
 }
 
+@keyframes matrixSymbolRain {
+  0% {
+    opacity: 0;
+    filter: blur(2px) brightness(2) drop-shadow(0 0 8px #ffd700);
+    color: #ffd700;
+    transform: translateY(-16px) scaleY(1.3);
+  }
+  20% {
+    opacity: 1;
+    filter: blur(1px) brightness(1.5) drop-shadow(0 0 4px #ffd700);
+    color: #ffd700;
+  }
+  80% {
+    opacity: 1;
+    filter: blur(0.5px) brightness(1.2) drop-shadow(0 0 2px #ffd700);
+    color: #ffd700;
+  }
+  100% {
+    opacity: 0;
+    filter: none;
+    color: #ffd700;
+    transform: none;
+  }
+}
+
+.matrix-symbol-rain {
+  animation: matrixSymbolRain 0.4s cubic-bezier(0.4, 0.8, 0.2, 1) both;
+  font-family: 'Noto Sans Egyptian Hieroglyphs', 'Arial', sans-serif;
+  font-size: 1.2em;
+  letter-spacing: 0.05em;
+  pointer-events: none;
+  user-select: none;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 2;
+  background: transparent;
+  text-align: left;
+  padding-left: 18px;
+}
+
+.matrix-fade-in {
+  animation: matrixFadeIn 1.2s cubic-bezier(0.4, 0.8, 0.2, 1) both;
+}
+
 @keyframes matrixFadeIn {
   0% {
     opacity: 0;
-    filter: blur(2px) brightness(1.5) drop-shadow(0 0 6px #00ff41);
+    filter: blur(2px) brightness(1.5) drop-shadow(0 0 6px #ffd700);
     transform: translateY(-12px) scaleY(1.2);
-    color: #00ff41;
+    color: #ffd700;
   }
   60% {
     opacity: 1;
-    filter: blur(0.5px) brightness(1.2) drop-shadow(0 0 2px #00ff41);
-    color: #00ff41;
+    filter: blur(0.5px) brightness(1.2) drop-shadow(0 0 2px #ffd700);
+    color: #ffd700;
   }
   100% {
     opacity: 1;
@@ -543,8 +593,4 @@
     transform: none;
     color: inherit;
   }
-}
-
-.matrix-fade-in {
-  animation: matrixFadeIn 0.7s cubic-bezier(0.4, 0.8, 0.2, 1) both;
 } 
