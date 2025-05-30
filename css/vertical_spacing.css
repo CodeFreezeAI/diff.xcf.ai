@@ -502,4 +502,10 @@ body {
     .footer-bottom {
         padding-top: var(--space-sm) !important;
     }
+}
+
+/* Ensure hero background is visible and not covered */
+.hero-background {
+    background: none !important;
+    display: block !important;
 } 
