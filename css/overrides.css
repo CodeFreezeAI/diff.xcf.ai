@@ -1,0 +1,17 @@
+/* OVERRIDES: Force important styles for showcase code block and any other critical fixes */
+
+.showcase-visual .code-demo .code-content {
+    background: #000 !important;
+}
+
+section.diff-showcase .showcase-visual .code-demo .code-content,
+.diff-showcase .showcase-visual .code-demo .code-content {
+    background: #000 !important;
+}
+
+.showcase-visual .code-demo .code-content pre[class*="language-"],
+.showcase-visual .code-demo .code-content code[class*="language-"] {
+    background: #000 !important;
+}
+
+/* Add any other !important overrides here as needed */ 

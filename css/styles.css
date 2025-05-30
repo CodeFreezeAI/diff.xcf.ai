@@ -1310,3 +1310,17 @@ a:focus {
   font-size: 1rem;
   margin-bottom: 15px;
 }
+
+.showcase-visual .code-demo .code-content {
+    background: #000 !important;
+}
+
+section.diff-showcase .showcase-visual .code-demo .code-content,
+.diff-showcase .showcase-visual .code-demo .code-content {
+    background: #000 !important;
+}
+
+.showcase-visual .code-demo .code-content pre[class*="language-"],
+.showcase-visual .code-demo .code-content code[class*="language-"] {
+    background: #000 !important;
+}
