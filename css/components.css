@@ -180,7 +180,7 @@
 }
 
 .showcase-stats .stat-item:nth-child(3)::before {
-    background: var(--gradient-primary);
+    background: linear-gradient(90deg, #007aff 0%, #1e40af 100%) !important;
 }
 
 .showcase-stats .stat-number {
