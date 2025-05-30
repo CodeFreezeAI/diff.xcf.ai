@@ -1501,6 +1501,34 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
         resize();
         window.addEventListener('resize', resize);
         const chars = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズヅブプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッンABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=<>?[]{}|';
+        // --- Fade-in lines logic ---
+        const lineDivs = Array.from(target.querySelectorAll('div'));
+        // Only fade in lines that are initially hidden (opacity 0)
+        lineDivs.forEach(div => {
+            div.style.opacity = '0';
+            div.style.transition = 'opacity 0.4s cubic-bezier(0.4,0,0.2,1)';
+        });
+        // Precompute line positions
+        function getLineTops() {
+            return lineDivs.map(div => {
+                const rect = div.getBoundingClientRect();
+                const parentRect = target.getBoundingClientRect();
+                return rect.top - parentRect.top + rect.height / 2;
+            });
+        }
+        let lineTops = getLineTops();
+        // Recompute on resize
+        window.addEventListener('resize', () => {
+            lineTops = getLineTops();
+        });
+        function fadeInLineAtY(y) {
+            // Find the closest line whose center is within fontSize/2 of y
+            for (let i = 0; i < lineTops.length; i++) {
+                if (lineDivs[i].style.opacity === '0' && Math.abs(lineTops[i] - y) < fontSize / 1.5) {
+                    lineDivs[i].style.opacity = '1';
+                }
+            }
+        }
         function draw() {
             ctx.fillStyle = 'rgba(0,0,0,0.08)';
             ctx.fillRect(0, 0, width, height);
@@ -1510,7 +1538,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
                 ctx.fillStyle = '#39ff14';
                 ctx.shadowColor = '#39ff14';
                 ctx.shadowBlur = 8;
-                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                const y = drops[i] * fontSize;
+                ctx.fillText(text, i * fontSize, y);
                 ctx.shadowBlur = 0;
                 if (drops[i] * fontSize > height) {
                     columnsReachedBottom[i] = true;
@@ -1518,6 +1547,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
                         drops[i] = 0;
                     }
                 }
+                // Fade in line if rain passes over
+                fadeInLineAtY(y);
                 drops[i]++;
             }
             // If all columns have reached the bottom at least once, finish rain
@@ -1532,6 +1563,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
             canvas.style.opacity = '0.18';
             setTimeout(() => {
                 drawGhostedColumns();
+                // Ensure all lines are visible after rain
+                lineDivs.forEach(div => { div.style.opacity = '1'; });
             }, 700); // match transition
         }
         function drawGhostedColumns() {
@@ -1558,7 +1591,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
         }
         matrixRainInterval = setInterval(() => {
             if (!rainFinished) draw();
-        }, 50);
+        }, 25);
         canvas._matrixRainCleanup = () => {
             clearInterval(matrixRainInterval);
             matrixRainInterval = null;
@@ -1566,6 +1599,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
             if (matrixRainTimeout) clearTimeout(matrixRainTimeout);
             if (canvas.parentNode) canvas.parentNode.removeChild(canvas);
             target.classList.remove('matrix-rain');
+            // Ensure all lines are visible if effect is interrupted
+            lineDivs.forEach(div => { div.style.opacity = '1'; });
         };
     }
     function stopMatrixRain(target) {
