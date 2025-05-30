@@ -204,11 +204,11 @@
 }
 
 .showcase-stats .stat-item:nth-child(3) .stat-number {
-    background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    color: unset !important;
+    background: none !important;
+    color: #0a84ff !important;
+    -webkit-background-clip: unset !important;
+    -webkit-text-fill-color: unset !important;
+    background-clip: unset !important;
     font-family: inherit;
 }
 
@@ -1290,6 +1290,8 @@
     overflow: hidden;
     text-overflow: ellipsis;
     font-size: 0.75rem;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
 }
 
 .output-stats .stat-badge::before {
@@ -3304,5 +3306,11 @@
 /* Make Source and Destination headers 2px taller (but not output header) */
 .demo-panel:not(.demo-output) .panel-header {
     padding: calc(var(--space-sm) + 1px) var(--space-lg);
+}
+
+:root {
+    /* ...existing variables... */
+    --bg-code: #000 !important;
+    /* ...rest of variables... */
 }
 
