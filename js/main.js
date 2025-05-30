@@ -862,4 +862,87 @@ window.MultiLineDiffSite = {
     trackEvent,
     debounce,
     throttle
+};
+
+// --- Matrix Rain Effect ---
+let matrixRainInterval = null;
+function startMatrixRain(target) {
+    if (!target) return;
+    // Remove any existing canvas
+    stopMatrixRain(target);
+    // Create canvas
+    const canvas = document.createElement('canvas');
+    canvas.className = 'matrix-rain-canvas';
+    canvas.style.position = 'absolute';
+    canvas.style.top = 0;
+    canvas.style.left = 0;
+    canvas.style.width = '100%';
+    canvas.style.height = '100%';
+    canvas.style.pointerEvents = 'none';
+    canvas.style.zIndex = 10;
+    canvas.style.opacity = 0.7;
+    canvas.style.mixBlendMode = 'lighten';
+    target.classList.add('matrix-rain');
+    target.appendChild(canvas);
+    // Matrix rain logic
+    const ctx = canvas.getContext('2d');
+    let width = 0, height = 0, fontSize = 18, columns = 0, drops = [];
+    function resize() {
+        width = target.offsetWidth;
+        height = target.offsetHeight;
+        canvas.width = width;
+        canvas.height = height;
+        fontSize = Math.max(14, Math.floor(height / 24));
+        columns = Math.floor(width / fontSize);
+        drops = Array(columns).fill(1);
+    }
+    resize();
+    window.addEventListener('resize', resize);
+    const chars = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズヅブプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッンABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    function draw() {
+        ctx.fillStyle = 'rgba(0,0,0,0.08)';
+        ctx.fillRect(0, 0, width, height);
+        ctx.font = fontSize + 'px JetBrains Mono, monospace';
+        for (let i = 0; i < columns; i++) {
+            const text = chars.charAt(Math.floor(Math.random() * chars.length));
+            ctx.fillStyle = '#39ff14';
+            ctx.shadowColor = '#39ff14';
+            ctx.shadowBlur = 8;
+            ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+            ctx.shadowBlur = 0;
+            if (drops[i] * fontSize > height && Math.random() > 0.975) {
+                drops[i] = 0;
+            }
+            drops[i]++;
+        }
+    }
+    matrixRainInterval = setInterval(draw, 50);
+    // Store cleanup
+    canvas._matrixRainCleanup = () => {
+        clearInterval(matrixRainInterval);
+        matrixRainInterval = null;
+        window.removeEventListener('resize', resize);
+        if (canvas.parentNode) canvas.parentNode.removeChild(canvas);
+        target.classList.remove('matrix-rain');
+    };
+}
+function stopMatrixRain(target) {
+    const canvas = target?.querySelector('.matrix-rain-canvas');
+    if (canvas && typeof canvas._matrixRainCleanup === 'function') {
+        canvas._matrixRainCleanup();
+    }
+}
+// Patch displayDiffResult to add Matrix rain in terminal format only
+const originalDisplayDiffResult = displayDiffResult;
+displayDiffResult = function(result) {
+    if (!diffOutput) return;
+    const format = formatSelect?.value || 'ai';
+    // Remove Matrix rain if present
+    stopMatrixRain(diffOutput);
+    // Call original
+    originalDisplayDiffResult(result);
+    // Add Matrix rain if terminal format
+    if (format === 'terminal') {
+        startMatrixRain(diffOutput);
+    }
 }; 

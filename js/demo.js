@@ -1466,10 +1466,128 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
         }
     }
 
-    // Add copy button when diff is generated - ensure it works for all formats
+    // --- Matrix Rain Effect ---
+    let matrixRainInterval = null;
+    let matrixRainTimeout = null;
+    function startMatrixRain(target) {
+        if (!target) return;
+        stopMatrixRain(target);
+        const canvas = document.createElement('canvas');
+        canvas.className = 'matrix-rain-canvas';
+        canvas.style.position = 'absolute';
+        canvas.style.top = 0;
+        canvas.style.left = 0;
+        canvas.style.width = '100%';
+        canvas.style.height = '100%';
+        canvas.style.pointerEvents = 'none';
+        canvas.style.zIndex = 10;
+        canvas.style.opacity = 0.7;
+        canvas.style.mixBlendMode = 'lighten';
+        canvas.style.transition = 'opacity 0.7s cubic-bezier(0.4,0,0.2,1)';
+        target.classList.add('matrix-rain');
+        target.appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+        let width = 0, height = 0, fontSize = 10, columns = 0, drops = [], columnsReachedBottom = [], rainFinished = false;
+        function resize() {
+            width = target.offsetWidth;
+            height = target.offsetHeight;
+            canvas.width = width;
+            canvas.height = height;
+            fontSize = 10;
+            columns = Math.floor(width / fontSize);
+            drops = Array(columns).fill(1);
+            columnsReachedBottom = Array(columns).fill(false);
+        }
+        resize();
+        window.addEventListener('resize', resize);
+        const chars = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズヅブプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッンABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=<>?[]{}|';
+        function draw() {
+            ctx.fillStyle = 'rgba(0,0,0,0.08)';
+            ctx.fillRect(0, 0, width, height);
+            ctx.font = fontSize + 'px JetBrains Mono, monospace';
+            for (let i = 0; i < columns; i++) {
+                const text = chars.charAt(Math.floor(Math.random() * chars.length));
+                ctx.fillStyle = '#39ff14';
+                ctx.shadowColor = '#39ff14';
+                ctx.shadowBlur = 8;
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                ctx.shadowBlur = 0;
+                if (drops[i] * fontSize > height) {
+                    columnsReachedBottom[i] = true;
+                    if (Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+                }
+                drops[i]++;
+            }
+            // If all columns have reached the bottom at least once, finish rain
+            if (!rainFinished && columnsReachedBottom.every(Boolean)) {
+                rainFinished = true;
+                setTimeout(() => {
+                    fadeToGhosted();
+                }, 500); // short pause before ghosting
+            }
+        }
+        function fadeToGhosted() {
+            canvas.style.opacity = '0.18';
+            setTimeout(() => {
+                drawGhostedColumns();
+            }, 700); // match transition
+        }
+        function drawGhostedColumns() {
+            ctx.clearRect(0, 0, width, height);
+            ctx.font = fontSize + 'px JetBrains Mono, monospace';
+            // Pick 10-15 random columns
+            const ghostCount = Math.floor(Math.random() * 6) + 10; // 10-15
+            const ghostColumns = [];
+            while (ghostColumns.length < ghostCount && ghostColumns.length < columns) {
+                const idx = Math.floor(Math.random() * columns);
+                if (!ghostColumns.includes(idx)) ghostColumns.push(idx);
+            }
+            for (const i of ghostColumns) {
+                for (let y = 0; y < height; y += fontSize) {
+                    const text = chars.charAt(Math.floor(Math.random() * chars.length));
+                    ctx.fillStyle = 'rgba(57,255,20,0.18)';
+                    ctx.shadowColor = 'rgba(57,255,20,0.10)';
+                    ctx.shadowBlur = 2;
+                    ctx.fillText(text, i * fontSize, y + fontSize);
+                    ctx.shadowBlur = 0;
+                }
+            }
+            canvas.style.opacity = '0.12';
+        }
+        matrixRainInterval = setInterval(() => {
+            if (!rainFinished) draw();
+        }, 50);
+        canvas._matrixRainCleanup = () => {
+            clearInterval(matrixRainInterval);
+            matrixRainInterval = null;
+            window.removeEventListener('resize', resize);
+            if (matrixRainTimeout) clearTimeout(matrixRainTimeout);
+            if (canvas.parentNode) canvas.parentNode.removeChild(canvas);
+            target.classList.remove('matrix-rain');
+        };
+    }
+    function stopMatrixRain(target) {
+        const canvas = target?.querySelector('.matrix-rain-canvas');
+        if (canvas && typeof canvas._matrixRainCleanup === 'function') {
+            canvas._matrixRainCleanup();
+        }
+    }
+
+    // Patch displayDiffResult to add Matrix rain in terminal format only, and always add copy button
     const originalDisplayDiffResult = displayDiffResult;
     displayDiffResult = function(result) {
+        if (!diffOutput) return;
+        const format = formatSelect?.value || 'ai';
+        // Remove Matrix rain if present
+        stopMatrixRain(diffOutput);
+        // Call original
         originalDisplayDiffResult(result);
+        // Add Matrix rain if terminal format
+        if (format === 'terminal') {
+            startMatrixRain(diffOutput);
+        }
         // Always add copy button for any format that has content
         if (result && result.content) {
             addCopyButton();
