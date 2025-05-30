@@ -32,7 +32,7 @@ section {
 
 /* Footer always tertiary */
 .footer {
-    background: var(--bg-tertiary) !important;
+    background: var(--bg-primary) !important;
     padding: 30px 0 20px 0 !important;
 }
 
@@ -86,7 +86,7 @@ section {
 
 /* Diff Showcase Section */
 .diff-showcase {
-    padding: 40px 0 55px 0 !important;
+    padding: 50px 0 55px 0 !important;
 }
 
 .diff-showcase .container {
@@ -227,7 +227,7 @@ section {
     }
     
     .hero {
-        padding: 93px 0 17px 0 !important;
+        padding: 133px 0 57px 0 !important;
     }
     
     .footer {
@@ -261,6 +261,37 @@ section {
     .demo-container {
         padding: 0 var(--space-md) !important;
     }
+    
+    /* Mobile hero buttons side by side */
+    .hero-actions {
+        flex-direction: row !important;
+        gap: var(--space-md) !important;
+        justify-content: center !important;
+    }
+    
+    .hero-actions .btn {
+        flex: 1 !important;
+        max-width: 160px !important;
+        font-size: 0.9rem !important;
+        padding: var(--space-sm) var(--space-md) !important;
+    }
+    
+    /* Add more spacing between hero items on mobile */
+    .hero-badge {
+        margin-bottom: calc(var(--space-sm) + 15px) !important;
+    }
+    
+    .hero-title {
+        margin-bottom: calc(var(--space-sm) + 15px) !important;
+    }
+    
+    .hero-subtitle {
+        margin-bottom: calc(var(--space-sm) + 15px) !important;
+    }
+    
+    .hero-stats {
+        margin-bottom: calc(var(--space-sm) + 15px) !important;
+    }
 }
 
 @media (max-width: 480px) {
@@ -269,7 +300,7 @@ section {
     }
     
     .hero {
-        padding: 82px 0 13px 0 !important;
+        padding: 122px 0 53px 0 !important;
     }
     
     .footer {
@@ -302,6 +333,37 @@ section {
     
     .demo-container {
         padding: 0 var(--space-sm) !important;
+    }
+    
+    /* Mobile hero buttons side by side */
+    .hero-actions {
+        flex-direction: row !important;
+        gap: var(--space-sm) !important;
+        justify-content: center !important;
+    }
+    
+    .hero-actions .btn {
+        flex: 1 !important;
+        max-width: 140px !important;
+        font-size: 0.85rem !important;
+        padding: var(--space-xs) var(--space-sm) !important;
+    }
+    
+    /* Add more spacing between hero items on mobile */
+    .hero-badge {
+        margin-bottom: calc(var(--space-sm) + 15px) !important;
+    }
+    
+    .hero-title {
+        margin-bottom: calc(var(--space-sm) + 15px) !important;
+    }
+    
+    .hero-subtitle {
+        margin-bottom: calc(var(--space-sm) + 15px) !important;
+    }
+    
+    .hero-stats {
+        margin-bottom: calc(var(--space-sm) + 15px) !important;
     }
 }
 

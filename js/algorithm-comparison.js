@@ -297,10 +297,10 @@ function toggleAlgoScale() {
     
     if (algoIsLogScale) {
         algoComparisonChart.options.scales.y.type = 'logarithmic';
-        algoComparisonChart.options.scales.y.title.text = 'Operations (Log Scale)';
+        algoComparisonChart.options.scales.y.title.text = 'Operations';
     } else {
         algoComparisonChart.options.scales.y.type = 'linear';
-        algoComparisonChart.options.scales.y.title.text = 'Operations (Linear Scale)';
+        algoComparisonChart.options.scales.y.title.text = 'Operations';
         algoComparisonChart.options.scales.y.beginAtZero = true;
     }
     
