@@ -318,12 +318,17 @@
 
 /* Terminal Format Specific Styles */
 .demo-output-content.terminal-format {
-    background: #000000 !important;
+    background: #0d1117 !important;
     color: #ffffff !important;
     overflow-x: auto !important;
     overflow-y: hidden !important;
     white-space: pre !important;
     position: relative !important;
+    font-family: 'JetBrains Mono', monospace !important;
+    font-size: 0.95rem !important;
+    line-height: 1.6 !important;
+    border-radius: 8px !important;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3) !important;
     /* Hide scrollbar but allow scrolling */
     scrollbar-width: none !important; /* Firefox */
     -ms-overflow-style: none !important; /* Internet Explorer 10+ */
@@ -336,13 +341,60 @@
 .demo-output-content.terminal-format div {
     white-space: pre !important;
     overflow: visible !important;
+    /* border-left: 2px solid transparent !important; */
+    transition: all 0.2s ease !important;
+    position: relative !important;
+    padding-left: 18px !important;
+    margin-left: 0 !important;
+}
+
+.demo-output-content.terminal-format div::before {
+    content: '' !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    width: 2px !important;
+    background: rgba(255, 255, 255, 0.18) !important;
+    transition: background 0.2s !important;
+    box-shadow: none !important;
+    z-index: 1 !important;
+}
+
+.demo-output-content.terminal-format div:hover {
+    /* border-left-color: rgba(255, 255, 255, 0.3) !important; */
+    background: linear-gradient(to right, rgba(255, 255, 255, 0.15), transparent) !important;
+    transform: translateX(-4px) !important;
+    box-shadow: 4px 0 8px rgba(0, 0, 0, 0.2) !important;
+    padding-left: 14px !important;
+    margin-left: 4px !important;
+}
+
+.demo-output-content.terminal-format div:hover::before {
+    background: rgba(255, 255, 255, 0.38) !important;
+    box-shadow: none !important;
+}
+
+/* Enhance the gradient backgrounds for different line types */
+.demo-output-content.terminal-format div[style*="color: #8b949e"]:hover {
+    background: linear-gradient(to right, rgba(139, 148, 158, 0.2), transparent) !important;
+}
+
+.demo-output-content.terminal-format div[style*="color: #f85149"]:hover {
+    background: linear-gradient(to right, rgba(248, 81, 73, 0.2), transparent) !important;
+}
+
+.demo-output-content.terminal-format div[style*="color: #3fb950"]:hover {
+    background: linear-gradient(to right, rgba(63, 185, 80, 0.2), transparent) !important;
 }
 
 /* Copy button for terminal format should be more visible */
 .demo-output-content.terminal-format .copy-btn {
-    background: rgba(255, 255, 255, 0.2) !important;
-    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
     opacity: 0.7 !important;
+    backdrop-filter: blur(4px) !important;
+    -webkit-backdrop-filter: blur(4px) !important;
 }
 
 .demo-output-content.terminal-format:hover .copy-btn {
@@ -350,7 +402,8 @@
 }
 
 .demo-output-content.terminal-format .copy-btn:hover {
-    background: rgba(255, 255, 255, 0.3) !important;
+    background: rgba(255, 255, 255, 0.2) !important;
+    transform: translateY(-1px) !important;
 }
 
 /* For terminal format, copy button is attached to demo panel */
@@ -359,9 +412,11 @@
     top: 55px !important;
     right: 8px !important;
     z-index: 10 !important;
-    background: rgba(255, 255, 255, 0.2) !important;
-    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
     opacity: 0.7 !important;
+    backdrop-filter: blur(4px) !important;
+    -webkit-backdrop-filter: blur(4px) !important;
 }
 
 .demo-panel.demo-output-positioned:hover .copy-btn {
@@ -369,7 +424,8 @@
 }
 
 .demo-panel.demo-output-positioned .copy-btn:hover {
-    background: rgba(255, 255, 255, 0.3) !important;
+    background: rgba(255, 255, 255, 0.2) !important;
+    transform: translateY(-1px) !important;
 }
 
 /* Stat Badge Styles */

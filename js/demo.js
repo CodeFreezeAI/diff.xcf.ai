@@ -1063,17 +1063,17 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
             let padding = `${topPadding} 8px ${bottomPadding} 18px`;
             
             if (line.startsWith('📎 ')) {
-                // Retain lines - lighter gray with more opaque ghost gray background gradient
-                return `<div style="color: #bbbbbb; background: linear-gradient(to right, rgba(187,187,187,0.25), transparent); padding: ${padding};">${escapeHtml(line)}</div>`;
+                // Retain lines - subtle gray with ghost background
+                return `<div style="color: #8b949e; background: linear-gradient(to right, rgba(139, 148, 158, 0.1), transparent); padding: ${padding};">${escapeHtml(line)}</div>`;
             } else if (line.startsWith('❌ ')) {
-                // Delete lines - more saturated red with ghost red background gradient
-                return `<div style="color: #ff3333; background: linear-gradient(to right, rgba(255,51,51,0.15), transparent); padding: ${padding};">${escapeHtml(line)}</div>`;
+                // Delete lines - muted red with ghost background
+                return `<div style="color: #f85149; background: linear-gradient(to right, rgba(248, 81, 73, 0.1), transparent); padding: ${padding};">${escapeHtml(line)}</div>`;
             } else if (line.startsWith('✅ ')) {
-                // Insert lines - slightly less bright green with ghost green background gradient
-                return `<div style="color: #55cc55; background: linear-gradient(to right, rgba(85,204,85,0.15), transparent); padding: ${padding};">${escapeHtml(line)}</div>`;
+                // Insert lines - muted green with ghost background
+                return `<div style="color: #3fb950; background: linear-gradient(to right, rgba(63, 185, 80, 0.1), transparent); padding: ${padding};">${escapeHtml(line)}</div>`;
             } else {
                 // Other lines - default color
-                return `<div style="padding: ${padding};">${escapeHtml(line)}</div>`;
+                return `<div style="color: #c9d1d9; padding: ${padding};">${escapeHtml(line)}</div>`;
             }
         });
         
