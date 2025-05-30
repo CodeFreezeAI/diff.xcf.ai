@@ -1294,3 +1294,19 @@ a:focus {
         transform: scale(1.1);
     }
 }
+
+@media (max-width: 1050px) {
+  #showcase .section-title {
+    white-space: nowrap;
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    letter-spacing: -0.5px;
+    overflow-x: auto;
+    text-overflow: ellipsis;
+    display: block;
+  }
+}
+
+#showcase .showcase-text .showcase-subtitle {
+  font-size: 1rem;
+  margin-bottom: 15px;
+}
