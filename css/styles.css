@@ -702,6 +702,8 @@ a:hover {
     gap: var(--space-lg);
     flex-wrap: wrap;
     justify-content: center;
+    z-index: 4;
+    position: relative;
 }
 
 .hero-visual {
@@ -759,6 +761,7 @@ a:hover {
     font-size: 0.875rem;
     line-height: 1.6;
     overflow-x: auto;
+    background: #000 !important;
 }
 
 .code-content pre {
