@@ -523,4 +523,28 @@
         padding: clamp(0.125rem, 0.25vw, 0.25rem);
         width: 100%;
     }
+}
+
+@keyframes matrixFadeIn {
+  0% {
+    opacity: 0;
+    filter: blur(2px) brightness(1.5) drop-shadow(0 0 6px #00ff41);
+    transform: translateY(-12px) scaleY(1.2);
+    color: #00ff41;
+  }
+  60% {
+    opacity: 1;
+    filter: blur(0.5px) brightness(1.2) drop-shadow(0 0 2px #00ff41);
+    color: #00ff41;
+  }
+  100% {
+    opacity: 1;
+    filter: none;
+    transform: none;
+    color: inherit;
+  }
+}
+
+.matrix-fade-in {
+  animation: matrixFadeIn 0.7s cubic-bezier(0.4, 0.8, 0.2, 1) both;
 } 

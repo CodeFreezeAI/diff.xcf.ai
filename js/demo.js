@@ -1056,29 +1056,31 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
         const coloredLines = lines.map((line, index) => {
             const isFirstLine = index === 0;
             const isLastLine = index === lines.length - 1;
-            
             // Calculate padding based on position
             let topPadding = isFirstLine ? '12px' : '2px';
             let bottomPadding = isLastLine ? '12px' : '2px';
             let padding = `${topPadding} 8px ${bottomPadding} 18px`;
-            
+            // Matrix fade-in effect: stagger delay
+            const delay = (index * 60) + 80; // ms
+            const matrixClass = 'matrix-fade-in';
+            const delayStyle = `animation-delay: ${delay}ms;`;
             if (line.startsWith('📎 ')) {
                 // Retain lines - subtle gray with ghost background
-                return `<div style="color: #8b949e; background: linear-gradient(to right, rgba(139, 148, 158, 0.1), transparent); padding: ${padding};">${escapeHtml(line)}</div>`;
+                return `<div class="${matrixClass}" style="color: #8b949e; background: linear-gradient(to right, rgba(139, 148, 158, 0.1), transparent); padding: ${padding}; ${delayStyle}">${escapeHtml(line)}</div>`;
             } else if (line.startsWith('❌ ')) {
                 // Delete lines - muted red with ghost background
-                return `<div style="color: #f85149; background: linear-gradient(to right, rgba(248, 81, 73, 0.1), transparent); padding: ${padding};">${escapeHtml(line)}</div>`;
+                return `<div class="${matrixClass}" style="color: #f85149; background: linear-gradient(to right, rgba(248, 81, 73, 0.1), transparent); padding: ${padding}; ${delayStyle}">${escapeHtml(line)}</div>`;
             } else if (line.startsWith('✅ ')) {
                 // Insert lines - muted green with ghost background
-                return `<div style="color: #3fb950; background: linear-gradient(to right, rgba(63, 185, 80, 0.1), transparent); padding: ${padding};">${escapeHtml(line)}</div>`;
+                return `<div class="${matrixClass}" style="color: #3fb950; background: linear-gradient(to right, rgba(63, 185, 80, 0.1), transparent); padding: ${padding}; ${delayStyle}">${escapeHtml(line)}</div>`;
             } else {
                 // Other lines - default color
-                return `<div style="color: #c9d1d9; padding: ${padding};">${escapeHtml(line)}</div>`;
+                return `<div class="${matrixClass}" style="color: #c9d1d9; padding: ${padding}; ${delayStyle}">${escapeHtml(line)}</div>`;
             }
         });
         
         const result = coloredLines.join('');
-        console.log(`✅ Terminal format applied with colored lines`);
+        console.log(`✅ Terminal format applied with colored lines and Matrix fade-in`);
         return result;
     }
 
