@@ -151,7 +151,7 @@
 }
 
 .showcase-stats .stat-item:nth-child(3):hover {
-    box-shadow: 0 20px 25px -5px rgba(245, 158, 11, 0.2), 0 10px 10px -5px rgba(245, 158, 11, 0.1);
+    box-shadow: 0 20px 25px -5px rgba(99, 102, 241, 0.2), 0 10px 10px -5px rgba(99, 102, 241, 0.1);
 }
 
 .showcase-stats .stat-item:hover::before {
@@ -175,11 +175,12 @@
 }
 
 .showcase-stats .stat-item:nth-child(3) {
-    border-color: rgba(245, 158, 11, 0.3);
+    border-color: rgba(99, 102, 241, 0.3);
+    box-shadow: 0 20px 25px -5px rgba(99, 102, 241, 0.2), 0 10px 10px -5px rgba(99, 102, 241, 0.1);
 }
 
 .showcase-stats .stat-item:nth-child(3)::before {
-    background: var(--gradient-accent);
+    background: var(--gradient-primary);
 }
 
 .showcase-stats .stat-number {
@@ -203,12 +204,12 @@
 }
 
 .showcase-stats .stat-item:nth-child(3) .stat-number {
-    background: none !important;
-    -webkit-background-clip: unset !important;
-    -webkit-text-fill-color: unset !important;
-    background-clip: unset !important;
-    color: initial !important;
-    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", var(--font-sans);
+    background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: unset !important;
+    font-family: inherit;
 }
 
 .showcase-stats .stat-label {
