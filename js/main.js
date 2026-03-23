@@ -85,11 +85,9 @@ function initNavigation() {
     });
 
     // Navbar scroll effect
-    let lastScrollY = window.scrollY;
-    
     window.addEventListener('scroll', () => {
         const currentScrollY = window.scrollY;
-        
+
         if (navbar) {
             // Add/remove scrolled class
             if (currentScrollY > 50) {
@@ -97,16 +95,7 @@ function initNavigation() {
             } else {
                 navbar.classList.remove('scrolled');
             }
-            
-            // Hide/show navbar on scroll
-            if (currentScrollY > lastScrollY && currentScrollY > 100) {
-                navbar.style.transform = 'translateY(-100%)';
-            } else {
-                navbar.style.transform = 'translateY(0)';
-            }
         }
-        
-        lastScrollY = currentScrollY;
     });
 
     // Active nav link highlighting

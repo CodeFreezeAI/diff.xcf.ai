@@ -490,13 +490,90 @@ a:hover {
     display: none !important;
 }
 
+/* Agent Nav Link */
+.agent-nav-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    vertical-align: middle;
+}
+
+.agent-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+}
+
+/* Agent Banner */
+.agent-banner {
+    position: fixed;
+    top: 80px;
+    left: 0;
+    right: 0;
+    z-index: 999;
+    background: linear-gradient(135deg, #1a3a5c 0%, #2563eb 50%, #3b82f6 100%);
+    border-bottom: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.agent-banner-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 8px var(--space-lg);
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: all var(--transition-fast);
+}
+
+.agent-banner-link:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.agent-banner-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+}
+
+.agent-banner-text {
+    color: #ffffff;
+}
+
+.agent-banner-text strong {
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.agent-banner-arrow {
+    font-size: 1.1rem;
+    transition: transform var(--transition-fast);
+}
+
+.agent-banner-link:hover .agent-banner-arrow {
+    transform: translateX(3px);
+}
+
+@media (max-width: 768px) {
+    .agent-banner-link {
+        font-size: 0.8rem;
+        padding: 6px var(--space-md);
+    }
+    .agent-banner-icon {
+        width: 20px;
+        height: 20px;
+    }
+}
+
 /* Hero Section */
 .hero {
     position: relative;
     height: auto;
     display: flex;
     align-items: center;
-    padding: 125px 0 30px 0;
+    padding: 165px 0 30px 0;
     overflow: hidden;
     text-align: center;
 }
