@@ -3,7 +3,10 @@
     "allow": [
       "Bash(open:*)",
       "Bash(cp /Users/toddbruss/Documents/GitHub/diff.xcf.ai/index.html /Users/toddbruss/Documents/GitHub/diff-xcf-ai/index.html)",
-      "Bash(cp /Users/toddbruss/Documents/GitHub/diff.xcf.ai/js/main.js /Users/toddbruss/Documents/GitHub/diff-xcf-ai/js/main.js)"
+      "Bash(cp /Users/toddbruss/Documents/GitHub/diff.xcf.ai/js/main.js /Users/toddbruss/Documents/GitHub/diff-xcf-ai/js/main.js)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)"
     ]
   }
 }
