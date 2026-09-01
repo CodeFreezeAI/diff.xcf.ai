@@ -224,7 +224,7 @@ chmod +x deploy.sh
 
 ## 📝 License
 
-This project is part of the MultiLineDiff library created by Heisenburg © d1f.ai.
+This project is part of the MultiLineDiff library created by AgentiLoop Agent © d1f.ai.
 
 ## 🔗 Links
 
