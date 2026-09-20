@@ -1,5 +1,5 @@
 // MultiLineDiff Algorithms - JavaScript Implementation
-// Based on the Swift MultiLineDiff library by Heisenburg
+// Based on the Swift MultiLineDiff library by AgentiLoop.ai
 
 class DiffOperation {
     constructor(type, value) {
