@@ -39,7 +39,7 @@ website/
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/codefreezeai/swift-multi-line-diff.git
+   git clone https://github.com/AgentiLoop/AgentD1F.git
    cd swift-multi-line-diff/website
    ```
 
@@ -228,8 +228,8 @@ This project is part of the MultiLineDiff library created by AgentiLoop © d1f.a
 
 ## 🔗 Links
 
-- **Library Repository**: [swift-multi-line-diff](https://github.com/codefreezeai/swift-multi-line-diff)
-- **Documentation**: [ASCII Diff Guide](https://github.com/codefreezeai/swift-multi-line-diff/blob/main/NEW_ASCII_DIFF.md)
+- **Library Repository**: [swift-multi-line-diff](https://github.com/AgentiLoop/AgentD1F)
+- **Documentation**: [ASCII Diff Guide](https://github.com/AgentiLoop/AgentD1F/blob/main/NEW_ASCII_DIFF.md)
 - **D1F.ai**: [https://d1f.ai](https://d1f.ai)
 
 ---
