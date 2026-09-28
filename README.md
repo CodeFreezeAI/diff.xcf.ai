@@ -235,3 +235,7 @@ This project is part of the MultiLineDiff library created by AgentiLoop © d1f.a
 ---
 
 **MultiLineDiff: The World's Most Advanced Diffing System** 🚀 
+
+---
+
+**AgentiLoop:** [agentiloop.ai](https://agentiloop.ai/)
